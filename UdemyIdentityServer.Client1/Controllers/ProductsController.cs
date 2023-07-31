@@ -27,6 +27,7 @@ namespace UdemyIdentityServer.Client1.Controllers
             _apiResourceHttpClient = apiResourceHttpClient;
         }
 
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Index()
         {
             HttpClient client = await _apiResourceHttpClient.GetHttpClient();
