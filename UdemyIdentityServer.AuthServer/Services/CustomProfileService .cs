@@ -31,7 +31,7 @@ namespace UdemyIdentityServer.AuthServer.Services
             {
                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                new Claim( "name", user.Name),
-               new Claim("city", user.City),
+               new Claim(" city", user.City),
             };
             claims.Add(new Claim("role", user.Role.Name));
 
