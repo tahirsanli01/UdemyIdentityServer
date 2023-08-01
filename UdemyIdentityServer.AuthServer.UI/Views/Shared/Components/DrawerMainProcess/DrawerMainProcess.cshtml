@@ -1,0 +1,62 @@
+﻿<div id="kt_mainprocess" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="mainprocess" data-kt-drawer-activate="true" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'lg': '500px'}" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_mainprocess_toggle" data-kt-drawer-close="#kt_mainprocess_close">
+    <div class="card shadow-none border-0 rounded-0">
+        <div class="card-header" id="kt_mainprocess_header">
+            <h3 class="card-title fw-bold text-dark">
+                Ana Süreçlerinizi Tanımlayınız
+            </h3>
+            <div class="card-toolbar">
+                <button type="button" class="btn btn-sm btn-icon btn-active-light-primary me-n5" id="kt_mainprocess_close">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body position-relative" id="kt_mainprocess_body">
+            <div id="kt_mainprocess_scroll" class="position-relative scroll-y me-n5 pe-5" data-kt-scroll="true" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_mainprocess_body" data-kt-scroll-dependencies="#kt_mainprocess_header, #kt_mainprocess_footer" data-kt-scroll-offset="5px">
+                <div class="w-100 p-5">
+                    <div class="pb-10 pb-lg-15">
+                        @*<h2 class="fw-bold text-dark"></h2>*@
+                        <div class="text-muted fw-semibold fs-6">
+                            Bu alanda ana süreçlerinizi, alt süreçlerinizi ve KPI bilgilerinizi girmeniz istenecektir.
+                            <a href="#" class="text-primary fw-bold">Help Page</a>.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+@*                        <label class="d-flex align-items-center fs-6 fw-semibold form-label mb-2">
+                            <span class="required">Ana Süreç</span>
+                            <span class="ms-1" data-bs-toggle="tooltip" aria-label="Specify a card holder's name" data-bs-original-title="Specify a card holder's name" data-kt-initialized="1">
+                                <i class="ki-outline ki-information-5 text-gray-500 fs-6"></i>
+                            </span>
+                        </label>*@
+
+                        <input type="text" class="form-control form-control-solid" placeholder="" name="card_name" value="Başlık">
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+                        <textarea class="form-control form-control-solid" placeholder="" name="card_name" value="Açıklama" rows="5">Açıklama</textarea>
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+                        <button type="button" class="btn btn-warning">Ana Süreç Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer py-5 text-center" id="kt_mainprocess_footer">
+@*            <a href="javascript:void(0)" class="btn btn-bg-body text-primary" onclick="GetModalWorkHours(0)">
+                Yeni Çalışma Ekle
+                <i class="ki-outline ki-arrow-right fs-3 text-primary"></i>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-bg-body text-primary" onclick="GetModalArgument(0)">
+                Yeni Kanıt Ekle
+                <i class="ki-outline ki-arrow-right fs-3 text-primary"></i>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-bg-body text-primary" onclick="XYZ(0)">
+                Yeni Toplantı Ekle
+                <i class="ki-outline ki-arrow-right fs-3 text-primary"></i>
+            </a>*@
+        </div>
+    </div>
+</div>

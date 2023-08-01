@@ -1,0 +1,17 @@
+﻿@using AdasoAdvisor.Models.ComponentViewDtos
+@model BriefCardDto
+
+<div class="card bg-@Model.BgColor card-xl-stretch mb-xl-8">
+    <!--begin::Body-->
+    <div class="card-body my-3">
+        <a href="/KpiDetay" class="card-title fw-bold text-white fs-5 mb-3 d-block">@(Model.Title)</a>
+        <div class="py-1">
+            <span class="text-white fs-1 fw-bold me-2">@Model.ActivityCount</span>
+            <span class="fw-semibold text-muted fs-7">@Model.ActivityTypeName</span>
+        </div>
+        <div class="progress h-7px bg-success bg-opacity-50 mt-7">
+            <div class="progress-bar bg-success" role="progressbar" style="width: @(Model.CompletedPercent)%" aria-valuenow="@(Model.CompletedPercent)" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    </div>
+    <!--end:: Body-->
+</div>

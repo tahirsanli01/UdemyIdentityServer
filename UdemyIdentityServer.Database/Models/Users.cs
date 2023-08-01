@@ -23,5 +23,15 @@ public partial class Users
 
     public string City { get; set; }
 
+    public string Avatar { get; set; }
+
+    public string PersonnelTitle { get; set; }
+
+    public string PersonnelDepartmen { get; set; }
+
+    public string PersonnelConsultant { get; set; }
+
+    public string TobbUyelikOid { get; set; }
+
     public virtual Roles Role { get; set; }
 }

@@ -9,25 +9,75 @@ namespace UdemyIdentityServer.Database.Contexts;
 
 public partial class AuthDbContext : DbContext
 {
+
+    public virtual DbSet<Department> Department { get; set; }
+
+    public virtual DbSet<PersonelTitle> PersonelTitle { get; set; }
+
     public virtual DbSet<Roles> Roles { get; set; }
 
     public virtual DbSet<Users> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Turkish_CS_AS");
+
+        modelBuilder.Entity<Department>(entity =>
+        {
+            entity.Property(e => e.Department1)
+                .IsRequired()
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS")
+                .HasColumnName("Department");
+        });
+
+        modelBuilder.Entity<PersonelTitle>(entity =>
+        {
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        });
+
         modelBuilder.Entity<Roles>(entity =>
         {
-            entity.Property(e => e.Name).HasMaxLength(250);
+            entity.Property(e => e.Name)
+                .HasMaxLength(250)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<Users>(entity =>
         {
-            entity.Property(e => e.City).HasMaxLength(50);
-            entity.Property(e => e.Country).HasMaxLength(50);
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.Password).HasMaxLength(50);
-            entity.Property(e => e.Surname).HasMaxLength(50);
+            entity.Property(e => e.Avatar).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.City)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Country)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Password)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.PersonnelConsultant)
+                .HasMaxLength(100)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.PersonnelDepartmen)
+                .HasMaxLength(100)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.PersonnelTitle)
+                .HasMaxLength(100)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Surname)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.TobbUyelikOid)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS")
+                .HasColumnName("TOBB_UYELIK_OID");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)

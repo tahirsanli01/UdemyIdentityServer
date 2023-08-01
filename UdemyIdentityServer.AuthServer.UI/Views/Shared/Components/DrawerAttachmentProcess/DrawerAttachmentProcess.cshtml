@@ -1,0 +1,125 @@
+﻿<div id="kt_attachmentprocess" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="attachmentprocess" data-kt-drawer-activate="true" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'lg': '500px'}" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_attachmentprocess_toggle" data-kt-drawer-close="#kt_attachmentprocess_close">
+    <div class="card shadow-none border-0 rounded-0">
+        <div class="card-header" id="kt_attachmentprocess_header">
+            <h3 class="card-title fw-bold text-dark">
+                Dosyalarınızı ekleyiniz.
+            </h3>
+            <div class="card-toolbar">
+                <button type="button" class="btn btn-sm btn-icon btn-active-light-primary me-n5" id="kt_attachmentprocess_close">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body position-relative" id="kt_attachmentprocess_body">
+            <div id="kt_attachmentprocess_scroll" class="position-relative scroll-y me-n5 pe-5" data-kt-scroll="true" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_attachmentprocess_body" data-kt-scroll-dependencies="#kt_attachmentprocess_header, #kt_attachmentprocess_footer" data-kt-scroll-offset="5px">
+                <div class="w-100 p-5">
+                    <div class="pb-10 pb-lg-15">
+                        @*<h2 class="fw-bold text-dark"></h2>*@
+                        <div class="text-muted fw-semibold fs-6">
+                            Bu alanda dosyalarınızı girmeniz istenecektir.
+                            <a href="#" class="text-primary fw-bold"></a>.
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+                        <input type="text" class="form-control form-control-solid" placeholder="" name="card_name" value="Başlık">
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                    </div>
+
+                    <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+                        <textarea class="form-control form-control-solid" placeholder="" name="card_name" value="Açıklama">Açıklama</textarea>
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6">
+                                <i class="ki-outline ki-svg/files/upload.svg fs-2tx text-primary me-4"></i>
+                                <div class="d-flex flex-stack flex-grow-1">
+                                    <div class="fw-semibold">
+                                        <h4 class="text-gray-900 fw-bold">Hızlı dosya yükleme</h4>
+                                        <div class="fs-6 text-gray-700">Dosyanızı sürükleyip bırakarak yükleyebilirsiniz.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+                        <button type="button" class="btn btn-warning">Dosya Ekle</button>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="d-flex flex-column mb-9">
+                                <div class="d-flex align-items-center mb-5">
+                                    <!--begin::Icon-->
+                                    <div class="symbol symbol-30px me-5">
+                                        <img alt="Icon" src="assets/media/svg/files/css.svg">
+                                    </div>
+                                    <!--end::Icon-->
+                                    <!--begin::Details-->
+                                    <div class="fw-semibold">
+                                        <a class="fs-6 fw-bold text-dark text-hover-primary" href="#">Test Title0</a>
+                                        <div class="text-gray-400">
+                                            -4319 önce eklendi
+                                            <a href="#">İsmail Gündoğan</a>
+                                        </div>
+                                    </div>
+                                    <!--end::Details-->
+
+                                </div>
+                                <div class="d-flex align-items-center mb-5">
+                                    <!--begin::Icon-->
+                                    <div class="symbol symbol-30px me-5">
+                                        <img alt="Icon" src="assets/media/svg/files/doc.svg">
+                                    </div>
+                                    <!--end::Icon-->
+                                    <!--begin::Details-->
+                                    <div class="fw-semibold">
+                                        <a class="fs-6 fw-bold text-dark text-hover-primary" href="#">Test Title1</a>
+                                        <div class="text-gray-400">
+                                            -4319 önce eklendi
+                                            <a href="#">İsmail Gündoğan</a>
+                                        </div>
+                                    </div>
+                                    <!--end::Details-->
+
+                                </div>
+                                <div class="d-flex align-items-center mb-5">
+                                    <!--begin::Icon-->
+                                    <div class="symbol symbol-30px me-5">
+                                        <img alt="Icon" src="assets/media/svg/files/xls.svg">
+                                    </div>
+                                    <!--end::Icon-->
+                                    <!--begin::Details-->
+                                    <div class="fw-semibold">
+                                        <a class="fs-6 fw-bold text-dark text-hover-primary" href="#">Test Title2</a>
+                                        <div class="text-gray-400">
+                                            -4319 önce eklendi
+                                            <a href="#">İsmail Gündoğan</a>
+                                        </div>
+                                    </div>
+                                    <!--end::Details-->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer py-5 text-center" id="kt_attachmentprocess_footer">
+            @*            <a href="javascript:void(0)" class="btn btn-bg-body text-primary" onclick="GetModalWorkHours(0)">
+            Yeni Çalışma Ekle
+            <i class="ki-outline ki-arrow-right fs-3 text-primary"></i>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-bg-body text-primary" onclick="GetModalArgument(0)">
+            Yeni Kanıt Ekle
+            <i class="ki-outline ki-arrow-right fs-3 text-primary"></i>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-bg-body text-primary" onclick="XYZ(0)">
+            Yeni Toplantı Ekle
+            <i class="ki-outline ki-arrow-right fs-3 text-primary"></i>
+            </a>*@
+        </div>
+    </div>
+</div>

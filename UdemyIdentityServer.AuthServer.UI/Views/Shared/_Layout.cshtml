@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="../" />
+    <title>Adana Advisor</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="" />
+    <meta property="og:url" content="https://keenthemes.com/metronic" />
+    <meta property="og:site_name" content="Adaso Advisor" />
+    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
+    <link rel="shortcut icon" href="~/assets/media/icons/favicon.png" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+    <link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/custom/vis-timeline/vis-timeline.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
+
+    @RenderSection("styles", required: false)
+</head>
+<body id="kt_app_body" data-kt-app-header-fixed-mobile="true" data-kt-app-toolbar-enabled="true" class="app-default">
+    <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+        <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+            <div id="kt_app_header" class="app-header" data-kt-sticky="true" data-kt-sticky-activate="{default: false, lg: true}" data-kt-sticky-name="app-header-sticky" data-kt-sticky-offset="{default: false, lg: '300px'}">
+                <div class="app-container container-xxl d-flex align-items-stretch justify-content-between" id="kt_app_header_container">
+                    <div class="d-flex align-items-center d-lg-none ms-n2 me-2" title="Show sidebar menu">
+                        <div class="btn btn-icon btn-color-gray-600 btn-active-color-primary w-35px h-35px" id="kt_app_header_menu_toggle">
+                            <i class="ki-outline ki-abstract-14 fs-2"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0 me-lg-15">
+                        <a href="/">
+
+                            <img alt="Adaso 360 Logo" src="~/assets/media/logos/adaso360logo.png" class="h-25px d-lg-none" />
+                            <img alt="Adaso 360 Logo" src="~/assets/media/logos/adaso360logo.png" class="h-25px d-none d-lg-inline app-sidebar-logo-default theme-light-show" />
+                            <img alt="Adaso 360 Logo" src="~/assets/media/logos/adaso360logo.png" class="h-25px d-none d-lg-inline app-sidebar-logo-default theme-dark-show" />
+
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-stretch justify-content-between flex-lg-grow-1" id="kt_app_header_wrapper">
+                        <div class="app-header-menu app-header-mobile-drawer align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="250px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_header_menu_toggle" data-kt-swapper="true" data-kt-swapper-mode="{default: 'append', lg: 'prepend'}" data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header_wrapper'}">
+                            @await Component.InvokeAsync("HeadMenu")
+                        </div>
+                        @await Component.InvokeAsync("Navbar")
+                    </div>
+                </div>
+            </div>
+            <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+                @await Component.InvokeAsync("AppToolbar")
+                <div class="app-container container-xxl">
+                    <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+                        <div class="d-flex flex-column flex-column-fluid">
+                            @RenderBody()
+                        </div>
+                        @await Component.InvokeAsync("Footer")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="kt_modal_process" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true"></div>
+
+    <!--begin::Drawers-->
+    @await Component.InvokeAsync("DrawerActivities")
+    @await Component.InvokeAsync("DrawerShopping")
+    @await Component.InvokeAsync("DrawerChat")
+    @await Component.InvokeAsync("DrawerScrollTop")
+    @await Component.InvokeAsync("DrawerSetMeetingProcess")
+    @await Component.InvokeAsync("ModalCreateCompany")
+
+    <!--end::Drawers-->
+
+    <script>var hostUrl = "assets/";</script>
+    <script src="/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="/assets/js/scripts.bundle.js"></script>
+
+    <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script src="/assets/plugins/custom/vis-timeline/vis-timeline.bundle.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/radar.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+    <script src="/assets/js/widgets.bundle.js"></script>
+    <!--begin::Vendors Javascript(used for this page only)-->
+    <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <!--end::Vendors Javascript-->
+    <!--begin::Custom Javascript(used for this page only)-->
+    <script src="/assets/js/custom/apps/projects/list/list.js"></script>
+    <script src="/assets/js/custom/apps/projects/users/users.js"></script>
+    <script src="/assets/js/widgets.bundle.js"></script>
+    <script src="/assets/js/custom/widgets.js"></script>
+    <script src="/assets/js/custom/apps/chat/chat.js"></script>
+    <script src="/assets/js/custom/utilities/modals/upgrade-plan.js"></script>
+    <script src="/assets/js/custom/utilities/modals/users-search.js"></script>
+    <script src="/assets/js/custom/utilities/modals/new-target.js"></script>
+    <script src="~/assets/plugins/select2/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+
+    @await RenderSectionAsync("scripts", required: false)
+</body>
+</html>
