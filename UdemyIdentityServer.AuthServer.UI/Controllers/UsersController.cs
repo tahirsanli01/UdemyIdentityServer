@@ -22,6 +22,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            TempData["Users"] = "active";
             var authDbContext = _context.Users.Include(u => u.Role);
             return View(await authDbContext.ToListAsync());
         }

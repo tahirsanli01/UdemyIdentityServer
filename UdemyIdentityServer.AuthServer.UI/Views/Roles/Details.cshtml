@@ -5,21 +5,56 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+
+@section styles{
+    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
+    <style>
+    </style>
+}
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Rol Detayları
+
+        </h3>
+        <div class="d-flex my-2">
+
+            
+            <a asp-action="Edit" class='btn btn-sm btn-primary fw-bolder' asp-route-id="@Model?.Id">Düzenle</a> 
+            <a class='btn btn-secondary btn-sm fw-bolder' asp-action="Index">Geri</a>
+        </div>
+    </div>
+    <div class="card">
 
 <div>
-    <h4>Roles</h4>
-    <hr />
+
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            <label>İsim</label>
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+
+    </div>
 </div>
+
+
+@await Component.InvokeAsync("DrawerMainProcess")
+@await Component.InvokeAsync("DrawerSubProcess")
+@await Component.InvokeAsync("DrawerAttachmentProcess")
+@await Component.InvokeAsync("DrawerKPIProcess")
+@await Component.InvokeAsync("DrawerSurveyProcess")
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

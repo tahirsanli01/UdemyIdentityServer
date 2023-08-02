@@ -5,16 +5,34 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+@section styles{
+    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
+    <style>
+    </style>
+}
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Departmanlar
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+        </h3>
+        <div class="d-flex my-2">
+
+            
+            <a class="btn btn-primary btn-sm fw-bolder" asp-action="Create">Yeni Departman Oluştur</a>
+            
+        </div>
+    </div>
+    <div class="card">
+
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Department1)
+                <label>Departman İsmi</label>
             </th>
             <th></th>
         </tr>
@@ -26,11 +44,14 @@
                 @Html.DisplayFor(modelItem => item.Department1)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detaylar</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
             </td>
         </tr>
 }
+
     </tbody>
 </table>
+    </div>
+</div>

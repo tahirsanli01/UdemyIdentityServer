@@ -22,6 +22,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: PersonelTitles
         public async Task<IActionResult> Index()
         {
+            TempData["PersonelTitles"] = "active";
               return _context.PersonelTitle != null ? 
                           View(await _context.PersonelTitle.ToListAsync()) :
                           Problem("Entity set 'AuthDbContext.PersonelTitle'  is null.");

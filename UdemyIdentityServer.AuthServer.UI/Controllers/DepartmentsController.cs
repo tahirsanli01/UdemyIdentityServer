@@ -22,6 +22,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments
         public async Task<IActionResult> Index()
         {
+            TempData["Departments"] = "active";
               return _context.Department != null ? 
                           View(await _context.Department.ToListAsync()) :
                           Problem("Entity set 'AuthDbContext.Department'  is null.");

@@ -22,6 +22,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles
         public async Task<IActionResult> Index()
         {
+            TempData["Roles"] = "active";
               return _context.Roles != null ? 
                           View(await _context.Roles.ToListAsync()) :
                           Problem("Entity set 'AuthDbContext.Roles'  is null.");
