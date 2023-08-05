@@ -10,93 +10,93 @@ using UdemyIdentityServer.Database.Models;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
-    public class PersonelTitlesController : Controller
+    public class ConsultantController : Controller
     {
         private readonly AuthDbContext _context;
 
-        public PersonelTitlesController(AuthDbContext context)
+        public ConsultantController(AuthDbContext context)
         {
             _context = context;
         }
 
-        // GET: PersonelTitles
+        // GET: Consultant
         public async Task<IActionResult> Index()
         {
-            TempData["PersonelTitles"] = "active";
-              return _context.PersonelTitle != null ? 
-                          View(await _context.PersonelTitle.ToListAsync()) :
-                          Problem("Entity set 'AuthDbContext.PersonelTitle'  is null.");
+            TempData["Consultant"] = "active";
+            return _context.Consultant != null ? 
+                          View(await _context.Consultant.ToListAsync()) :
+                          Problem("Entity set 'AuthDbContext.Consultant'  is null.");
         }
 
-        // GET: PersonelTitles/Details/5
+        // GET: Consultant/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            TempData["PersonelTitles"] = "active";
-            if (id == null || _context.PersonelTitle == null)
+            TempData["Consultant"] = "active";
+            if (id == null || _context.Consultant == null)
             {
                 return NotFound();
             }
 
-            var personelTitle = await _context.PersonelTitle
+            var consultant = await _context.Consultant
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (personelTitle == null)
+            if (consultant == null)
             {
                 return NotFound();
             }
 
-            return View(personelTitle);
+            return View(consultant);
         }
 
-        // GET: PersonelTitles/Create
+        // GET: Consultant/Create
         public IActionResult Create()
         {
-            TempData["PersonelTitles"] = "active";
+            TempData["Consultant"] = "active";
             return View();
         }
 
-        // POST: PersonelTitles/Create
+        // POST: Consultant/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title")] PersonelTitle personelTitle)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Consultant consultant)
         {
-            TempData["PersonelTitles"] = "active";
+            TempData["Consultant"] = "active";
             if (ModelState.IsValid)
             {
-                _context.Add(personelTitle);
+                _context.Add(consultant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(personelTitle);
+            return View(consultant);
         }
 
-        // GET: PersonelTitles/Edit/5
+        // GET: Consultant/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            TempData["PersonelTitles"] = "active";
-            if (id == null || _context.PersonelTitle == null)
+            TempData["Consultant"] = "active";
+            if (id == null || _context.Consultant == null)
             {
                 return NotFound();
             }
 
-            var personelTitle = await _context.PersonelTitle.FindAsync(id);
-            if (personelTitle == null)
+            var consultant = await _context.Consultant.FindAsync(id);
+            if (consultant == null)
             {
                 return NotFound();
             }
-            return View(personelTitle);
+            return View(consultant);
         }
 
-        // POST: PersonelTitles/Edit/5
+        // POST: Consultant/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title")] PersonelTitle personelTitle)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Consultant consultant)
         {
-            TempData["PersonelTitles"] = "active";
-            if (id != personelTitle.Id)
+            TempData["Consultant"] = "active";
+            if (id != consultant.Id)
             {
                 return NotFound();
             }
@@ -105,12 +105,12 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 try
                 {
-                    _context.Update(personelTitle);
+                    _context.Update(consultant);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PersonelTitleExists(personelTitle.Id))
+                    if (!ConsultantExists(consultant.Id))
                     {
                         return NotFound();
                     }
@@ -121,51 +121,51 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(personelTitle);
+            return View(consultant);
         }
 
-        // GET: PersonelTitles/Delete/5
+        // GET: Consultant/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            TempData["PersonelTitles"] = "active";
-            if (id == null || _context.PersonelTitle == null)
+            TempData["Consultant"] = "active";
+            if (id == null || _context.Consultant == null)
             {
                 return NotFound();
             }
 
-            var personelTitle = await _context.PersonelTitle
+            var consultant = await _context.Consultant
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (personelTitle == null)
+            if (consultant == null)
             {
                 return NotFound();
             }
 
-            return View(personelTitle);
+            return View(consultant);
         }
 
-        // POST: PersonelTitles/Delete/5
+        // POST: Consultant/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            TempData["PersonelTitles"] = "active";
-            if (_context.PersonelTitle == null)
+            TempData["Consultant"] = "active";
+            if (_context.Consultant == null)
             {
-                return Problem("Entity set 'AuthDbContext.PersonelTitle'  is null.");
+                return Problem("Entity set 'AuthDbContext.Consultant'  is null.");
             }
-            var personelTitle = await _context.PersonelTitle.FindAsync(id);
-            if (personelTitle != null)
+            var consultant = await _context.Consultant.FindAsync(id);
+            if (consultant != null)
             {
-                _context.PersonelTitle.Remove(personelTitle);
+                _context.Consultant.Remove(consultant);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonelTitleExists(int id)
+        private bool ConsultantExists(int id)
         {
-          return (_context.PersonelTitle?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Consultant?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -31,6 +31,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["Roles"] = "active";
             if (id == null || _context.Roles == null)
             {
                 return NotFound();
@@ -49,6 +50,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles/Create
         public IActionResult Create()
         {
+            TempData["Roles"] = "active";
             return View();
         }
 
@@ -59,6 +61,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Roles roles)
         {
+            TempData["Roles"] = "active";
             if (ModelState.IsValid)
             {
                 _context.Add(roles);
@@ -71,6 +74,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["Roles"] = "active";
             if (id == null || _context.Roles == null)
             {
                 return NotFound();
@@ -91,6 +95,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Roles roles)
         {
+            TempData["Roles"] = "active";
             if (id != roles.Id)
             {
                 return NotFound();
@@ -122,6 +127,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["Roles"] = "active";
             if (id == null || _context.Roles == null)
             {
                 return NotFound();
@@ -142,6 +148,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            TempData["Roles"] = "active";
             if (_context.Roles == null)
             {
                 return Problem("Entity set 'AuthDbContext.Roles'  is null.");

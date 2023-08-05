@@ -1,14 +1,15 @@
-﻿@model UdemyIdentityServer.Database.Models.Roles
+﻿@model UdemyIdentityServer.Database.Models.Consultant
 
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div id="ModalCreateGoal" class="app-content">
 
     <div class="d-flex flex-wrap flex-stack my-1">
         <h3 class="fw-bold my-2">
-           Rol
+            Danşıman
 
         </h3>
         <div class="d-flex my-2">
@@ -23,11 +24,11 @@
             <div class="col-md-8">
                 <h3>Silmek istediğinizden emin misiniz?</h3>
                 <div>
-                    <h4>Rol</h4>
+                    <h4>Consultant</h4>
                     <hr />
                     <dl class="row">
                         <dt class="col-sm-2">
-                            <label>İsim</label>
+                            @Html.DisplayNameFor(model => model.Name)
                         </dt>
                         <dd class="col-sm-10">
                             @Html.DisplayFor(model => model.Name)
@@ -36,8 +37,8 @@
 
                     <form asp-action="Delete">
                         <input type="hidden" asp-for="Id" />
-                        <input type="submit" value="Sil" class="btn btn-danger btn-sm" />
-                 
+                        <input type="submit" value="Sil" class="btn btn-danger" /> 
+
                     </form>
                 </div>
             </div>
@@ -50,11 +51,9 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    }
+        }
 @await Component.InvokeAsync("DrawerMainProcess")
 @await Component.InvokeAsync("DrawerSubProcess")
 @await Component.InvokeAsync("DrawerAttachmentProcess")
 @await Component.InvokeAsync("DrawerKPIProcess")
 @await Component.InvokeAsync("DrawerSurveyProcess")
-
-

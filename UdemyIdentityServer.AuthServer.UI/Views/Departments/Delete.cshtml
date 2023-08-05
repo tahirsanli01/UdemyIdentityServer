@@ -4,25 +4,57 @@
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div id="ModalCreateGoal" class="app-content">
 
-<h1>Delete</h1>
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Departman
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Department</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Department1)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Department1)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+        </h3>
+        <div class="d-flex my-2">
+
+
+            <a asp-action="Index" class='btn btn-primary btn-sm fw-bolder'> Geri</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="row">
+
+            <div class="col-md-8">
+                            <h3>Silmek istediğinizden emin misiniz?</h3>
+                            <div>
+                                <h4>Departman</h4>
+                                <hr />
+                                <dl class="row">
+                                    <dt class="col-sm-2">
+                                        @Html.DisplayNameFor(model => model.Department1)
+                                    </dt>
+                                    <dd class="col-sm-10">
+                                        @Html.DisplayFor(model => model.Department1)
+                                    </dd>
+                                </dl>
+
+                                <form asp-action="Delete">
+                                    <input type="hidden" asp-for="Id" />
+                                    <input type="submit" value="Sil" class="btn btn-danger" /> 
+                             
+                                </form>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+ 
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }
+        @await Component.InvokeAsync("DrawerMainProcess")
+        @await Component.InvokeAsync("DrawerSubProcess")
+        @await Component.InvokeAsync("DrawerAttachmentProcess")
+        @await Component.InvokeAsync("DrawerKPIProcess")
+        @await Component.InvokeAsync("DrawerSurveyProcess")
+
+
