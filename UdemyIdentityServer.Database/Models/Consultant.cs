@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace UdemyIdentityServer.Database.Models;
 
-public partial class PersonelTitle
+public partial class Consultant
 {
     public int Id { get; set; }
 
-    public string Title { get; set; }
+    public string Name { get; set; }
 
     public virtual ICollection<Users> Users { get; set; } = new List<Users>();
 }

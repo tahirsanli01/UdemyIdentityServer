@@ -11,6 +11,12 @@ public partial class Users
 
     public int RoleId { get; set; }
 
+    public int PersonelTitleId { get; set; }
+
+    public int DepartmentId { get; set; }
+
+    public int ConsultantId { get; set; }
+
     public string Name { get; set; }
 
     public string Surname { get; set; }
@@ -25,13 +31,13 @@ public partial class Users
 
     public string Avatar { get; set; }
 
-    public string PersonnelTitle { get; set; }
-
-    public string PersonnelDepartmen { get; set; }
-
-    public string PersonnelConsultant { get; set; }
-
     public string TobbUyelikOid { get; set; }
+
+    public virtual Consultant Consultant { get; set; }
+
+    public virtual Department Department { get; set; }
+
+    public virtual PersonelTitle PersonelTitle { get; set; }
 
     public virtual Roles Role { get; set; }
 }

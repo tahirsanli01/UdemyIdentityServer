@@ -1,10 +1,12 @@
-﻿@{
+﻿@model IEnumerable<UdemyIdentityServer.Database.Models.Users>
+
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @using AdasoAdvisor.Models.ComponentViewDtos
-@model IEnumerable<UdemyIdentityServer.Database.Models.Users>
 
+ 
 @section styles{
     <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
     <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
@@ -27,74 +29,66 @@
         </div>
     </div>
     <div class="card">
-<table class="table" Id="table">
-    <thead>
-        <tr>
-            <th width="250"> 
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Surname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-           
-  
-   
-            <th>
-                @Html.DisplayNameFor(model => model.Consultant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PersonelTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Role)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-           
+        <table class="table" Id="table">
+            <thead>
+                <tr>
             
-            <td>
-                @Html.DisplayFor(modelItem => item.Consultant.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.Department1)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PersonelTitle.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Role.Name)
-            </td>
-            <td>
+                    <th >
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Surname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Country)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Role)
+                    </th>
+                    <th class="text-right" style="width: 100px!important;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                   
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Surname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Country)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Role.Name)
+                        </td>
+                        <td >
                             <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fa-2x"></i></a> |
                             <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fa-2x"></i></a> |
                             <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fa-2x"></i></a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-  </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
     </div>
-
+ 
 
 @await Component.InvokeAsync("DrawerMainProcess")
 @await Component.InvokeAsync("DrawerSubProcess")
@@ -110,7 +104,7 @@
         $("#table").DataTable({
             "columnDefs": [
                 {
-                    "width": "20%",
+                    "width": "10%",
                     "targets": 0
                 }
             ]
@@ -120,3 +114,4 @@
     @*<script src="~/custom/advisor.js"></script>*@
 
 }
+ 

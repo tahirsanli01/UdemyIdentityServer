@@ -31,6 +31,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["Departments"] = "active";
             if (id == null || _context.Department == null)
             {
                 return NotFound();
@@ -49,6 +50,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments/Create
         public IActionResult Create()
         {
+            TempData["Departments"] = "active";
             return View();
         }
 
@@ -59,6 +61,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Department1")] Department department)
         {
+            TempData["Departments"] = "active";
             if (ModelState.IsValid)
             {
                 _context.Add(department);
@@ -71,6 +74,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["Departments"] = "active";
             if (id == null || _context.Department == null)
             {
                 return NotFound();
@@ -91,6 +95,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Department1")] Department department)
         {
+            TempData["Departments"] = "active";
             if (id != department.Id)
             {
                 return NotFound();
@@ -122,6 +127,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["Departments"] = "active";
             if (id == null || _context.Department == null)
             {
                 return NotFound();
@@ -142,6 +148,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            TempData["Departments"] = "active";
             if (_context.Department == null)
             {
                 return Problem("Entity set 'AuthDbContext.Department'  is null.");
@@ -155,6 +162,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        
 
         private bool DepartmentExists(int id)
         {

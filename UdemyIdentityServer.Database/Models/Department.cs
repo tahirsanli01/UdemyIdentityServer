@@ -10,4 +10,6 @@ public partial class Department
     public int Id { get; set; }
 
     public string Department1 { get; set; }
+
+    public virtual ICollection<Users> Users { get; set; } = new List<Users>();
 }

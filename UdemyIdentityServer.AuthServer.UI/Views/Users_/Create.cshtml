@@ -16,7 +16,7 @@
                 <i class="ki-outline ki-magnifier fs-3 position-absolute translate-middle-y top-50 ms-4"></i>
                 <input type="text" id="kt_filter_search" class="form-control form-control-sm form-control-solid bg-body fw-semibold fs-7 w-150px ps-11" placeholder="Firma Ara" />
             </div>
-
+            
             <a asp-action="Index" class='btn btn-primary btn-sm fw-bolder'> Geri</a>
         </div>
     </div>
@@ -30,24 +30,14 @@
                         <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
                     </div>
                     <div class="form-group">
-                        <label asp-for="PersonelTitleId" class="control-label"></label>
-                        <select asp-for="PersonelTitleId" class="form-control" asp-items="ViewBag.PersonelTitleId"></select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="DepartmentId" class="control-label"></label>
-                        <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="ConsultantId" class="control-label"></label>
-                        <select asp-for="ConsultantId" class="form-control" asp-items="ViewBag.ConsultantId"></select>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Name" class="control-label"></label>
+                        <label asp-for="Name" class="control-label">İsim</label>
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Surname" class="control-label"></label>
+                        <label asp-for="Surname" class="control-label">
+                            Soyisim
+                        </label>
                         <input asp-for="Surname" class="form-control" />
                         <span asp-validation-for="Surname" class="text-danger"></span>
                     </div>
@@ -62,42 +52,43 @@
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Country" class="control-label"></label>
+                        <label asp-for="Country" class="control-label">Ülke</label>
                         <input asp-for="Country" class="form-control" />
                         <span asp-validation-for="Country" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="City" class="control-label"></label>
+                        <label asp-for="City" class="control-label">Şehir</label>
                         <input asp-for="City" class="form-control" />
                         <span asp-validation-for="City" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Avatar" class="control-label"></label>
+                        <label asp-for="Avatar" class="control-label">Logo/Image</label>
                         <input asp-for="Avatar" class="form-control" />
                         <span asp-validation-for="Avatar" class="text-danger"></span>
                     </div>
+ 
                     <div class="form-group">
                         <label asp-for="TobbUyelikOid" class="control-label"></label>
-                        <input asp-for="TobbUyelikOid" class="form-control" />
+                        <input asp-for="TobbUyelikOid" class="form-control"  readonly="readonly"/>
                         <span asp-validation-for="TobbUyelikOid" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-primary" />
+                    <div class="form-group text-right">
+                        <input type="submit" value="Kaydet" class="btn btn-primary" />
                     </div>
                 </form>
             </div>
         </div>
-
+        
     </div>
-</div>
+    </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
     }
-    }
-@await Component.InvokeAsync("DrawerMainProcess")
-@await Component.InvokeAsync("DrawerSubProcess")
-@await Component.InvokeAsync("DrawerAttachmentProcess")
-@await Component.InvokeAsync("DrawerKPIProcess")
-@await Component.InvokeAsync("DrawerSurveyProcess")
+    @await Component.InvokeAsync("DrawerMainProcess")
+    @await Component.InvokeAsync("DrawerSubProcess")
+    @await Component.InvokeAsync("DrawerAttachmentProcess")
+    @await Component.InvokeAsync("DrawerKPIProcess")
+    @await Component.InvokeAsync("DrawerSurveyProcess")

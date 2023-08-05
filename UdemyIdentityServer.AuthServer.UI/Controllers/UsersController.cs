@@ -22,20 +22,25 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            var authDbContext = _context.Users.Include(u => u.Consultant).Include(u => u.Department).Include(u => u.PersonelTitle).Include(u => u.Role);
+
             TempData["Users"] = "active";
-            var authDbContext = _context.Users.Include(u => u.Role);
             return View(await authDbContext.ToListAsync());
         }
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
 
             var users = await _context.Users
+                .Include(u => u.Consultant)
+                .Include(u => u.Department)
+                .Include(u => u.PersonelTitle)
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (users == null)
@@ -49,7 +54,12 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id");
+            TempData["Users"] = "active";
+            ViewData["ConsultantId"] = new SelectList(_context.Consultant, "Id", "Name");
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Department1");
+            ViewData["PersonelTitleId"] = new SelectList(_context.PersonelTitle, "Id", "Title");
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name");
+           
             return View();
         }
 
@@ -58,21 +68,26 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RoleId,Name,Surname,Email,Password,Country,City,Avatar,PersonnelTitle,PersonnelDepartmen,PersonnelConsultant,TobbUyelikOid")] Users users)
+        public async Task<IActionResult> Create([Bind("Id,RoleId,PersonelTitleId,DepartmentId,ConsultantId,Name,Surname,Email,Password,Country,City,Avatar,TobbUyelikOid")] Users users)
         {
+            TempData["Users"] = "active";
             if (ModelState.IsValid)
             {
                 _context.Add(users);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", users.RoleId);
+            ViewData["ConsultantId"] = new SelectList(_context.Consultant, "Id", "Name", users.ConsultantId);
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Department1", users.DepartmentId);
+            ViewData["PersonelTitleId"] = new SelectList(_context.PersonelTitle, "Id", "Title", users.PersonelTitleId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", users.RoleId);
             return View(users);
         }
 
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -83,7 +98,10 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", users.RoleId);
+            ViewData["ConsultantId"] = new SelectList(_context.Consultant, "Id", "Name", users.ConsultantId);
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Department1", users.DepartmentId);
+            ViewData["PersonelTitleId"] = new SelectList(_context.PersonelTitle, "Id", "Title", users.PersonelTitleId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", users.RoleId);
             return View(users);
         }
 
@@ -92,8 +110,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RoleId,Name,Surname,Email,Password,Country,City,Avatar,PersonnelTitle,PersonnelDepartmen,PersonnelConsultant,TobbUyelikOid")] Users users)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RoleId,PersonelTitleId,DepartmentId,ConsultantId,Name,Surname,Email,Password,Country,City,Avatar,TobbUyelikOid")] Users users)
         {
+            TempData["Users"] = "active";
             if (id != users.Id)
             {
                 return NotFound();
@@ -119,19 +138,26 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Id", users.RoleId);
+            ViewData["ConsultantId"] = new SelectList(_context.Consultant, "Id", "Name", users.ConsultantId);
+            ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Department1", users.DepartmentId);
+            ViewData["PersonelTitleId"] = new SelectList(_context.PersonelTitle, "Id", "Title", users.PersonelTitleId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", users.RoleId);
             return View(users);
         }
 
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
 
             var users = await _context.Users
+                .Include(u => u.Consultant)
+                .Include(u => u.Department)
+                .Include(u => u.PersonelTitle)
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (users == null)
@@ -147,6 +173,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            TempData["Users"] = "active";
             if (_context.Users == null)
             {
                 return Problem("Entity set 'AuthDbContext.Users'  is null.");

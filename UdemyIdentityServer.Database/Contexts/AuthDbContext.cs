@@ -9,6 +9,9 @@ namespace UdemyIdentityServer.Database.Contexts;
 
 public partial class AuthDbContext : DbContext
 {
+ 
+
+    public virtual DbSet<Consultant> Consultant { get; set; }
 
     public virtual DbSet<Department> Department { get; set; }
 
@@ -21,6 +24,13 @@ public partial class AuthDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("Turkish_CS_AS");
+
+        modelBuilder.Entity<Consultant>(entity =>
+        {
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(250);
+        });
 
         modelBuilder.Entity<Department>(entity =>
         {
@@ -40,6 +50,7 @@ public partial class AuthDbContext : DbContext
         modelBuilder.Entity<Roles>(entity =>
         {
             entity.Property(e => e.Name)
+                .IsRequired()
                 .HasMaxLength(250)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
@@ -62,15 +73,6 @@ public partial class AuthDbContext : DbContext
             entity.Property(e => e.Password)
                 .HasMaxLength(50)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
-            entity.Property(e => e.PersonnelConsultant)
-                .HasMaxLength(100)
-                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
-            entity.Property(e => e.PersonnelDepartmen)
-                .HasMaxLength(100)
-                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
-            entity.Property(e => e.PersonnelTitle)
-                .HasMaxLength(100)
-                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Surname)
                 .HasMaxLength(50)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
@@ -78,6 +80,21 @@ public partial class AuthDbContext : DbContext
                 .HasMaxLength(50)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS")
                 .HasColumnName("TOBB_UYELIK_OID");
+
+            entity.HasOne(d => d.Consultant).WithMany(p => p.Users)
+                .HasForeignKey(d => d.ConsultantId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Users_Consultant");
+
+            entity.HasOne(d => d.Department).WithMany(p => p.Users)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Users_Department");
+
+            entity.HasOne(d => d.PersonelTitle).WithMany(p => p.Users)
+                .HasForeignKey(d => d.PersonelTitleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Users_PersonelTitle");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
