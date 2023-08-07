@@ -25,15 +25,15 @@
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="RoleId" class="control-label"></label>
+                        <label asp-for="RoleId" class="control-label">Rol</label>
                         <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
                     </div>
                     <div class="form-group">
-                        <label asp-for="PersonelTitleId" class="control-label"></label>
+                        <label asp-for="PersonelTitleId" class="control-label">Ünvan</label>
                         <select asp-for="PersonelTitleId" class="form-control" asp-items="ViewBag.PersonelTitleId"></select>
                     </div>
                     <div class="form-group">
-                        <label asp-for="DepartmentId" class="control-label"></label>
+                        <label asp-for="DepartmentId" class="control-label">Departman</label>
                         <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
                     </div>
                     <div class="form-group">
@@ -41,37 +41,37 @@
                         <select asp-for="ConsultantId" class="form-control" asp-items="ViewBag.ConsultantId"></select>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Name" class="control-label"></label>
+                        <label asp-for="Name" class="control-label">İsim</label>
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Surname" class="control-label"></label>
+                        <label asp-for="Surname" class="control-label">Soyisim</label>
                         <input asp-for="Surname" class="form-control" />
                         <span asp-validation-for="Surname" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Email" class="control-label"></label>
+                        <label asp-for="Email" class="control-label">Email</label>
                         <input asp-for="Email" class="form-control" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
+                        <label asp-for="Password" class="control-label">Şifre</label>
                         <input asp-for="Password" class="form-control" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Country" class="control-label"></label>
+                        <label asp-for="Country" class="control-label">Ülke</label>
                         <input asp-for="Country" class="form-control" />
                         <span asp-validation-for="Country" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="City" class="control-label"></label>
+                        <label asp-for="City" class="control-label">Şehir</label>
                         <input asp-for="City" class="form-control" />
                         <span asp-validation-for="City" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Avatar" class="control-label"></label>
+                        <label asp-for="Avatar" class="control-label">Image</label>
                         <input asp-for="Avatar" class="form-control" />
                         <span asp-validation-for="Avatar" class="text-danger"></span>
                     </div>
