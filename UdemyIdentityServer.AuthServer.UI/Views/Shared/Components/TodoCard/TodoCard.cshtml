@@ -1,0 +1,39 @@
+﻿@using AdasoAdvisor.Models.ComponentViewDtos
+@model TodoCardDto
+
+
+<div class="card mb-6 mb-xl-9">
+	<div class="card-body">
+		<div class="d-flex flex-stack mb-3">
+			<div class="badge badge-light">@Model.Title</div>
+			<div>
+				<button type="button" class="btn btn-sm btn-icon btn-color-light-dark btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+					<i class="ki-outline ki-element-plus fs-2"></i>
+				</button>
+				@await Component.InvokeAsync("MenuForTodoCard", new MenuForTodoCardDto(TodoCardType.Bekliyor))
+			</div>
+		</div>
+		<div class="mb-2">
+			<a href="#" class="fs-4 fw-bold mb-1 text-gray-900 text-hover-primary">@Model.SubTitle</a>
+		</div>
+		<div class="fs-6 fw-semibold text-gray-600 mb-5">@Model.Explanation</div>
+		<hr>
+		<span class="badge badge-light-danger">@Model.CompanyName</span>
+		<div class="d-flex flex-stack flex-wrapr">
+			<div class="d-flex my-1">
+				<div class="border border-dashed border-gray-300 d-flex align-items-center rounded py-2 px-3 ms-3" data-kt-drawer-show="true" data-kt-drawer-target="#kt_drawer_chat">
+					<i class="ki-outline ki-key fs-3"></i>
+					<span class="ms-1 fs-7 fw-bold text-gray-600">@Model.MessageCount</span>
+				</div>
+				<div class="border border-dashed border-gray-300 rounded d-flex align-items-center py-2 px-3 ms-3" onclick="GetModalArgument(0)">
+					<i class="ki-outline ki-paper-clip fs-3"></i>
+					<span class="ms-1 fs-7 fw-bold text-gray-600">@Model.AttachmentCount</span>
+				</div>
+				<div class="border border-dashed border-gray-300 d-flex align-items-center rounded py-2 px-3 ms-3" data-kt-drawer-show="true" data-kt-drawer-target="#kt_drawer_chat">
+					<i class="ki-outline ki-message-text-2 fs-3"></i>
+					<span class="ms-1 fs-7 fw-bold text-gray-600">@Model.MessageCount</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

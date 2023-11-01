@@ -1,0 +1,14 @@
+﻿
+body {
+    background-color:#054676 !important;
+    background-image: url('../assets/media/auth/adasobg.png');
+    background-repeat: no-repeat;
+    background-size: 40% !important;
+    background-position:15% !important;
+}
+
+[data-bs-theme="dark"] body {
+    background-image: url('assets/media/auth/bg4-dark.jpg');
+}
+
+

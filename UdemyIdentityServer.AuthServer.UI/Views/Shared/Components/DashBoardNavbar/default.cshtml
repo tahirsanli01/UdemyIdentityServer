@@ -1,0 +1,91 @@
+﻿<div class="card">
+    <div class="card-body pt-9 pb-0">
+ 
+        <div class="d-flex flex-wrap flex-sm-nowrap mb-6">
+ 
+            <div class="d-flex flex-center flex-shrink-0 bg-light rounded w-100px h-100px w-lg-150px h-lg-150px me-7 mb-4">
+                <img class="mw-50px mw-lg-75px" src="assets/media/svg/avatars/blank.svg" alt="image" />
+            </div>
+ 
+            <div class="flex-grow-1">
+ 
+                <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+ 
+                    <div class="d-flex flex-column">
+ 
+                        <div class="d-flex align-items-center mb-1">
+                            <a href="#" class="text-gray-800 text-hover-primary fs-2 fw-bold me-3">Administrator</a>
+                            <span class="badge badge-light-success me-auto">Aktif</span>
+                        </div>
+ 
+                        <div class="d-flex flex-wrap fw-semibold mb-4 fs-5 text-gray-400">Adana Sanayi Odası Üye ve Personel Kullanıcı Yönetimi</div>
+ 
+                    </div>
+ 
+                    <div class="d-flex mb-4">
+                        
+
+                        <a href="/users/create" class="btn btn-sm btn-primary me-3" >Yeni Kullanıcı Oluştur</a>
+ 
+                        <div class="me-0">
+                            <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                <i class="ki-solid ki-dots-horizontal fs-2x"></i>
+                            </button>
+ 
+                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-3" data-kt-menu="true">
+ 
+                                <div class="menu-item px-3 my-1">
+                                    <a href="/Users" class="menu-link px-3">Kullanıcı Listesi</a>
+                                </div>
+                                <div class="menu-item px-3 my-1">
+                                    <a href="/Roles" class="menu-link px-3">Roller</a>
+                                </div>
+                                <div class="menu-item px-3 my-1">
+                                    <a href="/Consultants" class="menu-link px-3">Danışmanlıklar</a>
+                                </div>
+                                <div class="menu-item px-3 my-1">
+                                    <a href="/Departments" class="menu-link px-3">Departmanlar</a>
+                                </div>
+                                <div class="menu-item px-3 my-1">
+                                    <a href="/PersonelTitles" class="menu-link px-3">Personel Unvanları</a>
+                                </div>
+                                
+                            </div>
+                            <!--end::Menu 3-->
+                        </div>
+                        <!--end::Menu-->
+                    </div>
+                    <!--end::Actions-->
+                </div>
+                <!--end::Head-->
+                <!--begin::Info-->
+                <div class="d-flex flex-wrap justify-content-start">
+                    <!--begin::Stats-->
+                    <div class="d-flex flex-wrap">
+                        <!--begin::Stat-->
+                        <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                            <!--begin::Number-->
+                            <div class="d-flex align-items-center">
+                                <i class="ki-outline ki-arrow-up fs-3 text-success me-2"></i>
+                                <div class="fs-4 fw-bold" data-kt-countup="true" data-kt-countup-value="4800">4800</div>
+                            </div>
+                            <!--end::Number-->
+                            <!--begin::Label-->
+                            <div class="fw-semibold fs-6 text-gray-400">Toplam Kullanıcı Sayısı</div>
+                            <!--end::Label-->
+                        </div>
+                        <!--end::Stat-->
+                  
+                    </div>
+                   
+                </div>
+                <!--end::Info-->
+            </div>
+            <!--end::Wrapper-->
+        </div>
+        <!--end::Details-->
+        <div class="separator"></div>
+        @await Component.InvokeAsync("NavStretch")
+
+    </div>
+</div>

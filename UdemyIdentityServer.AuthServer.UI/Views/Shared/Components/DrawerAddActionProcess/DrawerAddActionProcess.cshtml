@@ -1,0 +1,87 @@
+﻿<div id="kt_addactionprocess" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="addactionprocess" data-kt-drawer-activate="true" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'lg': '500px'}" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_addactionprocess_toggle" data-kt-drawer-close="#kt_addactionprocess_close">
+    <div class="card shadow-none border-0 rounded-0">
+        <div class="card-header" id="kt_addactionprocess_header">
+            <h3 class="card-title fw-bold text-dark">
+                Süreç Hareketleri
+            </h3>
+            <div class="card-toolbar">
+                <button type="button" class="btn btn-sm btn-icon btn-active-light-primary me-n5" id="kt_addactionprocess_close">
+                    <i class="ki-outline ki-cross fs-1"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body position-relative" id="kt_addactionprocess_body">
+            <div id="kt_addactionprocess_scroll" class="position-relative scroll-y me-n5 pe-5" data-kt-scroll="true" data-kt-scroll-height="auto" data-kt-scroll-wrappers="#kt_addactionprocess_body" data-kt-scroll-dependencies="#kt_addactionprocess_header, #kt_addactionprocess_footer" data-kt-scroll-offset="5px">
+                <div class="w-100">
+                    <div class="card mb-1 mb-xl-3">
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            <div class="card-body pb-0">
+                                <div class="d-flex align-items-center mb-5">
+                                    <div class="d-flex align-items-center flex-grow-1">
+                                        <div class="symbol symbol-45px me-5">
+                                            <img src="assets/media/avatars/blank.png" alt="">
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <a href="#" class="text-gray-900 text-hover-primary fs-6 fw-bold">Yeni İşlem Hareket Başlık</a>
+                                            <span class="text-gray-400 fw-bold">23.07.2023 16:57:08</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-7">
+                                    <div class="text-gray-800 mb-5">Outlines keep you honest.They stop you from indulging in poorly thought-out metaphors about driving and keep you focused on the overall structure of your post</div>
+                                    <div class="d-flex align-items-center mb-5">
+                                        <a href="#" class="btn btn-sm btn-light btn-color-muted btn-active-light-success px-4 py-2 me-4">
+                                            <i class="ki-outline ki-paper-clip fs-2"></i>1
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-light btn-color-muted btn-active-light-danger px-4 py-2">
+                                            <i class="ki-outline ki-time fs-2"></i>30 dk
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="separator mb-4"></div>
+                            </div>
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer py-5 text-center" id="kt_addactionprocess_footer">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+                        <input type="text" class="form-control form-control-solid" placeholder="" name="card_name" value="Başlık">
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+                        <input type="text" class="form-control form-control-solid" placeholder="" name="card_name" value="Süre(dk)">
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container">
+                <textarea class="form-control form-control-solid" placeholder="" name="card_name" value="Açıklama">Açıklama</textarea>
+                <div class="fv-plugins-message-container invalid-feedback"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6">
+                        <i class="ki-outline ki-svg/files/upload.svg fs-2tx text-primary me-4"></i>
+                        <div class="d-flex flex-stack flex-grow-1">
+                            <div class="fw-semibold">
+                                <h4 class="text-gray-900 fw-bold">Hızlı dosya yükleme</h4>
+                                <div class="fs-6 text-gray-700">Dosyanızı sürükleyip bırakarak yükleyebilirsiniz.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column mb-3 fv-row fv-plugins-icon-container mt-3">
+                <button type="button" class="btn btn-warning">Hareket Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
