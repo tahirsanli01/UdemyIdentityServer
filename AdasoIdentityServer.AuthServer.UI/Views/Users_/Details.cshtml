@@ -1,0 +1,97 @@
+﻿@model AdasoIdentityServer.Database.Models.Users
+
+
+@{
+    ViewData["Title"] = "Detaylar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Kullanıcı Detayları
+        </h3>
+        <div class="d-flex my-2">
+            
+
+            <a asp-action="Index" class='btn btn-primary btn-sm fw-bolder'> Geri</a>
+            <a asp-action="Edit" class='btn btn-secondary btn-sm fw-bolder' asp-route-id="@Model?.Id">Edit</a>
+        </div>
+    </div>
+    <div class="card">        
+        <dl class="row">
+            <dt class = "col-sm-2 mb-5">
+                <label>İsim</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class = "col-sm-2 mb-5">
+                <label>Soyisim</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Surname)
+            </dd>
+            <dt class = "col-sm-2 mb-5">
+                <label>Email</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class = "col-sm-2 mb-5">
+                <label>Şifre</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Password)
+            </dd>
+            <dt class = "col-sm-2 mb-5">
+                <label>Ülke</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Country)
+            </dd>
+            <dt class = "col-sm-2 mb-5">
+                <label>Şehir</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.City)
+            </dd>
+            <dt class = "col-sm-2 mb-5">
+                <label>Profil Resmi</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Avatar)
+            </dd>
+            <dt class = "col-sm-2 mb-5">
+                <label>Personel Unvanı</label>
+            </dt>
+ 
+            <dt class = "col-sm-2 mb-5">
+                <label>Tobb Üyelik Oid</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.TobbUyelikOid)
+            </dd>
+            <dt class = "col-sm-2 mb-5">
+                <label>Rol Id</label>
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Role.Id)
+            </dd>
+        </dl>
+        </div>
+
+    </div>
+    
+
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+        }
+    @await Component.InvokeAsync("DrawerMainProcess")
+    @await Component.InvokeAsync("DrawerSubProcess")
+    @await Component.InvokeAsync("DrawerAttachmentProcess")
+    @await Component.InvokeAsync("DrawerKPIProcess")
+    @await Component.InvokeAsync("DrawerSurveyProcess")
