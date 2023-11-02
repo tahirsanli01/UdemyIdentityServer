@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace UdemyIdentityServer.API2.Controllers
 {
@@ -23,9 +22,9 @@ namespace UdemyIdentityServer.API2.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet]     
         public IEnumerable<WeatherForecast> Get()
-        {
+        {            
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

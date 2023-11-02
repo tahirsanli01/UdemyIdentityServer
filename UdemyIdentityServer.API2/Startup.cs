@@ -31,6 +31,7 @@ namespace UdemyIdentityServer.API2
                 opts.Authority = "https://localhost:5001";
                 opts.Audience = "resource_api2";
             });
+            
             services.AddControllers();
         }
 

@@ -35,7 +35,7 @@ namespace UdemyIdentityServer.Client1.Controllers
 
             //https://localhost:5006
 
-            var response = await client.GetAsync("https://localhost:5016/api/products/getproducts");
+            var response = await client.GetAsync("https://localhost:55643/api/products/getproducts");
 
             if (response.IsSuccessStatusCode)
             {

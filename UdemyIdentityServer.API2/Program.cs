@@ -21,6 +21,7 @@ namespace UdemyIdentityServer.API2
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    
                 });
     }
 }
