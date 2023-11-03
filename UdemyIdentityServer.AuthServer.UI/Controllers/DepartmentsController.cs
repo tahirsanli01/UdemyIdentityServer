@@ -13,15 +13,36 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
     public class DepartmentsController : Controller
     {
         private readonly AuthDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DepartmentsController(AuthDbContext context)
+        public DepartmentsController(AuthDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public bool sessionControl()
+        {
+
+            var session_ = _httpContextAccessor.HttpContext?.Session;
+
+            if (string.IsNullOrEmpty(session_?.GetString("username")))
+            {
+                session_.Clear();
+                return false;
+            }
+
+            return true;
+
+
         }
 
         // GET: Departments
         public async Task<IActionResult> Index()
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Departments"] = "active";
               return _context.Department != null ? 
                           View(await _context.Department.ToListAsync()) :
@@ -31,6 +52,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Departments"] = "active";
             if (id == null || _context.Department == null)
             {
@@ -50,6 +74,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments/Create
         public IActionResult Create()
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Departments"] = "active";
             return View();
         }
@@ -74,6 +101,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Departments"] = "active";
             if (id == null || _context.Department == null)
             {
@@ -95,6 +125,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Department1")] Department department)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Departments"] = "active";
             if (id != department.Id)
             {
@@ -127,6 +160,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Departments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Departments"] = "active";
             if (id == null || _context.Department == null)
             {

@@ -8,15 +8,36 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
     public class RolesController : Controller
     {
         private readonly AuthDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RolesController(AuthDbContext context)
+        public RolesController(AuthDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public bool sessionControl()
+        {
+
+            var session_ = _httpContextAccessor.HttpContext?.Session;
+
+            if (string.IsNullOrEmpty(session_?.GetString("username")))
+            {
+                session_.Clear();
+                return false;
+            }
+
+            return true;
+
+
         }
 
         // GET: Roles
         public async Task<IActionResult> Index()
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Roles"] = "active";
               return _context.Roles != null ? 
                           View(await _context.Roles.ToListAsync()) :
@@ -26,6 +47,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Roles"] = "active";
             if (id == null || _context.Roles == null)
             {
@@ -45,6 +69,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles/Create
         public IActionResult Create()
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Roles"] = "active";
             return View();
         }
@@ -69,6 +96,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Roles"] = "active";
             if (id == null || _context.Roles == null)
             {
@@ -122,6 +152,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Roles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Roles"] = "active";
             if (id == null || _context.Roles == null)
             {

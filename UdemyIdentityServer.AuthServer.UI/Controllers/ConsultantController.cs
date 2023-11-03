@@ -8,15 +8,36 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
     public class ConsultantController : Controller
     {
         private readonly AuthDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ConsultantController(AuthDbContext context)
+        public ConsultantController(AuthDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public bool sessionControl()
+        {
+
+            var session_ = _httpContextAccessor.HttpContext?.Session;
+
+            if (string.IsNullOrEmpty(session_?.GetString("username")))
+            {
+                session_.Clear();
+                return false;
+            }
+
+            return true;
+
+
         }
 
         // GET: Consultant
         public async Task<IActionResult> Index()
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Consultant"] = "active";
             return _context.Consultant != null ? 
                           View(await _context.Consultant.ToListAsync()) :
@@ -26,6 +47,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Consultant/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Consultant"] = "active";
             if (id == null || _context.Consultant == null)
             {
@@ -45,6 +69,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Consultant/Create
         public IActionResult Create()
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Consultant"] = "active";
             return View();
         }
@@ -69,6 +96,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Consultant/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Consultant"] = "active";
             if (id == null || _context.Consultant == null)
             {
@@ -122,6 +152,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Consultant/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!sessionControl()) return Redirect("Home/Login");
+
+
             TempData["Consultant"] = "active";
             if (id == null || _context.Consultant == null)
             {
