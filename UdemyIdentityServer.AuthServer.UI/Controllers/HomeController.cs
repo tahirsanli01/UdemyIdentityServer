@@ -29,8 +29,6 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
  
         public IActionResult Login([FromForm] string username, string password)
         {
-            
-
             if (!(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)))
             {
                 if (username == "administrator" && password == "Adaso+-*")
@@ -42,7 +40,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
                 else {
                     return View("Login", "Error");
-                }               
+                }
                                 
             }
 
