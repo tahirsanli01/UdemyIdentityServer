@@ -34,16 +34,13 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 if (username == "administrator" && password == "Adaso+-*")
                 {
                     _httpContextAccessor.HttpContext?.Session.SetString("username", username);
-                    
                     return Redirect("/Users");
                 }
-
-                else {
+                else
+                {
                     return View("Login", "Error");
                 }
-                                
             }
-
             return View();
         }
     }

@@ -9,9 +9,6 @@ namespace UdemyIdentityServer.Database.Contexts;
 
 public partial class AuthDbContext : DbContext
 {
-    public AuthDbContext()
-    {
-    }
  
     public virtual DbSet<Consultant> Consultant { get; set; }
 
