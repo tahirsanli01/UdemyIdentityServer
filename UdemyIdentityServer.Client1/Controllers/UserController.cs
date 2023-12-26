@@ -77,7 +77,7 @@ namespace UdemyIdentityServer.Client1.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,user")]
         public IActionResult AdminAction()
         {
             return View();
