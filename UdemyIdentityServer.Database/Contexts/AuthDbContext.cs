@@ -9,19 +9,45 @@ namespace UdemyIdentityServer.Database.Contexts;
 
 public partial class AuthDbContext : DbContext
 {
- 
+    public AuthDbContext()
+    {
+    }
+
+    public AuthDbContext(DbContextOptions<AuthDbContext> options)
+        : base(options)
+    {
+    }
+
     public virtual DbSet<Consultant> Consultant { get; set; }
 
     public virtual DbSet<Department> Department { get; set; }
 
     public virtual DbSet<PersonelTitle> PersonelTitle { get; set; }
 
+    public virtual DbSet<Projects> Projects { get; set; }
+
     public virtual DbSet<Roles> Roles { get; set; }
+
+    public virtual DbSet<SystemApiResources> SystemApiResources { get; set; }
+
+    public virtual DbSet<SystemApiScopes> SystemApiScopes { get; set; }
+
+    public virtual DbSet<SystemApis> SystemApis { get; set; }
+
+    public virtual DbSet<SystemClientAllowedScopes> SystemClientAllowedScopes { get; set; }
+
+    public virtual DbSet<SystemClients> SystemClients { get; set; }
+
+    public virtual DbSet<SystemIdentityRosources> SystemIdentityRosources { get; set; }
+
+    public virtual DbSet<UserProjects> UserProjects { get; set; }
 
     public virtual DbSet<Users> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Turkish_CS_AS");
+
         modelBuilder.Entity<Consultant>(entity =>
         {
             entity.Property(e => e.Name)
@@ -33,31 +59,128 @@ public partial class AuthDbContext : DbContext
         {
             entity.Property(e => e.Department1)
                 .IsRequired()
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS")
                 .HasColumnName("Department");
         });
 
         modelBuilder.Entity<PersonelTitle>(entity =>
         {
-            entity.Property(e => e.Title).IsRequired();
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        });
+
+        modelBuilder.Entity<Projects>(entity =>
+        {
+            entity.Property(e => e.Explanation).HasMaxLength(500);
+            entity.Property(e => e.Name).HasMaxLength(250);
+            entity.Property(e => e.ShortName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Roles>(entity =>
         {
             entity.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(250);
+                .HasMaxLength(250)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        });
+
+        modelBuilder.Entity<SystemApiResources>(entity =>
+        {
+            entity.Property(e => e.ApiFunction).HasMaxLength(500);
+            entity.Property(e => e.ApiResource).HasMaxLength(50);
+            entity.Property(e => e.Explanation).HasMaxLength(500);
+
+            entity.HasOne(d => d.SystemApi).WithMany(p => p.SystemApiResources)
+                .HasForeignKey(d => d.SystemApiId)
+                .HasConstraintName("FK_SystemApiResources_SystemApis");
+        });
+
+        modelBuilder.Entity<SystemApiScopes>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_ApiScopes");
+
+            entity.Property(e => e.ApiResource).HasMaxLength(50);
+            entity.Property(e => e.Explanation).HasMaxLength(500);
+            entity.Property(e => e.Scope).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<SystemApis>(entity =>
+        {
+            entity.Property(e => e.ApiSecrets).HasMaxLength(50);
+            entity.Property(e => e.Explanation).HasMaxLength(500);
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.SystemName).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<SystemClientAllowedScopes>(entity =>
+        {
+            entity.Property(e => e.Explanation).HasMaxLength(500);
+            entity.Property(e => e.Name).HasMaxLength(250);
+
+            entity.HasOne(d => d.SystemClient).WithMany(p => p.SystemClientAllowedScopes)
+                .HasForeignKey(d => d.SystemClientId)
+                .HasConstraintName("FK_SystemClientAllowedScopes_SystemClients");
+        });
+
+        modelBuilder.Entity<SystemClients>(entity =>
+        {
+            entity.Property(e => e.AllowedGrantTypeExplanation).HasMaxLength(500);
+            entity.Property(e => e.AllowedGrantTypes).HasMaxLength(500);
+            entity.Property(e => e.ClientId).HasMaxLength(250);
+            entity.Property(e => e.ClientName).HasMaxLength(250);
+            entity.Property(e => e.ClientSecrets).HasMaxLength(50);
+            entity.Property(e => e.PostLogoutRedirectUris).HasMaxLength(500);
+            entity.Property(e => e.RedirectUris).HasMaxLength(500);
+            entity.Property(e => e.RefreshTokenExpirationExplanation).HasMaxLength(50);
+            entity.Property(e => e.RefreshTokenUsageExplanation).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<SystemIdentityRosources>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_IdentityRosources");
+
+            entity.Property(e => e.DisplayName).HasMaxLength(50);
+            entity.Property(e => e.Explanation).HasMaxLength(500);
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.UserClaims).HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<UserProjects>(entity =>
+        {
+            entity.HasOne(d => d.Project).WithMany(p => p.UserProjects)
+                .HasForeignKey(d => d.ProjectId)
+                .HasConstraintName("FK_UserProjects_Projects");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserProjects)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_UserProjects_Users");
         });
 
         modelBuilder.Entity<Users>(entity =>
         {
-            entity.Property(e => e.City).HasMaxLength(50);
-            entity.Property(e => e.Country).HasMaxLength(50);
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(500);
-            entity.Property(e => e.Password).HasMaxLength(50);
-            entity.Property(e => e.Surname).HasMaxLength(50);
+            entity.Property(e => e.Avatar).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.City)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Country)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Password)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Surname)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.TobbUyelikOid)
                 .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS")
                 .HasColumnName("TOBB_UYELIK_OID");
 
             entity.HasOne(d => d.Consultant).WithMany(p => p.Users)

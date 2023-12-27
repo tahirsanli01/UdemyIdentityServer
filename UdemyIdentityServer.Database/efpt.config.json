@@ -28,7 +28,39 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Projects]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Roles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SystemApiResources]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SystemApis]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SystemApiScopes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SystemClientAllowedScopes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SystemClients]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SystemIdentityRosources]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserProjects]",
          "ObjectType": 0
       },
       {
@@ -36,12 +68,13 @@
          "ObjectType": 0
       }
    ],
-   "UiHint": "server02\\sqlexpress.AuthDb.dbo",
+   "UiHint": "productsrv\\sqlexpress.AuthDb.dbo",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
    "UseDateOnlyTimeOnly": false,
    "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
    "UseHierarchyId": false,

@@ -1,6 +1,5 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
 
 using IdentityModel;
 using IdentityServer4;
@@ -84,7 +83,7 @@ namespace IdentityServerHost.Quickstart.UI
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
             // the user clicked the "cancel" button
-            if (button != "Giriş")
+            if (button != "login")
             {
                 if (context != null)
                 {
@@ -116,7 +115,7 @@ namespace IdentityServerHost.Quickstart.UI
                 if (await _customUserRepository.Validate(model.Email, model.Password))
                 {
                     var user = await _customUserRepository.FindByEmail(model.Email);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Email, user.Id.ToString(), user.Email, clientId: context?.Client.ClientId));
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName, clientId: context?.Client.ClientId));
 
                     // only set explicit expiration here if user chooses "remember me".
                     // otherwise we rely upon expiration configured in cookie middleware.
@@ -133,7 +132,7 @@ namespace IdentityServerHost.Quickstart.UI
                     // issue authentication cookie with subject ID and username
                     var isuser = new IdentityServerUser(user.Id.ToString())
                     {
-                        DisplayName = user.Email
+                        DisplayName = user.UserName
                     };
 
                     await HttpContext.SignInAsync(isuser, props);
@@ -176,7 +175,6 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-        
         /// <summary>
         /// Show logout page
         /// </summary>
@@ -236,10 +234,10 @@ namespace IdentityServerHost.Quickstart.UI
             return View();
         }
 
-
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
+
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
@@ -252,7 +250,7 @@ namespace IdentityServerHost.Quickstart.UI
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
-                    Email = context?.LoginHint,
+                    Password = context?.LoginHint,
                 };
 
                 if (!local)
@@ -301,7 +299,7 @@ namespace IdentityServerHost.Quickstart.UI
         private async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
         {
             var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
-            vm.Email = model.Email;
+            vm.Password = model.Password;
             vm.RememberLogin = model.RememberLogin;
             return vm;
         }

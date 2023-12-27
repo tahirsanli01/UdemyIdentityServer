@@ -40,4 +40,6 @@ public partial class Users
     public virtual PersonelTitle PersonelTitle { get; set; }
 
     public virtual Roles Role { get; set; }
+
+    public virtual ICollection<UserProjects> UserProjects { get; set; } = new List<UserProjects>();
 }

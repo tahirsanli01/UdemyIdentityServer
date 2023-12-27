@@ -29,7 +29,14 @@ namespace IdentityServerHost.Quickstart.UI
 
         public IActionResult Index()
         {
-            return Redirect("/Account/Login?ReturnUrl=%2Fdiagnostics");
+            if (_environment.IsDevelopment())
+            {
+                // only show in development
+                return View();
+            }
+
+            _logger.LogInformation("Homepage is disabled in production. Returning 404.");
+            return NotFound();
         }
 
         /// <summary>
