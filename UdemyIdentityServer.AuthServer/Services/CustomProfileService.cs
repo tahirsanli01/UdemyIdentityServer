@@ -35,7 +35,8 @@ namespace UdemyIdentityServer.AuthServer.Services
             var claims = new List<Claim>()
             {
                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-               new Claim( "name", user.UserName),
+               new Claim("oid", user.OId),
+               new Claim("name", user.UserName),
                new Claim("city", user.City),
                new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
                new Claim("role", user.Role)

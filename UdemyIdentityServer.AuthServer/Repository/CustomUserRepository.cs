@@ -47,6 +47,7 @@ namespace UdemyIdentityServer.AuthServer.Repository
             return new CustomUser()
             {
                 Id = user.Id,
+                OId = user.TobbUyelikOid,
                 City = user.City,
                 Email = user.Email,
                 Password = user.Password,
