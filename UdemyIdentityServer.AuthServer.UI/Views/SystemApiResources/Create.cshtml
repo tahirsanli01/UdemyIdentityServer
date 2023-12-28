@@ -1,0 +1,47 @@
+﻿@model UdemyIdentityServer.Database.Models.SystemApiResources
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>SystemApiResources</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SystemApiId" class="control-label"></label>
+                <select asp-for="SystemApiId" class ="form-control" asp-items="ViewBag.SystemApiId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiResource" class="control-label"></label>
+                <input asp-for="ApiResource" class="form-control" />
+                <span asp-validation-for="ApiResource" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApiFunction" class="control-label"></label>
+                <input asp-for="ApiFunction" class="form-control" />
+                <span asp-validation-for="ApiFunction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Explanation" class="control-label"></label>
+                <input asp-for="Explanation" class="form-control" />
+                <span asp-validation-for="Explanation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

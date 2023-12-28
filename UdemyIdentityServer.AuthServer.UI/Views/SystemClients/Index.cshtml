@@ -1,0 +1,125 @@
+﻿@model IEnumerable<UdemyIdentityServer.Database.Models.SystemClients>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequirePkce)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientSecrets)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AllowedGrantTypes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AllowedGrantTypeExplanation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RedirectUris)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostLogoutRedirectUris)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccessTokenLifetime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AllowOfflineAccess)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RefreshTokenUsage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RefreshTokenUsageExplanation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RefreshTokenExpiration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RefreshTokenExpirationExplanation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AbsoluteRefreshTokenLifetime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequireConsent)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequirePkce)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientSecrets)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AllowedGrantTypes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AllowedGrantTypeExplanation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RedirectUris)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostLogoutRedirectUris)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccessTokenLifetime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AllowOfflineAccess)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RefreshTokenUsage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RefreshTokenUsageExplanation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RefreshTokenExpiration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RefreshTokenExpirationExplanation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AbsoluteRefreshTokenLifetime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequireConsent)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
