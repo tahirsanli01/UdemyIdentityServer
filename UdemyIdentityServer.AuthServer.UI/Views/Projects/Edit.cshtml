@@ -3,42 +3,58 @@
 @{
     ViewData["Title"] = "Edit";
 }
+@section styles {
+    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
+    <style>
+    </style>
+}
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Düzenle
+        </h3>
+        <div class="d-flex my-2">
+            <a class='btn btn-primary btn-sm fw-bolder' asp-action="Index">Geri</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ShortName" class="control-label"></label>
+                        <input asp-for="ShortName" class="form-control" />
+                        <span asp-validation-for="ShortName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Explanation" class="control-label"></label>
+                        <input asp-for="Explanation" class="form-control" />
+                        <span asp-validation-for="Explanation" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Güncelle" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
 
-<h1>Edit</h1>
-
-<h4>Projects</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShortName" class="control-label"></label>
-                <input asp-for="ShortName" class="form-control" />
-                <span asp-validation-for="ShortName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Explanation" class="control-label"></label>
-                <input asp-for="Explanation" class="form-control" />
-                <span asp-validation-for="Explanation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        <div>
+            <a asp-action="Index">Listeye Geri Dön</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -73,7 +73,7 @@
     @await Component.InvokeAsync("DrawerScrollTop")
     @await Component.InvokeAsync("DrawerSetMeetingProcess")
     @await Component.InvokeAsync("ModalCreateCompany")
-    
+
 
     <!--end::Drawers-->
 
@@ -109,6 +109,18 @@
 
         });
     </script>
+
+    <style>
+        .form-group {
+            width: 50%;
+            margin: 0 auto;
+            margin-bottom: 10px;
+        }
+
+        form > .form-group > .control-label {
+            font-weight: bold;
+        }
+    </style>
 
     @await RenderSectionAsync("scripts", required: false)
 </body>

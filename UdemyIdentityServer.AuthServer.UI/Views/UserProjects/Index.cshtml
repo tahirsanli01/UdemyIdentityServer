@@ -2,40 +2,61 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Project)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Project.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@section styles {
+    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
+    <style>
+    </style>
 }
-    </tbody>
-</table>
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Kullanıcı Listesi
+            <span class="fs-6 text-gray-400 fw-semibold ms-1">4800</span>
+        </h3>
+        <div class="d-flex my-2">
+            <div class="d-flex align-items-center position-relative me-4">
+                <i class="ki-outline ki-magnifier fs-3 position-absolute translate-middle-y top-50 ms-4"></i>
+                <input type="text" id="kt_filter_search" class="form-control form-control-sm form-control-solid bg-body fw-semibold fs-7 w-150px ps-11" placeholder="Firma Ara" />
+            </div>
+            <a href="/UserProjects/Create" class='btn btn-primary btn-sm fw-bolder'>Kullanıcı Proje Oluştur</a>
+        </div>
+    </div>
+    <div class="card">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Project)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.User)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Project.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.Name) @Html.DisplayFor(modelItem => item.User.Surname)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fa-2x"></i></a> |
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fa-2x"></i></a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fa-2x"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

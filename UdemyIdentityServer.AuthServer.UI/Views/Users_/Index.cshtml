@@ -1,13 +1,13 @@
-﻿@model IEnumerable<UdemyIdentityServer.Database.Models.Users>
+﻿@using AdasoAdvisor.Models.ComponentViewDtos
+@model IEnumerable<UdemyIdentityServer.Database.Models.Users>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@using AdasoAdvisor.Models.ComponentViewDtos
 
- 
-@section styles{
+
+@section styles {
     <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
     <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <style>
@@ -32,8 +32,8 @@
         <table class="table" Id="table">
             <thead>
                 <tr>
-            
-                    <th >
+
+                    <th>
                         @Html.DisplayNameFor(model => model.Name)
                     </th>
                     <th>
@@ -58,7 +58,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                   
+
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
@@ -77,7 +77,7 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Role.Name)
                         </td>
-                        <td >
+                        <td>
                             <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fa-2x"></i></a> |
                             <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fa-2x"></i></a> |
                             <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fa-2x"></i></a>
@@ -86,9 +86,9 @@
                 }
             </tbody>
         </table>
-        </div>
     </div>
- 
+</div>
+
 
 @await Component.InvokeAsync("DrawerMainProcess")
 @await Component.InvokeAsync("DrawerSubProcess")
@@ -96,7 +96,7 @@
 @await Component.InvokeAsync("DrawerKPIProcess")
 @await Component.InvokeAsync("DrawerSurveyProcess")
 
-@section scripts{
+@section scripts {
     <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
     <script src="~/assets/plugins/select2/select2.min.js"></script>
     <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
@@ -114,4 +114,3 @@
     @*<script src="~/custom/advisor.js"></script>*@
 
 }
- 

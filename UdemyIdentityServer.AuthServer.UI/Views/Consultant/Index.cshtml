@@ -1,14 +1,14 @@
-﻿@model IEnumerable<UdemyIdentityServer.Database.Models.Consultant>
-
+﻿@using AdasoAdvisor.Models.ComponentViewDtos
+@model IEnumerable<UdemyIdentityServer.Database.Models.Consultant>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@using AdasoAdvisor.Models.ComponentViewDtos
 
 
-@section styles{
+
+@section styles {
     <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
     <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <style>
@@ -30,30 +30,31 @@
         </div>
     </div>
     <div class="card">
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-               Tür
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Detay</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Tür
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fa-2x"></i></a> |
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fa-2x"></i></a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fa-2x"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -64,7 +65,7 @@
 @await Component.InvokeAsync("DrawerKPIProcess")
 @await Component.InvokeAsync("DrawerSurveyProcess")
 
-@section scripts{
+@section scripts {
     <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
     <script src="~/assets/plugins/select2/select2.min.js"></script>
     <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>

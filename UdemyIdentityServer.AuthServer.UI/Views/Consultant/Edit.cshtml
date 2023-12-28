@@ -17,16 +17,14 @@
     <div class="d-flex flex-wrap flex-stack my-1">
         <h3 class="fw-bold my-2">
              Düzenle
-
         </h3>
         <div class="d-flex my-2">
-
             <a class='btn btn-primary btn-sm fw-bolder' asp-action="Index">Geri</a>
         </div>
     </div>
     <div class="card">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
@@ -36,7 +34,7 @@
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Kaydet" class="btn btn-primary" />
+                        <input type="submit" value="Güncelle" class="btn btn-primary" />
                     </div>
                 </form>
             </div>

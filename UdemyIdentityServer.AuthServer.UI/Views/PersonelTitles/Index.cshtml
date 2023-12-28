@@ -16,11 +16,9 @@
     <div class="d-flex flex-wrap flex-stack my-1">
         <h3 class="fw-bold my-2">
             Unvanlar
-
         </h3>
         <div class="d-flex my-2">
             <a class='btn btn-primary btn-sm fw-bolder' asp-action="Create">Unvan Ekle</a>
-
         </div>
     </div>
     <div class="card">
@@ -41,9 +39,9 @@
                             @Html.DisplayFor(modelItem => item.Title)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Detaylar</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Sil</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fa-2x"></i></a> |
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fa-2x"></i></a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fa-2x"></i></a>
                         </td>
                     </tr>
                 }
