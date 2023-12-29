@@ -22,7 +22,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: UserProjects
         public async Task<IActionResult> Index()
         {
+            
             var authDbContext = _context.UserProjects.Include(u => u.Project).Include(u => u.User);
+            TempData["UserProjects"] = "active";
             return View(await authDbContext.ToListAsync());
         }
 
@@ -42,7 +44,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Projects"] = "active";
             return View(userProjects);
         }
 
@@ -51,6 +53,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         {
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
+            TempData["Projects"] = "active";
             return View();
         }
 
@@ -69,6 +72,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", userProjects.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProjects.UserId);
+            TempData["Projects"] = "active";
             return View(userProjects);
         }
 
@@ -87,6 +91,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", userProjects.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProjects.UserId);
+            TempData["Projects"] = "active";
             return View(userProjects);
         }
 
@@ -143,7 +148,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Projects"] = "active";
             return View(userProjects);
         }
 

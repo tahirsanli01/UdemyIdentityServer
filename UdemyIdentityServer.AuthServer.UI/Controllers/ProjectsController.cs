@@ -22,7 +22,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: Projects
         public async Task<IActionResult> Index()
         {
-              return _context.Projects != null ? 
+            TempData["Projects"] = "active";
+            return _context.Projects != null ? 
                           View(await _context.Projects.ToListAsync()) :
                           Problem("Entity set 'AuthDbContext.Projects'  is null.");
         }
@@ -41,13 +42,14 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Projects"] = "active";
             return View(projects);
         }
 
         // GET: Projects/Create
         public IActionResult Create()
         {
+            TempData["Projects"] = "active";
             return View();
         }
 
@@ -64,6 +66,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            TempData["Projects"] = "active";
             return View(projects);
         }
 
@@ -80,6 +83,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
+            TempData["Projects"] = "active";
             return View(projects);
         }
 
@@ -132,7 +136,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Projects"] = "active";
             return View(projects);
         }
 
@@ -152,6 +156,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             }
             
             await _context.SaveChangesAsync();
+            TempData["Projects"] = "active";
             return RedirectToAction(nameof(Index));
         }
 
