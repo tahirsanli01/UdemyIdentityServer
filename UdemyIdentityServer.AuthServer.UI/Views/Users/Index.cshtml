@@ -21,10 +21,10 @@
             <span class="fs-6 text-gray-400 fw-semibold ms-1">@Model.Count()</span>
         </h3>
         <div class="d-flex my-2">
-            <div class="d-flex align-items-center position-relative me-4">
+@*             <div class="d-flex align-items-center position-relative me-4">
                 <i class="ki-outline ki-magnifier fs-3 position-absolute translate-middle-y top-50 ms-4"></i>
                 <input type="text" id="kt_filter_search" class="form-control form-control-sm form-control-solid bg-body fw-semibold fs-7 w-150px ps-11" placeholder="Firma Ara" />
-            </div>
+            </div> *@
             <a href="/Users/Create" class='btn btn-primary btn-sm fw-bolder'>Kullanıcı Oluştur</a>
         </div>
     </div>
@@ -110,15 +110,24 @@
     <script src="~/assets/plugins/select2/select2.min.js"></script>
     <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
     <script>
+  
         $("#table").DataTable({
-            "columnDefs": [
-                {
-                    "width": "20%",
-                    "targets": 0
-                }
-            ]
-        });
+            "language": {
+                "lengthMenu": "Show _MENU_",
+            },
+            "dom":
+                "<'row'" +
+                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                ">" +
 
+                "<'table-responsive'tr>" +
+
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">"
+        });
     </script>
     @*<script src="~/custom/advisor.js"></script>*@
 

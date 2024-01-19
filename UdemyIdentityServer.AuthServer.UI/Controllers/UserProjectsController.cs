@@ -51,8 +51,15 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: UserProjects/Create
         public IActionResult Create()
         {
+        
+            var userList = _context.Users.Select(u => new
+            {
+                Id = u.Id,
+                DisplayText = $"{u.Name} - {u.Email}"
+            }).ToList();
+
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name");
+            ViewData["UserId"] = new SelectList(userList, "Id", "DisplayText");
             TempData["Projects"] = "active";
             return View();
         }
