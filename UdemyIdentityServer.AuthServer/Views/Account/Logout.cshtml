@@ -1,15 +1,33 @@
 ﻿@model LogoutViewModel
 
-<div class="logout-page">
-    <div class="lead">
-        <h1>Logout</h1>
-        <p>Would you like to logut of IdentityServer?</p>
-    </div>
+<style>
 
-    <form asp-action="Logout">
-        <input type="hidden" name="logoutId" value="@Model.LogoutId"  />
-        <div class="form-group">
-            <button class="btn btn-primary">Yes</button>
+    .logout-card {
+        margin: 10px;
+        padding: 60px;
+        background-color: white;
+        border-radius: 50px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.20);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+    }
+</style>
+<div class="logout-card">
+    <div class="text-center">
+        <div class="text-center">            
+            <img src="~/assets/media/logos/adasologo.png" style="max-width: 100px; margin-bottom: 20px;" />
         </div>
-    </form>
+        <h1 class="text-center">Çıkış Yap</h1>
+        <p class="text-center">Çıkış yapmak istediğinizden emin misiniz?</p>
+        <form asp-action="Logout">
+            <input type="hidden" name="logoutId" value="CfDJ8LFmahq_GkhDknTA23nkYCso83L0Lo9kBfO72fuIT3o4UK9XcRVUML7uuAzY01ScjnopqZG9_az9Ante6TkE57kfNxBD8BWJbZRWdqt5I5k-ULD_MB5dWK6TWdIguwsY4DOC6moOsl0CWATHMrF9dT7OtMyJxzGGpoIB64RGzkP2JavMnrqKtUtaARHDSeXDwWSOiY5JRSA-dzEQNB_JYmGO1ZS5l3bt0Unsq-2Adw4a4f_HxamsripLhFWoA6Xv0XBIbW0LwdycrCbfgQ3bTAN-W5AgEm5yo0DhO49dQqPArip01YIp2c0D-d_489eiM4ZH1l2el0B3KXB_miwS4vp-lTaL-M-h9wUwttwNgDwcWDTS3vQdrObhn-SaHbYd9vYc0lm_L3LL3SNja58vkE2SSinkXqEUnApOw-7R5x6dPrnN1g4Tfqs1-QJdz2ugxVryA6a4eTXBLMM43EaGA9BDoHbvBdXwo7eRbyhnndB0OhQaAaUgpkIMUFTLR5ujajDZsWM2OilwwMoDnNUyI3Em_TmnecRuqODJ5Hjk9FNDzsxJ2DeF5SxotmwfmoY2RCYFHUhxrkQcCyy4vKnSzQ9Iu8e2cFHibHmQtL2rCBhwdFDI9JDEk4orVgsSJtVBWDHK3esVS-muDspxc4H0GRcY_3jwvPrI1A2uqa-yvO2S2z7-T6uoIZNuwclS-C1tqBn-GGMWlKxkGb7FV7jgDn1Y2tFd_e5W-cWXOQB34zTtl2XFc1agvjGg9VosMFrnxzvQOhFc9_Jzl_7u90UX2nhpmHAPzkQ6e93A_4hvrJiguUQs4dDNznHcjkmp1WJou9ozV-ySddRZeLwUTU8Qj__eJdFDTXYAmyB21BNdFtKr" />
+            <div class="text-center">
+                <br />
+                <button type="button" class="btn btn-outline-primary">Evet</button>
+            </div>
+        </form>
+    </div>
 </div>
