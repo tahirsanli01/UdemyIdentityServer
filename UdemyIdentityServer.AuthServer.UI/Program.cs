@@ -1,5 +1,3 @@
-using AdasoAdvisor.Helper;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using UdemyIdentityServer.Database.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
