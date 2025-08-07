@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,10 +14,12 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         {
             _httpContextAccessor = httpContextAccessor;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
-            return Redirect("Home/Login");
+            //return Redirect("Home/Login");
+
+            return View();
         }
 
         public IActionResult Login()
