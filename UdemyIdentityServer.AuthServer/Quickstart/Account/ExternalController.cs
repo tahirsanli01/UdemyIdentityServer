@@ -1,9 +1,10 @@
-using IdentityModel;
-using IdentityServer4;
-using IdentityServer4.Events;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using IdentityServer4.Test;
+using Duende.IdentityModel;
+using Duende.IdentityServer;
+using Duende.IdentityServer.Events;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Services;
+using Duende.IdentityServer.Stores;
+using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -34,8 +35,6 @@ namespace IdentityServerHost.Quickstart.UI
             ILogger<ExternalController> logger,
             TestUserStore users = null)
         {
-            // if the TestUserStore is not in DI, then we'll just use the global users collection
-            // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
             _users = users ?? new TestUserStore(TestUsers.Users);
 
             _interaction = interaction;
@@ -132,7 +131,7 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (context != null)
             {
-                if (context.IsNativeClient())
+                if (context.Client.IsImplicitOnly())
                 {
                     // The client is native, so this change in how to
                     // return the response is for better UX for the end user.

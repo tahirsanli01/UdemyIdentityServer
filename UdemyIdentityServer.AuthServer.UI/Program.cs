@@ -24,7 +24,7 @@ builder.Services.AddAuthentication(opts =>
 }).AddOpenIdConnect("oidc", opts =>
 {
     opts.SignInScheme = "Cookies";
-    opts.Authority = "https://authserver.adasoportal.com/";
+    opts.Authority = "https://localhost:5000/";
     opts.ClientId = "IdentityUI-Test-Project";
     opts.ClientSecret = "secret";
     opts.ResponseType = "code id_token";

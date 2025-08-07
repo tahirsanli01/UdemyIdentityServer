@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UdemyIdentityServer.AuthServer.Models;
 using UdemyIdentityServer.Database.Contexts;
 using UdemyIdentityServer.Database.Models;
-using static IdentityServer4.Models.IdentityResources;
+using static Duende.IdentityServer.Models.IdentityResources;
 
 namespace UdemyIdentityServer.AuthServer.Repository
 {

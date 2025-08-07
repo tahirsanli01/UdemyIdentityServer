@@ -1,8 +1,5 @@
-﻿using IdentityModel;
-using IdentityServer4.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Duende.IdentityModel;
+using Duende.IdentityServer.Validation;
 using System.Threading.Tasks;
 using UdemyIdentityServer.AuthServer.Repository;
 
