@@ -22,57 +22,59 @@
     <link href="/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
- 
+
 </head>
 <body id="kt_body" style="background-image: url(/metronic/theme/html/demo2/dist/assets/media/bg/bg-10.jpg)" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
 
     <div class="d-flex flex-column flex-root">
 
         <div class="login login-1 login-signin-on d-flex flex-column flex-lg-row flex-column-fluid bg-white" id="kt_login">
-            
+
             <div class="d-flex flex-column flex-row-fluid position-relative p-7 overflow-hidden">
- 
-                <div class="d-flex flex-column-fluid flex-center mt-30 mt-lg-0">                    
+
+                <div class="d-flex flex-column-fluid flex-center mt-30 mt-lg-0">
                     <div class="login-form login-signin">
                         <div class="text-center mb-10 mb-lg-20">
-                            <a href="/Home/Index" class="mb-12">                                
+                            <a href="/Home/Index" class="mb-12">
                                 <img src="~/assets/media/logos/adaso360logo.png" class="max-h-70px" alt="" />
                             </a>
 
-                        <div class="text-center mb-10 mb-lg-20">
-                            <h3 class="font-size-h1">Adaso Kullanıcı Yönetimi</h3>
-                            <p class="text-muted font-weight-bold">Kullanıcı adınızı ve şifrenizi girin</p>
+                            <div class="text-center mb-10 mb-lg-20">
+                                <h3 class="font-size-h1">Adaso Kullanıcı Yönetimi</h3>
+                                <p class="text-muted font-weight-bold">Kullanıcı adınızı ve şifrenizi girin</p>
+                            </div>
+
+                            <form class="form" method="post" action="/Home/Login">
+                                <div class="form-group">
+                                    <input class="form-control form-control-solid h-auto py-5 px-6" type="text" placeholder="Kullanıcı Adı" name="username" autocomplete="off" />
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control form-control-solid h-auto py-5 px-6" type="password" placeholder="Şifre" name="password" autocomplete="off" />
+                                </div>
+                                <div class="form-group d-flex flex-wrap justify-content-between align-items-center">
+                                    <a href="javascript:;" class="text-dark-50 text-hover-primary my-3 mr-2 text-white" id="kt_login_forgot">
+                                        Forgot Password ?
+                                    </a>
+                                    <button type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3">Giriş</button>
+                                </div>
+                            </form>
+
                         </div>
 
-                        <form class="form" method="post" action="/Home/Login">
-                            <div class="form-group">
-                                <input class="form-control form-control-solid h-auto py-5 px-6" type="text" placeholder="Kullanıcı Adı" name="username" autocomplete="off" />
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control form-control-solid h-auto py-5 px-6" type="password" placeholder="Şifre" name="password" autocomplete="off" />
-                            </div>
-                            <div class="form-group d-flex flex-wrap justify-content-between align-items-center">
-                                <a href="javascript:;" class="text-dark-50 text-hover-primary my-3 mr-2 text-white" id="kt_login_forgot">
-                                    Forgot Password ?
-                                </a>
-                                <button type="submit" class="btn btn-primary font-weight-bold px-9 py-4 my-3">Giriş</button>
-                            </div>
-                        </form>
 
                     </div>
- 
 
-                </div>
+                    <div class="d-flex d-lg-none flex-column-auto flex-column flex-sm-row justify-content-between align-items-center mt-5 p-5">
+                        <div class="text-dark-50 font-weight-bold order-2 order-sm-1 my-2">
+                            &copy; 2023 Metronic
+                        </div>
+                        <div class="d-flex order-1 order-sm-2 my-2">
+                            <a href="#" class="text-dark-75 text-hover-primary">Privacy</a>
+                            <a href="#" class="text-dark-75 text-hover-primary ml-4">Legal</a>
+                            <a href="#" class="text-dark-75 text-hover-primary ml-4">Contact</a>
+                        </div>
+                    </div>
 
-                <div class="d-flex d-lg-none flex-column-auto flex-column flex-sm-row justify-content-between align-items-center mt-5 p-5">
-                    <div class="text-dark-50 font-weight-bold order-2 order-sm-1 my-2">
-                        &copy; 2023 Metronic
-                    </div>
-                    <div class="d-flex order-1 order-sm-2 my-2">
-                        <a href="#" class="text-dark-75 text-hover-primary">Privacy</a>
-                        <a href="#" class="text-dark-75 text-hover-primary ml-4">Legal</a>
-                        <a href="#" class="text-dark-75 text-hover-primary ml-4">Contact</a>
-                    </div>
                 </div>
 
             </div>
@@ -81,13 +83,11 @@
 
     </div>
 
- 
-    
     <script src="~/assets/plugins/global/plugins.bundle.js"></script>
     <script src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
-    <script src="~/assets/js/scripts.bundle.js"></script>    
+    <script src="~/assets/js/scripts.bundle.js"></script>
     <script src="~/assets/js/custom/login/login-general.js"></script>
 
 </body>
- 
+
 </html>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,36 +18,26 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public bool sessionControl() {
-            
-            var session_ = _httpContextAccessor.HttpContext?.Session;
-            
-            if (string.IsNullOrEmpty(session_?.GetString("username")))
-            {
-                session_.Clear();
-                return false;
-            }
-                
-            return true;
-            
-                
-        }
-        // GET: Users
+ 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            if (!sessionControl()) return Redirect("Home/Login");
-            
-
-            var authDbContext = _context.Users.Include(u => u.Consultant).Include(u => u.Department).Include(u => u.PersonelTitle).Include(u => u.Role);
+   
+            var authDbContext = _context.Users.
+                Include(u => u.Consultant).
+                Include(u => u.Department).
+                Include(u => u.PersonelTitle).
+                Include(u => u.Role).Skip(1).Take(10);
             
             TempData["Users"] = "active";
             return View(await authDbContext.ToListAsync());
         }
 
         // GET: Users/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
-            if (!sessionControl()) return Redirect("Home/Login");
+            
             TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
@@ -69,9 +59,10 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Create
+        [Authorize]
         public IActionResult Create()
         {
-            if (!sessionControl()) return Redirect("Home/Login");
+            
             TempData["Users"] = "active";
             ViewData["ConsultantId"] = new SelectList(_context.Consultant, "Id", "Name");
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Department1");
@@ -86,6 +77,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,RoleId,PersonelTitleId,DepartmentId,ConsultantId,Name,Surname,Email,Password,Country,City,Avatar,TobbUyelikOid")] Users users)
         {
 
@@ -104,9 +96,10 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (!sessionControl()) return Redirect("Home/Login");
+            
             TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
@@ -165,9 +158,10 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (!sessionControl()) return Redirect("Home/Login");
+            
             TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
