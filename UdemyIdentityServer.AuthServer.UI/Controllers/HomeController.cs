@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
 
@@ -19,6 +19,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         {
             return Redirect("Users/Index");
         }
+
 
         public IActionResult Login()
         {

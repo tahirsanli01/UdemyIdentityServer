@@ -1,5 +1,6 @@
 ﻿.adasologinBg {
-    background-image: url(/assets/media/misc/auth-bg.png);
-    background-size: cover;
+    /*background-image: url(/assets/media/misc/adasoBg.png);*/
+    background-size: contain;
     background-position: center;
+    background-color:#565555;
 }
