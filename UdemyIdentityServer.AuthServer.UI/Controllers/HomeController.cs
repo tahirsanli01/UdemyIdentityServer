@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class HomeController : Controller
     {
 
@@ -12,11 +13,11 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        //[Authorize(Roles = "admin")]
-        [Authorize]
+        
+        
         public IActionResult Index()
         {
-            return Redirect("Users/Index");            
+            return Redirect("Users/Index");
         }
 
         public IActionResult Login()
@@ -25,8 +26,13 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
         //[HttpPost]
- 
+
         //public IActionResult Login([FromForm] string username, string password)
         //{
         //    if (!(string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)))

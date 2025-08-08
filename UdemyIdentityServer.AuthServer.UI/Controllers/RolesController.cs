@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UdemyIdentityServer.Database.Contexts;
 using UdemyIdentityServer.Database.Models;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         private readonly AuthDbContext _context;

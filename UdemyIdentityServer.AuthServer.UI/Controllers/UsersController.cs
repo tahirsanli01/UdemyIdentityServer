@@ -7,6 +7,7 @@ using UdemyIdentityServer.Database.Models;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
         private readonly AuthDbContext _context;
@@ -19,22 +20,22 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
  
-        [Authorize]
+        
         public async Task<IActionResult> Index()
         {
-   
+
             var authDbContext = _context.Users.
                 Include(u => u.Consultant).
                 Include(u => u.Department).
                 Include(u => u.PersonelTitle).
-                Include(u => u.Role).Skip(1).Take(10);
+                Include(u => u.Role);
             
             TempData["Users"] = "active";
             return View(await authDbContext.ToListAsync());
         }
 
         // GET: Users/Details/5
-        [Authorize]
+        
         public async Task<IActionResult> Details(int? id)
         {
             
@@ -59,7 +60,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Create
-        [Authorize]
+        
         public IActionResult Create()
         {
             
@@ -96,7 +97,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Edit/5
-        [Authorize]
+        
         public async Task<IActionResult> Edit(int? id)
         {
             
@@ -158,7 +159,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Delete/5
-        [Authorize]
+        
         public async Task<IActionResult> Delete(int? id)
         {
             
