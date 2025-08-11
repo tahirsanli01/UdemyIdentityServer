@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +7,7 @@ using UdemyIdentityServer.Database.Models;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UserProjectsController : Controller
     {
         private readonly AuthDbContext _context;
@@ -40,10 +38,12 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 .Include(u => u.Project)
                 .Include(u => u.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (userProjects == null)
             {
                 return NotFound();
             }
+
             TempData["Projects"] = "active";
             return View(userProjects);
         }

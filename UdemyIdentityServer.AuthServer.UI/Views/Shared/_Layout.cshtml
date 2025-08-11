@@ -53,21 +53,19 @@
             </div>
             <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
                 @await Component.InvokeAsync("AppToolbar")
-                <div class="app-container container-xxl">
-                    <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
-                        <div class="d-flex flex-column flex-column-fluid">
-                            @RenderBody()
+                    <div class="app-container container-xxl">
+                        <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+                            <div class="d-flex flex-column flex-column-fluid">
+                                @RenderBody()
+                            </div>
+                            @await Component.InvokeAsync("Footer")
                         </div>
-                        @await Component.InvokeAsync("Footer")
                     </div>
-                </div>
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="kt_modal_process" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true"></div>
-
-    <!--begin::Drawers-->
+    
     @await Component.InvokeAsync("DrawerActivities")
     @await Component.InvokeAsync("DrawerShopping")
     @await Component.InvokeAsync("DrawerChat")

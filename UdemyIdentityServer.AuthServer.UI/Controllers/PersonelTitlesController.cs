@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using UdemyIdentityServer.Database.Contexts;
 using UdemyIdentityServer.Database.Models;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PersonelTitlesController : Controller
     {
         private readonly AuthDbContext _context;
@@ -20,29 +17,10 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             _context = context;
             _httpContextAccessor = httpContextAccessor;
         }
-
-        public bool sessionControl()
-        {
-
-            var session_ = _httpContextAccessor.HttpContext?.Session;
-
-            if (string.IsNullOrEmpty(session_?.GetString("username")))
-            {
-                session_.Clear();
-                return false;
-            }
-
-            return true;
-
-
-        }
-
-        // GET: PersonelTitles
+ 
         public async Task<IActionResult> Index()
         {
-            if (!sessionControl()) return Redirect("Home/Login");
-
-
+        
             TempData["PersonelTitles"] = "active";
               return _context.PersonelTitle != null ? 
                           View(await _context.PersonelTitle.ToListAsync()) :
@@ -51,10 +29,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: PersonelTitles/Details/5
         public async Task<IActionResult> Details(int? id)
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
-
+        { 
             TempData["PersonelTitles"] = "active";
             if (id == null || _context.PersonelTitle == null)
             {
@@ -73,10 +48,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: PersonelTitles/Create
         public IActionResult Create()
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
-
+        { 
             TempData["PersonelTitles"] = "active";
             return View();
         }
@@ -100,10 +72,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: PersonelTitles/Edit/5
         public async Task<IActionResult> Edit(int? id)
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
-
+        { 
             TempData["PersonelTitles"] = "active";
             if (id == null || _context.PersonelTitle == null)
             {
@@ -156,10 +125,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: PersonelTitles/Delete/5
         public async Task<IActionResult> Delete(int? id)
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
-
+        { 
             TempData["PersonelTitles"] = "active";
             if (id == null || _context.PersonelTitle == null)
             {

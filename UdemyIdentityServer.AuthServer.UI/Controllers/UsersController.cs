@@ -19,26 +19,23 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
- 
-        
         public async Task<IActionResult> Index()
         {
-
             var authDbContext = _context.Users.
                 Include(u => u.Consultant).
                 Include(u => u.Department).
                 Include(u => u.PersonelTitle).
                 Include(u => u.Role);
-            
+
             TempData["Users"] = "active";
             return View(await authDbContext.ToListAsync());
         }
 
         // GET: Users/Details/5
-        
+
         public async Task<IActionResult> Details(int? id)
         {
-            
+
             TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
@@ -60,16 +57,16 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Create
-        
+
         public IActionResult Create()
         {
-            
+
             TempData["Users"] = "active";
             ViewData["ConsultantId"] = new SelectList(_context.Consultant, "Id", "Name");
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Department1");
             ViewData["PersonelTitleId"] = new SelectList(_context.PersonelTitle, "Id", "Title");
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name");
-           
+
             return View();
         }
 
@@ -97,10 +94,10 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Edit/5
-        
+
         public async Task<IActionResult> Edit(int? id)
         {
-            
+
             TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
@@ -159,10 +156,10 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         // GET: Users/Delete/5
-        
+
         public async Task<IActionResult> Delete(int? id)
         {
-            
+
             TempData["Users"] = "active";
             if (id == null || _context.Users == null)
             {
@@ -198,14 +195,14 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 _context.Users.Remove(users);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UsersExists(int id)
         {
-          return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

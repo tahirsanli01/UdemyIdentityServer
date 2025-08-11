@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UdemyIdentityServer.Database.Contexts;
 using UdemyIdentityServer.Database.Models;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ConsultantController : Controller
     {
         private readonly AuthDbContext _context;
@@ -34,9 +36,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: Consultant
         public async Task<IActionResult> Index()
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
+        { 
 
             TempData["Consultant"] = "active";
             return _context.Consultant != null ? 
@@ -46,10 +46,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: Consultant/Details/5
         public async Task<IActionResult> Details(int? id)
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
-
+        { 
             TempData["Consultant"] = "active";
             if (id == null || _context.Consultant == null)
             {
@@ -68,10 +65,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: Consultant/Create
         public IActionResult Create()
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
-
+        { 
             TempData["Consultant"] = "active";
             return View();
         }
@@ -95,9 +89,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: Consultant/Edit/5
         public async Task<IActionResult> Edit(int? id)
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
+        { 
 
             TempData["Consultant"] = "active";
             if (id == null || _context.Consultant == null)
@@ -151,9 +143,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         // GET: Consultant/Delete/5
         public async Task<IActionResult> Delete(int? id)
-        {
-            if (!sessionControl()) return Redirect("Home/Login");
-
+        { 
 
             TempData["Consultant"] = "active";
             if (id == null || _context.Consultant == null)
