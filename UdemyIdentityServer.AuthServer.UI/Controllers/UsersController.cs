@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using UdemyIdentityServer.AuthServer.UI.Models.ComponentViewDtos;
 using UdemyIdentityServer.Database.Contexts;
 using UdemyIdentityServer.Database.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
@@ -21,15 +23,52 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var authDbContext = _context.Users.
-                Include(u => u.Consultant).
-                Include(u => u.Department).
-                Include(u => u.PersonelTitle).
-                Include(u => u.Role);
-
             TempData["Users"] = "active";
+            var authDbContext = _context.Users.
+               Include(u => u.Consultant).
+               Include(u => u.Department).
+               Include(u => u.PersonelTitle).
+               Include(u => u.Role);
             return View(await authDbContext.ToListAsync());
         }
+
+
+
+        [HttpPost]
+        public async Task<JsonResult> GetUserListAsync([FromBody] PagingDto pagingDto)
+        {
+            string serachkey = pagingDto.search.value == null ? "" : pagingDto.search.value;
+
+            var query = _context.Users
+                .Include(u => u.Consultant)
+                .Include(u => u.Department)
+                .Include(u => u.PersonelTitle)
+                .Include(u => u.Role)
+                .Where(x => x.Name.Contains(serachkey));
+
+            var totalCount = await query.CountAsync();
+
+            var pagedData = await query
+                .Skip(pagingDto.start)
+                .Take(pagingDto.length)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Name,
+                    Department = new { u.Department.Department1 },
+                    Role = new { u.Role.Name }
+                })
+                .ToListAsync();
+
+            return Json(new
+            {
+                draw = pagingDto.draw,
+                recordsTotal = totalCount,
+                recordsFiltered = pagedData.Count,
+                data = pagedData
+            });
+        }
+
 
         // GET: Users/Details/5
 
@@ -37,6 +76,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         {
 
             TempData["Users"] = "active";
+
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -48,6 +88,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 .Include(u => u.PersonelTitle)
                 .Include(u => u.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (users == null)
             {
                 return NotFound();
@@ -86,14 +127,14 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ConsultantId"] = new SelectList(_context.Consultant, "Id", "Name", users.ConsultantId);
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "Department1", users.DepartmentId);
             ViewData["PersonelTitleId"] = new SelectList(_context.PersonelTitle, "Id", "Title", users.PersonelTitleId);
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", users.RoleId);
+
             return View(users);
         }
-
-        // GET: Users/Edit/5
 
         public async Task<IActionResult> Edit(int? id)
         {

@@ -29,68 +29,18 @@
         </div>
     </div>
     <div class="card">
-        <table class="table" Id="table">
+        <table id="table" class="table table-striped">
             <thead>
                 <tr>
-                    <th width="250">
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Surname)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Email)
-                    </th>
-
-                    <th>
-                        @Html.DisplayNameFor(model => model.Consultant)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Department)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PersonelTitle)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Role)
-                    </th>
-                    <th></th>
+                    <th>ID</th>
+                    <th>Ad Soyad</th>
+                    <th>Departman</th>
+                    <th>Rol</th>
+                    
                 </tr>
             </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Surname)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Consultant.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Department.Department1)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PersonelTitle.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Role.Name)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fa-2x"></i></a> |
-                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fa-2x"></i></a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fa-2x"></i></a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
         </table>
+        
     </div>
 </div>
 
@@ -106,24 +56,43 @@
     <script src="~/assets/plugins/select2/select2.min.js"></script>
     <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
     <script>
-  
-        $("#table").DataTable({
-            "language": {
-                "lengthMenu": "Show _MENU_",
+
+          $("#table").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/Users/GetUserList',
+                type: 'POST',
+                contentType: "application/json",
+                data: function (d) {
+                    
+                    return JSON.stringify(d); // JSON formatında gönder
+                }
             },
-            "dom":
+            columns: [
+                { data: 'id', title: 'ID' },
+                { data: 'name', title: 'Ad Soyad' },
+                { data: 'department.name', title: 'Departman' }, // navigation property
+                { data: 'role.name', title: 'Rol' }
+            ],
+            data_: function(data__){
+                console.log("data__:" + data__);
+            },
+            language: {
+                lengthMenu: "Show _MENU_"
+            },
+            dom:
                 "<'row'" +
                 "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
                 "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
                 ">" +
-
                 "<'table-responsive'tr>" +
-
                 "<'row'" +
                 "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
                 "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
                 ">"
         });
+
     </script>
     @*<script src="~/custom/advisor.js"></script>*@
 }

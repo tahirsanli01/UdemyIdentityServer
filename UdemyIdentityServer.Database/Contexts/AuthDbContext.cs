@@ -9,15 +9,14 @@ namespace UdemyIdentityServer.Database.Contexts;
 
 public partial class AuthDbContext : DbContext
 {
-    public AuthDbContext()
-    {
-    }
-
     public AuthDbContext(DbContextOptions<AuthDbContext> options)
         : base(options)
     {
     }
-
+    
+    public AuthDbContext()
+    {
+    }
     public virtual DbSet<Consultant> Consultant { get; set; }
 
     public virtual DbSet<Department> Department { get; set; }
@@ -46,13 +45,14 @@ public partial class AuthDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("Turkish_CS_AS");
+        modelBuilder.UseCollation("Turkish_CI_AI");
 
         modelBuilder.Entity<Consultant>(entity =>
         {
             entity.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(250);
+                .HasMaxLength(250)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<Department>(entity =>
@@ -72,9 +72,15 @@ public partial class AuthDbContext : DbContext
 
         modelBuilder.Entity<Projects>(entity =>
         {
-            entity.Property(e => e.Explanation).HasMaxLength(500);
-            entity.Property(e => e.Name).HasMaxLength(250);
-            entity.Property(e => e.ShortName).HasMaxLength(50);
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name)
+                .HasMaxLength(250)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.ShortName)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<Roles>(entity =>
@@ -87,9 +93,15 @@ public partial class AuthDbContext : DbContext
 
         modelBuilder.Entity<SystemApiResources>(entity =>
         {
-            entity.Property(e => e.ApiFunction).HasMaxLength(500);
-            entity.Property(e => e.ApiResource).HasMaxLength(50);
-            entity.Property(e => e.Explanation).HasMaxLength(500);
+            entity.Property(e => e.ApiFunction)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.ApiResource)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
             entity.HasOne(d => d.SystemApi).WithMany(p => p.SystemApiResources)
                 .HasForeignKey(d => d.SystemApiId)
@@ -100,23 +112,41 @@ public partial class AuthDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_ApiScopes");
 
-            entity.Property(e => e.ApiResource).HasMaxLength(50);
-            entity.Property(e => e.Explanation).HasMaxLength(500);
-            entity.Property(e => e.Scope).HasMaxLength(50);
+            entity.Property(e => e.ApiResource)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Scope)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<SystemApis>(entity =>
         {
-            entity.Property(e => e.ApiSecrets).HasMaxLength(50);
-            entity.Property(e => e.Explanation).HasMaxLength(500);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.SystemName).HasMaxLength(50);
+            entity.Property(e => e.ApiSecrets)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.SystemName)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<SystemClientAllowedScopes>(entity =>
         {
-            entity.Property(e => e.Explanation).HasMaxLength(500);
-            entity.Property(e => e.Name).HasMaxLength(250);
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name)
+                .HasMaxLength(250)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
 
             entity.HasOne(d => d.SystemClient).WithMany(p => p.SystemClientAllowedScopes)
                 .HasForeignKey(d => d.SystemClientId)
@@ -125,25 +155,51 @@ public partial class AuthDbContext : DbContext
 
         modelBuilder.Entity<SystemClients>(entity =>
         {
-            entity.Property(e => e.AllowedGrantTypeExplanation).HasMaxLength(500);
-            entity.Property(e => e.AllowedGrantTypes).HasMaxLength(500);
-            entity.Property(e => e.ClientId).HasMaxLength(250);
-            entity.Property(e => e.ClientName).HasMaxLength(250);
-            entity.Property(e => e.ClientSecrets).HasMaxLength(50);
-            entity.Property(e => e.PostLogoutRedirectUris).HasMaxLength(500);
-            entity.Property(e => e.RedirectUris).HasMaxLength(500);
-            entity.Property(e => e.RefreshTokenExpirationExplanation).HasMaxLength(50);
-            entity.Property(e => e.RefreshTokenUsageExplanation).HasMaxLength(50);
+            entity.Property(e => e.AllowedGrantTypeExplanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.AllowedGrantTypes)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.ClientId)
+                .HasMaxLength(250)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.ClientName)
+                .HasMaxLength(250)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.ClientSecrets)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.PostLogoutRedirectUris)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.RedirectUris)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.RefreshTokenExpirationExplanation)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.RefreshTokenUsageExplanation)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<SystemIdentityRosources>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_IdentityRosources");
 
-            entity.Property(e => e.DisplayName).HasMaxLength(50);
-            entity.Property(e => e.Explanation).HasMaxLength(500);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.UserClaims).HasMaxLength(500);
+            entity.Property(e => e.DisplayName)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.UserClaims)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<UserProjects>(entity =>
@@ -168,9 +224,6 @@ public partial class AuthDbContext : DbContext
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
-                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
-            entity.Property(e => e.Name)
-                .HasMaxLength(500)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Password)
                 .HasMaxLength(50)
