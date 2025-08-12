@@ -34,8 +34,10 @@
                 <tr>
                     <th>ID</th>
                     <th>Ad Soyad</th>
+                    <th>Email</th>
                     <th>Departman</th>
                     <th>Rol</th>
+                    <th style="width: 10%;">İşlemler</th>
                     
                 </tr>
             </thead>
@@ -54,10 +56,8 @@
 @section scripts {
     <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
     <script src="~/assets/plugins/select2/select2.min.js"></script>
-    <script src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
     <script>
-
-          $("#table").DataTable({
+        $("#table").DataTable({
             processing: true,
             serverSide: true,
             ajax: {
@@ -65,19 +65,29 @@
                 type: 'POST',
                 contentType: "application/json",
                 data: function (d) {
-                    
                     return JSON.stringify(d); // JSON formatında gönder
                 }
             },
             columns: [
                 { data: 'id', title: 'ID' },
                 { data: 'name', title: 'Ad Soyad' },
-                { data: 'department.name', title: 'Departman' }, // navigation property
-                { data: 'role.name', title: 'Rol' }
+                { data: 'email', title: 'Email' },
+                { data: 'department.department1', title: 'Departman' }, // navigation property
+                { data: 'role.name', title: 'Rol' },
+                {
+                    data: 'id',
+                    title: 'İşlemler',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        return `
+                            <a href="/Users/Edit/${data}"><i class="fa fa-edit fs-2"></i></a> |
+                            <a href="/Users/Details/${data}"><i class="fa fa-arrow-right fs-2"></i></a> |
+                            <a href="/Users/Delete/${data}"><i class="fa fa-trash fs-2"></i></a>
+                        `;
+                    }
+                }
             ],
-            data_: function(data__){
-                console.log("data__:" + data__);
-            },
             language: {
                 lengthMenu: "Show _MENU_"
             },
@@ -92,7 +102,7 @@
                 "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
                 ">"
         });
-
     </script>
+
     @*<script src="~/custom/advisor.js"></script>*@
 }

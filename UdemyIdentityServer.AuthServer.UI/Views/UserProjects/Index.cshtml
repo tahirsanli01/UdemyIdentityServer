@@ -27,16 +27,18 @@
         </div>
     </div>
     <div class="card">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>
+                    <th width="10%">
                         @Html.DisplayNameFor(model => model.Project)
                     </th>
-                    <th>
+                    <th width="50%">
                         @Html.DisplayNameFor(model => model.User)
                     </th>
-                    <th></th>
+                    <th class="text-end" width="40%">
+                        İşlemler
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -49,14 +51,23 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.User.Name) @Html.DisplayFor(modelItem => item.User.Surname)
                         </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fa-2x"></i></a> |
-                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fa-2x"></i></a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fa-2x"></i></a>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-id="@item.Id" title="Düzenle">
+                                <i class="fa fa-edit fs-2"></i>
+                            </a>
+                            &nbsp;|&nbsp;
+                            <a asp-action="Details" asp-route-id="@item.Id" title="Detaylar">
+                                <i class="fa fa-arrow-right fs-2"></i>
+                            </a>
+                            &nbsp;|&nbsp;
+                            <a asp-action="Delete" asp-route-id="@item.Id" title="Sil">
+                                <i class="fa fa-remove fs-2"></i>
+                            </a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+
     </div>
 </div>

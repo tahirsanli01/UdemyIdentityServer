@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using UdemyIdentityServer.AuthServer.UI.Models.ComponentViewDtos;
 using UdemyIdentityServer.Database.Contexts;
 using UdemyIdentityServer.Database.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
@@ -37,14 +36,14 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [HttpPost]
         public async Task<JsonResult> GetUserListAsync([FromBody] PagingDto pagingDto)
         {
-            string serachkey = pagingDto.search.value == null ? "" : pagingDto.search.value;
+            string searchkey = pagingDto.search.value;
 
             var query = _context.Users
                 .Include(u => u.Consultant)
                 .Include(u => u.Department)
                 .Include(u => u.PersonelTitle)
                 .Include(u => u.Role)
-                .Where(x => x.Name.Contains(serachkey));
+                .Where(x => x.Name.Contains(searchkey) || x.Email.Contains(searchkey));
 
             var totalCount = await query.CountAsync();
 
@@ -55,6 +54,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 {
                     u.Id,
                     u.Name,
+                    u.Email,
                     Department = new { u.Department.Department1 },
                     Role = new { u.Role.Name }
                 })
@@ -64,7 +64,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 draw = pagingDto.draw,
                 recordsTotal = totalCount,
-                recordsFiltered = pagedData.Count,
+                recordsFiltered = totalCount,
                 data = pagedData
             });
         }

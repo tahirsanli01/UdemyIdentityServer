@@ -16,24 +16,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
-        }
-
-        public bool sessionControl()
-        {
-
-            var session_ = _httpContextAccessor.HttpContext?.Session;
-
-            if (string.IsNullOrEmpty(session_?.GetString("username")))
-            {
-                session_.Clear();
-                return false;
-            }
-
-            return true;
-
-
-        }
-
+        } 
         // GET: Consultant
         public async Task<IActionResult> Index()
         { 

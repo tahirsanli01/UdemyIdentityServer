@@ -44,7 +44,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 return NotFound();
             }
 
-            TempData["Projects"] = "active";
+            TempData["UserProjects"] = "active";
             return View(userProjects);
         }
 
@@ -60,7 +60,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             ViewData["UserId"] = new SelectList(userList, "Id", "DisplayText");
-            TempData["Projects"] = "active";
+            TempData["UserProjects"] = "active";
             return View();
         }
 
@@ -79,7 +79,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", userProjects.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProjects.UserId);
-            TempData["Projects"] = "active";
+            TempData["UserProjects"] = "active";
             return View(userProjects);
         }
 
@@ -92,13 +92,17 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             }
 
             var userProjects = await _context.UserProjects.FindAsync(id);
+
             if (userProjects == null)
             {
                 return NotFound();
             }
+            
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", userProjects.ProjectId);
+
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProjects.UserId);
-            TempData["Projects"] = "active";
+
+            TempData["UserProjects"] = "active";
             return View(userProjects);
         }
 
@@ -155,7 +159,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
-            TempData["Projects"] = "active";
+            TempData["UserProjects"] = "active";
             return View(userProjects);
         }
 

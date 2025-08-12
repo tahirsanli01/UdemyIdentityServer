@@ -153,11 +153,14 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 return Problem("Entity set 'AuthDbContext.PersonelTitle'  is null.");
             }
             var personelTitle = await _context.PersonelTitle.FindAsync(id);
+
             if (personelTitle != null)
             {
                 _context.PersonelTitle.Remove(personelTitle);
             }
             
+            
+            _context.Remove(personelTitle);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

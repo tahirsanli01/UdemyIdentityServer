@@ -1,7 +1,8 @@
 ﻿@model UdemyIdentityServer.Database.Models.Projects
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Proje Düzenle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section styles {
     <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
@@ -46,10 +47,7 @@
                 </form>
             </div>
         </div>
-
-        <div>
-            <a asp-action="Index">Listeye Geri Dön</a>
-        </div>
+ 
     </div>
 </div>
 
