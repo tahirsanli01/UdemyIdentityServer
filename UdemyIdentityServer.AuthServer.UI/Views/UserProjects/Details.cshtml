@@ -23,16 +23,16 @@
     <div class="card">
         <dl class="row">
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Project)
+                @Html.DisplayNameFor(model => model.Project.Name)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Project.Id)
+                @Html.DisplayFor(model => model.Project.Name)
             </dd>
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.User.Name)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.User.Id)
+                @Html.DisplayFor(model => model.User.Name)
             </dd>
         </dl>
     </div>

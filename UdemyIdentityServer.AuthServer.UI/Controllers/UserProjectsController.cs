@@ -77,8 +77,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", userProjects.ProjectId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProjects.UserId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", userProjects.ProjectId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userProjects.UserId);
             TempData["UserProjects"] = "active";
             return View(userProjects);
         }
@@ -98,9 +98,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 return NotFound();
             }
             
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", userProjects.ProjectId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", userProjects.ProjectId);
 
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProjects.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userProjects.UserId);
 
             TempData["UserProjects"] = "active";
             return View(userProjects);
@@ -138,8 +138,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Id", userProjects.ProjectId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", userProjects.UserId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", userProjects.ProjectId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userProjects.UserId);
             return View(userProjects);
         }
 
