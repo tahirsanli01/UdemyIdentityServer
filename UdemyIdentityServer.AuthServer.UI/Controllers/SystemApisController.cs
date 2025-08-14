@@ -19,7 +19,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApis
         public async Task<IActionResult> Index()
         {
-              return _context.SystemApis != null ? 
+            TempData["SystemApis"] = "active";
+            return _context.SystemApis != null ? 
                           View(await _context.SystemApis.ToListAsync()) :
                           Problem("Entity set 'AuthDbContext.SystemApis'  is null.");
         }
@@ -27,6 +28,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApis/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["SystemApis"] = "active";
             if (id == null || _context.SystemApis == null)
             {
                 return NotFound();
@@ -45,6 +47,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApis/Create
         public IActionResult Create()
         {
+            TempData["SystemApis"] = "active";
             return View();
         }
 
@@ -67,6 +70,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApis/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["SystemApis"] = "active";
             if (id == null || _context.SystemApis == null)
             {
                 return NotFound();
@@ -118,6 +122,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApis/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["SystemApis"] = "active";
             if (id == null || _context.SystemApis == null)
             {
                 return NotFound();

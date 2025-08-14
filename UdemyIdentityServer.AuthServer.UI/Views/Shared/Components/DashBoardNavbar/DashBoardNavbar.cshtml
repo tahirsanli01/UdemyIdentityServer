@@ -33,27 +33,40 @@
                             <button class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                 <i class="ki-solid ki-dots-horizontal fs-2x"></i>
                             </button>
- 
+
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-3" data-kt-menu="true">
                                 <div class="menu-item px-3 my-1">
-                                    <a href="/SystemClients" class="menu-link px-3">Clients</a>
+                                    <a href="/SystemClients" class="menu-link px-3 @TempData["SystemClients"]">
+                                        Clients - Yetkilendirilmiş Uygulama (Sistem Uygulamaları)
+                                    </a>
                                 </div>
                                 <div class="menu-item px-3 my-1">
-                                    <a href="/SystemApis" class="menu-link px-3">Api</a>
+                                    <a href="/SystemApis" class="menu-link px-3 @TempData["SystemApis"]">
+                                        Api (Sistem API’leri)
+                                    </a>
                                 </div>
                                 <div class="menu-item px-3 my-1">
-                                    <a href="/SystemApiResources" class="menu-link px-3">Api Resources</a>
+                                    <a href="/SystemApiResources" class="menu-link px-3 @TempData["SystemApiResources"]">
+                                        Api Resources (API Kaynakları)
+                                    </a>
                                 </div>
                                 <div class="menu-item px-3 my-1">
-                                    <a href="/SystemApiScopes" class="menu-link px-3">Api Scopes</a>
+                                    <a href="/SystemApiScopes" class="menu-link px-3 @TempData["SystemApiScopes"]">
+                                        Api Scopes (API Yetkileri)
+                                    </a>
                                 </div>
                                 <div class="menu-item px-3 my-1">
-                                    <a href="/SystemClientAllowedScopes" class="menu-link px-3">Client Allowed Scopes</a>
+                                    <a href="/SystemClientAllowedScopes" class="menu-link px-3 @TempData["SystemClientAllowedScopes"]">
+                                        Client Allowed Scopes (Uygulamaya Tanımlı Yetkiler)
+                                    </a>
                                 </div>
                                 <div class="menu-item px-3 my-1">
-                                    <a href="/SystemIdentityRosources" class="menu-link px-3">Identity Resources</a>
+                                    <a href="/SystemIdentityRosources" class="menu-link px-3 @TempData["SystemIdentityRosources"]">
+                                        Identity Resources (Kimlik Kaynakları)
+                                    </a>
                                 </div>
                             </div>
+
 
                         </div>
 

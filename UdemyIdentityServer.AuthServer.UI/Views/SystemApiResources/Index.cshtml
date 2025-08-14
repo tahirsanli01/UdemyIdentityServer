@@ -23,11 +23,11 @@
                 <i class="ki-outline ki-magnifier fs-3 position-absolute translate-middle-y top-50 ms-4"></i>
                 <input type="text" id="kt_filter_search" class="form-control form-control-sm form-control-solid bg-body fw-semibold fs-7 w-150px ps-11" placeholder="Firma Ara" />
             </div>
-            <a href="/Users/Create" class='btn btn-primary btn-sm fw-bolder'>Api Resource Oluştur</a>
+            <a href="/SystemApiResources/Create" class='btn btn-primary btn-sm fw-bolder'>Api Resource Oluştur</a>
         </div>
     </div>
     <div class="card">
-        <table class="table">
+        <table id="table" class="table table-striped">
             <thead>
                 <tr>
                     <th>
@@ -62,9 +62,9 @@
                             @Html.DisplayFor(modelItem => item.SystemApi.Id)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fa-2x"></i></a> |
-                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fa-2x"></i></a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fa-2x"></i></a>
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fs-2"></i></a> |
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fs-2"></i></a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fs-2"></i></a>
                         </td>
                     </tr>
                 }
@@ -72,3 +72,11 @@
         </table>
     </div>
 </div>
+
+
+@section scripts {
+    <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
+    <script src="~/assets/plugins/select2/select2.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+}

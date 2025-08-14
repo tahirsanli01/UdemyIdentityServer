@@ -19,7 +19,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiScopes
         public async Task<IActionResult> Index()
         {
-              return _context.SystemApiScopes != null ? 
+            TempData["SystemApiScopes"] = "active";
+            return _context.SystemApiScopes != null ? 
                           View(await _context.SystemApiScopes.ToListAsync()) :
                           Problem("Entity set 'AuthDbContext.SystemApiScopes'  is null.");
         }
@@ -27,6 +28,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiScopes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["SystemApiScopes"] = "active";
             if (id == null || _context.SystemApiScopes == null)
             {
                 return NotFound();
@@ -45,6 +47,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiScopes/Create
         public IActionResult Create()
         {
+            TempData["SystemApiScopes"] = "active";
             return View();
         }
 
@@ -67,6 +70,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiScopes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["SystemApiScopes"] = "active";
             if (id == null || _context.SystemApiScopes == null)
             {
                 return NotFound();
@@ -118,6 +122,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiScopes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["SystemApiScopes"] = "active";
             if (id == null || _context.SystemApiScopes == null)
             {
                 return NotFound();

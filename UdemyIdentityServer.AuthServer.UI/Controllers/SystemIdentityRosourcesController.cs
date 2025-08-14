@@ -19,7 +19,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemIdentityRosources
         public async Task<IActionResult> Index()
         {
-              return _context.SystemIdentityRosources != null ? 
+            TempData["SystemIdentityRosources"] = "active";
+            return _context.SystemIdentityRosources != null ? 
                           View(await _context.SystemIdentityRosources.ToListAsync()) :
                           Problem("Entity set 'AuthDbContext.SystemIdentityRosources'  is null.");
         }
@@ -27,6 +28,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemIdentityRosources/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["SystemIdentityRosources"] = "active";
             if (id == null || _context.SystemIdentityRosources == null)
             {
                 return NotFound();
@@ -45,6 +47,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemIdentityRosources/Create
         public IActionResult Create()
         {
+            TempData["SystemIdentityRosources"] = "active";
             return View();
         }
 
@@ -67,6 +70,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemIdentityRosources/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["SystemIdentityRosources"] = "active";
             if (id == null || _context.SystemIdentityRosources == null)
             {
                 return NotFound();
@@ -118,6 +122,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemIdentityRosources/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["SystemIdentityRosources"] = "active";
             if (id == null || _context.SystemIdentityRosources == null)
             {
                 return NotFound();
@@ -138,6 +143,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            TempData["SystemIdentityRosources"] = "active";
             if (_context.SystemIdentityRosources == null)
             {
                 return Problem("Entity set 'AuthDbContext.SystemIdentityRosources'  is null.");

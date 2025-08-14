@@ -2,42 +2,57 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            System Api Scopes
+        </h3>
+        <div class="d-flex my-2">
+            <a class='btn btn-secondary btn-sm fw-bolder' asp-action="Index">Geri</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12 ml-auto">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h1>Create</h1>
+                    <div class="form-group">
+                        <label asp-for="ApiResource" class="control-label"></label>
+                        <input asp-for="ApiResource" class="form-control" />
+                        <small class="form-text text-muted">API içinde erişilecek kaynak adı (örn: /users, /orders).</small>
+                        <span asp-validation-for="ApiResource" class="text-danger"></span>
+                    </div>
 
-<h4>SystemApiScopes</h4>
-<hr />
-<div class="row">
-    <div class="col-md-12 ml-auto">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ApiResource" class="control-label"></label>
-                <input asp-for="ApiResource" class="form-control" />
-                <span asp-validation-for="ApiResource" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Scope" class="control-label"></label>
+                        <input asp-for="Scope" class="form-control" />
+                        <small class="form-text text-muted">Bu kaynağa erişim yetkisini tanımlayan alan. Genellikle kullanıcıya hangi izinlerin verileceğini belirtir (örn: read, write).</small>
+                        <span asp-validation-for="Scope" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Explanation" class="control-label"></label>
+                        <input asp-for="Explanation" class="form-control" />
+                        <small class="form-text text-muted">API kaynağı ve scope hakkında kısa açıklama veya kullanım amacı.</small>
+                        <span asp-validation-for="Explanation" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Yeni Oluştur" class="btn btn-primary" />
+                    </div>
+                </form>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Scope" class="control-label"></label>
-                <input asp-for="Scope" class="form-control" />
-                <span asp-validation-for="Scope" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Explanation" class="control-label"></label>
-                <input asp-for="Explanation" class="form-control" />
-                <span asp-validation-for="Explanation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Yeni Oluştur" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

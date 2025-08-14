@@ -20,6 +20,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClientAllowedScopes
         public async Task<IActionResult> Index()
         {
+            TempData["SystemClientAllowedScopes"] = "active";
             var authDbContext = _context.SystemClientAllowedScopes.Include(s => s.SystemClient);
             return View(await authDbContext.ToListAsync());
         }
@@ -27,6 +28,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClientAllowedScopes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["SystemClientAllowedScopes"] = "active";
             if (id == null || _context.SystemClientAllowedScopes == null)
             {
                 return NotFound();
@@ -46,6 +48,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClientAllowedScopes/Create
         public IActionResult Create()
         {
+            TempData["SystemClientAllowedScopes"] = "active";
             ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "Id");
             return View();
         }
@@ -57,6 +60,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SystemClientId,Name,Explanation")] SystemClientAllowedScopes systemClientAllowedScopes)
         {
+            TempData["SystemClientAllowedScopes"] = "active";
             if (ModelState.IsValid)
             {
                 _context.Add(systemClientAllowedScopes);
@@ -70,6 +74,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClientAllowedScopes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["SystemClientAllowedScopes"] = "active";
+
             if (id == null || _context.SystemClientAllowedScopes == null)
             {
                 return NotFound();
@@ -123,6 +129,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClientAllowedScopes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["SystemClientAllowedScopes"] = "active";
             if (id == null || _context.SystemClientAllowedScopes == null)
             {
                 return NotFound();

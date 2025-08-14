@@ -21,6 +21,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClients
         public async Task<IActionResult> Index()
         {
+            TempData["SystemClients"] = "active";
+
               return _context.SystemClients != null ? 
                           View(await _context.SystemClients.ToListAsync()) :
                           Problem("Entity set 'AuthDbContext.SystemClients'  is null.");
@@ -29,6 +31,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["SystemClients"] = "active";
+
             if (id == null || _context.SystemClients == null)
             {
                 return NotFound();
@@ -47,6 +51,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClients/Create
         public IActionResult Create()
         {
+            TempData["SystemClients"] = "active";
             return View();
         }
 
@@ -69,6 +74,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["SystemClients"] = "active";
             if (id == null || _context.SystemClients == null)
             {
                 return NotFound();
@@ -120,6 +126,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemClients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["SystemClients"] = "active";
             if (id == null || _context.SystemClients == null)
             {
                 return NotFound();

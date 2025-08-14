@@ -2,47 +2,66 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            System Apis
+        </h3>
+        <div class="d-flex my-2">
+            <a class='btn btn-secondary btn-sm fw-bolder' asp-action="Index">Geri</a>
+        </div>
+    </div>
 
-<h1>Create</h1>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12 ml-auto">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h4>SystemApis</h4>
-<hr />
-<div class="row">
-    <div class="col-md-12 ml-auto">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <small class="form-text text-muted">API’nin görünen adı. Kullanıcıların listede göreceği isimdir.</small>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Explanation" class="control-label"></label>
+                        <input asp-for="Explanation" class="form-control" />
+                        <small class="form-text text-muted">API’nin ne işe yaradığını veya kullanım amacını kısaca açıklayın.</small>
+                        <span asp-validation-for="Explanation" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="SystemName" class="control-label"></label>
+                        <input asp-for="SystemName" class="form-control" />
+                        <small class="form-text text-muted">Sistem içerisindeki teknik veya benzersiz API adı (genellikle kodda kullanılır).</small>
+                        <span asp-validation-for="SystemName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ApiSecrets" class="control-label"></label>
+                        <input asp-for="ApiSecrets" class="form-control" />
+                        <small class="form-text text-muted">API erişimi için kullanılan gizli anahtar(lar). Güvenli şekilde saklanmalıdır.</small>
+                        <span asp-validation-for="ApiSecrets" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Yeni Oluştur" class="btn btn-primary" />
+                    </div>
+                </form>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Explanation" class="control-label"></label>
-                <input asp-for="Explanation" class="form-control" />
-                <span asp-validation-for="Explanation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SystemName" class="control-label"></label>
-                <input asp-for="SystemName" class="form-control" />
-                <span asp-validation-for="SystemName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApiSecrets" class="control-label"></label>
-                <input asp-for="ApiSecrets" class="form-control" />
-                <span asp-validation-for="ApiSecrets" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Yeni Oluştur" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

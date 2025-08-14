@@ -20,30 +20,40 @@
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
+
                     <div class="form-group">
                         <label asp-for="SystemApiId" class="control-label"></label>
                         <select asp-for="SystemApiId" class="form-control" asp-items="ViewBag.SystemApiId"></select>
+                        <small class="form-text text-muted">Bu fonksiyonun bağlı olduğu sistem API’sini seçin.</small>
                         <span asp-validation-for="SystemApiId" class="text-danger"></span>
                     </div>
+
                     <div class="form-group">
                         <label asp-for="ApiResource" class="control-label"></label>
                         <input asp-for="ApiResource" class="form-control" />
+                        <small class="form-text text-muted">API içinde erişilecek kaynak adı (örn: /users, /orders).</small>
                         <span asp-validation-for="ApiResource" class="text-danger"></span>
                     </div>
+
                     <div class="form-group">
                         <label asp-for="ApiFunction" class="control-label"></label>
                         <input asp-for="ApiFunction" class="form-control" />
+                        <small class="form-text text-muted">Kaynak üzerinde çalışacak fonksiyon veya işlem adı (örn: GET, POST, UpdateUser).</small>
                         <span asp-validation-for="ApiFunction" class="text-danger"></span>
                     </div>
+
                     <div class="form-group">
                         <label asp-for="Explanation" class="control-label"></label>
                         <input asp-for="Explanation" class="form-control" />
+                        <small class="form-text text-muted">Bu API fonksiyonunun amacı veya yaptığı işlem hakkında kısa açıklama.</small>
                         <span asp-validation-for="Explanation" class="text-danger"></span>
                     </div>
+
                     <div class="form-group">
                         <input type="submit" value="Güncelle" class="btn btn-primary" />
                     </div>
                 </form>
+
             </div>
         </div>
     </div>

@@ -20,6 +20,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiResources
         public async Task<IActionResult> Index()
         {
+            TempData["SystemApiResources"] = "active";
             var authDbContext = _context.SystemApiResources.Include(s => s.SystemApi);
             return View(await authDbContext.ToListAsync());
         }
@@ -27,6 +28,8 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiResources/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["SystemApiResources"] = "active";
+
             if (id == null || _context.SystemApiResources == null)
             {
                 return NotFound();
@@ -46,6 +49,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiResources/Create
         public IActionResult Create()
         {
+            TempData["SystemApiResources"] = "active";
             ViewData["SystemApiId"] = new SelectList(_context.SystemApis, "Id", "Id");
             return View();
         }
@@ -70,6 +74,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiResources/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            TempData["SystemApiResources"] = "active";
             if (id == null || _context.SystemApiResources == null)
             {
                 return NotFound();
@@ -123,6 +128,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         // GET: SystemApiResources/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            TempData["SystemApiResources"] = "active";
             if (id == null || _context.SystemApiResources == null)
             {
                 return NotFound();
