@@ -16,15 +16,20 @@
     <div class="d-flex flex-wrap flex-stack my-1">
         <h3 class="fw-bold my-2">
             Kullanıcı Rolleri
+            <span class="fs-6 text-gray-400 fw-semibold ms-1">@Model.Count()</span>
         </h3>
         <div class="d-flex my-2">
+            <div class="d-flex align-items-center position-relative me-4">
+                <i class="ki-outline ki-magnifier fs-3 position-absolute translate-middle-y top-50 ms-4"></i>
+                <input type="text" id="kt_filter_search" class="form-control form-control-sm form-control-solid bg-body fw-semibold fs-7 w-150px ps-11" placeholder="Kayıt Ara" />
+            </div>
             <a href="/Users/Create" class='btn btn-primary btn-sm fw-bolder'>Kullanıcı Oluştur</a>
             <a class='btn btn-secondary btn-sm fw-bolder' asp-action="Create">Yeni Rol Ekle</a>
         </div>
     </div>
     <div class="card">
 
-        <table class="table">
+        <table id="table"  class="table">
             <thead>
                 <tr>
                     <th>
@@ -69,10 +74,11 @@
 @await Component.InvokeAsync("DrawerAttachmentProcess")
 @await Component.InvokeAsync("DrawerKPIProcess")
 @await Component.InvokeAsync("DrawerSurveyProcess")
-
 @section scripts {
-
-
-
+    <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
+    <script src="~/assets/plugins/select2/select2.min.js"></script>
+    <script src="~/js/site.js"></script>
+    
+    </script>
 }
 
