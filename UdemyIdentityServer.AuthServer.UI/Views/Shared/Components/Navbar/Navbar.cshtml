@@ -1,6 +1,7 @@
-﻿<div class="app-navbar flex-shrink-0">
+﻿@using UdemyIdentityServer.AuthServer.UI.Models.Users
+@model UserViewModel
 
-
+<div class="app-navbar flex-shrink-0">
     <div class="app-navbar-item ms-1 ms-lg-5">
 
         <div class="btn btn-icon btn-custom btn-color-gray-600 btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom">
@@ -534,10 +535,13 @@
 
                     <div class="d-flex flex-column">
                         <div class="fw-bold d-flex align-items-center fs-5">
-                            Mecit Türkoğlu
-                            <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Enerji Verimliliği Uzmanı</span>
+                            @Model?.UserName
+                            <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">@Model.Role</span>
                         </div>
-                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">mecitturkoglu@adaso.org.tr</a>
+                        <div class="fw-bold d-flex align-items-center fs-8">
+                            @Model?.Title
+                            </div>
+                        <a href="#" class="fw-semibold text-muted text-hover-primary fs-7">@Model?.Email</a>
                     </div>
 
                 </div>

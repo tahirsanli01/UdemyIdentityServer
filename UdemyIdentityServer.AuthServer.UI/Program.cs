@@ -1,6 +1,7 @@
 ﻿using AdasoAdvisor.Helper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using UdemyIdentityServer.AuthServer.UI.Services;
 using UdemyIdentityServer.Database.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddSingleton<AuthHelper>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
@@ -33,7 +36,7 @@ builder.Services.AddAuthentication(opts =>
     opts.Scope.Add("api1.read");
     opts.Scope.Add("offline_access");
     opts.Scope.Add("CountryAndCity");
-    //opts.Scope.Add("Email");
+    opts.Scope.Add("email");
     opts.Scope.Add("Roles");
     opts.Scope.Add("Projects");
     opts.Scope.Add("OId");

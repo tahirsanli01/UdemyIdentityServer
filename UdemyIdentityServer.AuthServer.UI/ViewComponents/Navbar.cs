@@ -1,22 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using UdemyIdentityServer.AuthServer.UI.Models.Users;
+using UdemyIdentityServer.AuthServer.UI.Services;
+using UdemyIdentityServer.Database.Contexts;
 
-  namespace AdasoAdvisor.Controllers.ViewComponents
+namespace AdasoAdvisor.Controllers.ViewComponents
 {
     public class Navbar : ViewComponent
     {
+        private readonly AuthDbContext _authDbContext;
+        private readonly ICurrentUserService _currentUserService;
 
-        public IViewComponentResult Invoke()
+        public Navbar(AuthDbContext authDbContext, ICurrentUserService currentUserService)
         {
-            var context = HttpContext;
-            var viewContext = ViewContext;
-            var user = HttpContext.User;
-            var isAuthenticated = user;
-            var userName = user.Identity.Name; // Genellikle username
-            var email = user.FindFirst("email")?.Value; // Email claim’i
-            var subId = user.FindFirst("name")?.Value; // Kullanıcı ID
+            _authDbContext = authDbContext;
+            _currentUserService = currentUserService;
+        }
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            //var context = HttpContext;
+            //var viewContext = ViewContext;
+            //var routeData = context.GetRouteData();
+            //var actionName = routeData.Values["action"]?.ToString();
+            //var controllerName = routeData.Values["controller"]?.ToString();
+            //var areaName = routeData.DataTokens["area"]?.ToString();
 
-            return View("Navbar");
+            UserViewModel userViewModel = await _currentUserService.GetCurrentUser();
+
+
+            return View("Navbar", userViewModel);
         }
     }
 }

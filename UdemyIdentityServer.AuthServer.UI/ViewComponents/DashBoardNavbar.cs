@@ -1,13 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UdemyIdentityServer.AuthServer.UI.Models.Users;
+using UdemyIdentityServer.AuthServer.UI.Services;
 
-  namespace AdasoAdvisor.Controllers.ViewComponents
+namespace AdasoAdvisor.Controllers.ViewComponents
 {
     public class DashBoardNavbar : ViewComponent
     {
 
-        public IViewComponentResult Invoke()
+        private readonly ICurrentUserService _currentUserService;
+        public DashBoardNavbar(ICurrentUserService currentUserService)
         {
-            return View("DashBoardNavbar");
+            _currentUserService = currentUserService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            UserViewModel userViewModel = await _currentUserService.GetCurrentUser();
+
+            return View("DashBoardNavbar", userViewModel);
         }
     }
 }
