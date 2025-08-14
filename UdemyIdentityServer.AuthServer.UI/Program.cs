@@ -26,13 +26,14 @@ builder.Services.AddAuthentication(opts =>
     opts.SignInScheme = "Cookies";
     opts.Authority = "https://localhost:5000/";
     opts.ClientId = "IdentityUI-Test-Project";
-    opts.ClientSecret = "secret";
+    opts.ClientSecret = "K9f!2vG#8xTqP$1bLr7mNzW4dHs6YjQp";
     opts.ResponseType = "code id_token";
     opts.GetClaimsFromUserInfoEndpoint = true;
     opts.SaveTokens = true;
     opts.Scope.Add("api1.read");
     opts.Scope.Add("offline_access");
     opts.Scope.Add("CountryAndCity");
+    //opts.Scope.Add("Email");
     opts.Scope.Add("Roles");
     opts.Scope.Add("Projects");
     opts.Scope.Add("OId");
@@ -40,6 +41,7 @@ builder.Services.AddAuthentication(opts =>
     opts.ClaimActions.MapUniqueJsonKey("city", "city");
     opts.ClaimActions.MapUniqueJsonKey("project", "project");
     opts.ClaimActions.MapUniqueJsonKey("role", "role");
+    
     opts.ClaimActions.MapUniqueJsonKey("oid", "oid");
 
     opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters

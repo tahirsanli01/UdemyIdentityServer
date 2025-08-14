@@ -7,7 +7,7 @@
 
         public IViewComponentResult Invoke()
         {
-            return View();
+            return View("DashBoardNavbar");
         }
     }
 }

@@ -28,6 +28,9 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                Include(u => u.Department).
                Include(u => u.PersonelTitle).
                Include(u => u.Role);
+            
+            ViewBag.Breadcrumb = new List<string> { "Kullanıcı Yönetimi", "Kullanıcı Listesi" };
+
             return View(await authDbContext.ToListAsync());
         }
 

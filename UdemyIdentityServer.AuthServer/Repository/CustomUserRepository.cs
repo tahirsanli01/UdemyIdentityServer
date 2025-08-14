@@ -44,6 +44,7 @@ namespace UdemyIdentityServer.AuthServer.Repository
         public async Task<CustomUser> FindById(int id)
         {
             var user = await _context.Users.Include(x => x.Role).Include(x=>x.UserProjects).ThenInclude(x=>x.Project).Where(x => x.Id == id).SingleOrDefaultAsync();
+            
             return new CustomUser()
             {
                 Id = user.Id,
@@ -54,6 +55,7 @@ namespace UdemyIdentityServer.AuthServer.Repository
                 UserName = user.Name + " " + user.Surname,
                 Role = user.Role.Name,
                 Projects=user.UserProjects.Select(x=>x.Project).ToList()
+
             };
         }
 
@@ -61,10 +63,6 @@ namespace UdemyIdentityServer.AuthServer.Repository
         {
             return await _context.Users.AnyAsync(x => x.Email == email && x.Password == password);
         }
-
-
-
-
         public async Task<List<SystemApiResources>> GetListSystemApiResourceAsync()
         {
             return await _context.SystemApiResources.ToListAsync();

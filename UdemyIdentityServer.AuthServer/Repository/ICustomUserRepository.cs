@@ -16,8 +16,6 @@ namespace UdemyIdentityServer.AuthServer.Repository
 
         Task<CustomUser> FindByEmail(string email);
 
-
-
         Task<List<SystemApis>> GetListSystemApisAsync();
 
         Task<List<SystemApiResources>> GetListSystemApiResourceAsync();

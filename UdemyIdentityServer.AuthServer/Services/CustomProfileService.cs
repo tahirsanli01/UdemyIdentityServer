@@ -35,6 +35,7 @@ namespace UdemyIdentityServer.AuthServer.Services
                new Claim("oid", user.OId),
                new Claim("name", user.UserName),
                new Claim("city", user.City),
+               //new Claim("email", user.Email),
                new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
                new Claim("role", user.Role)
             };
@@ -120,7 +121,16 @@ namespace UdemyIdentityServer.AuthServer.Services
         private async Task<List<IdentityResource>> GetListIdentityRosources()
         {
             var identityRosources = await _customUserRepository.GetListSystemIdentityRosourcesAsync();
-            var paramIdentityRosources = identityRosources.Select(x => new IdentityResource() { Name = x.Name, DisplayName = x.DisplayName, Description = x.Explanation, UserClaims = x.UserClaims.Split(',') }).ToList();
+            var paramIdentityRosources = identityRosources.Select(x =>
+                
+            new IdentityResource()
+            {
+                Name = x.Name,
+                DisplayName = x.DisplayName,
+                Description = x.Explanation,
+                UserClaims = x.UserClaims.Split(',')
+                }).ToList();
+
             if (paramIdentityRosources == null)
             {
                 paramIdentityRosources = new List<IdentityResource>();

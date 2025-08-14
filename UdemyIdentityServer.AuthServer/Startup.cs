@@ -33,7 +33,7 @@ namespace UdemyIdentityServer.AuthServer
 
                 .AddDeveloperSigningCredential()
                 .AddProfileService<CustomProfileService>()
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>(); ;
+                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
 
             services.AddControllersWithViews();
         }
