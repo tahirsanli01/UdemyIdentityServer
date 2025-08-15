@@ -49,7 +49,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         public IActionResult Create()
         {
             TempData["SystemClientAllowedScopes"] = "active";
-            ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "Id");
+            ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "ClientId");
             return View();
         }
 
@@ -67,7 +67,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "Id", systemClientAllowedScopes.SystemClientId);
+            ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "ClientId", systemClientAllowedScopes.SystemClientId);
             return View(systemClientAllowedScopes);
         }
 
@@ -86,7 +86,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
-            ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "Id", systemClientAllowedScopes.SystemClientId);
+            ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "ClientId", systemClientAllowedScopes.SystemClientId);
             return View(systemClientAllowedScopes);
         }
 
@@ -122,9 +122,67 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "Id", systemClientAllowedScopes.SystemClientId);
+            ViewData["SystemClientId"] = new SelectList(_context.SystemClients, "Id", "ClientId", systemClientAllowedScopes.SystemClientId);
             return View(systemClientAllowedScopes);
         }
+        // GET: SystemClientAllowedScopes/Copy create view
+        // GET: SystemClientAllowedScopes/Copy/5
+
+        public async Task<IActionResult> Copy()
+        {
+            var systemClients = await _context.SystemClients.ToListAsync();
+            ViewBag.SystemClients = new SelectList(systemClients, "Id", "ClientId");
+
+            return View(new CopyViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Copy(CopyViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var systemClients = await _context.SystemClients.ToListAsync();
+                ViewBag.SystemClients = new SelectList(systemClients, "Id", "ClientId");
+                return View(model);
+            }
+
+            //Copy
+            var sourceScopes = await _context.SystemClientAllowedScopes
+                .Where(s => s.SystemClientId == model.SourceSystemClientId)
+                .ToListAsync();
+            
+            if (sourceScopes == null || !sourceScopes.Any())
+            {
+                ModelState.AddModelError("", "Kaynak istemci için izin verilen kapsam bulunamadı.");
+                var systemClients = await _context.SystemClients.ToListAsync();
+                ViewBag.SystemClients = new SelectList(systemClients, "Id", "ClientId");
+                return View(model);
+            }
+            foreach (var scope in sourceScopes)
+            {
+                var systemClient = await _context.SystemClients.FindAsync(model.TargetSystemClientId);
+
+
+                var newScope = new SystemClientAllowedScopes
+                {
+                    SystemClientId = model.TargetSystemClientId,
+                    Name = scope.Name,
+                    Explanation = scope.Explanation + $"ClientId : {model.SourceSystemClientId}- {systemClient.ClientName}' dan kopyalandı",
+                };
+                _context.SystemClientAllowedScopes.Add(newScope);
+
+                _context.SaveChanges();
+
+
+
+            }
+
+            // İşlem başarılıysa yönlendirme
+            return RedirectToAction("Index");
+        }
+
+
+
 
         // GET: SystemClientAllowedScopes/Delete/5
         public async Task<IActionResult> Delete(int? id)

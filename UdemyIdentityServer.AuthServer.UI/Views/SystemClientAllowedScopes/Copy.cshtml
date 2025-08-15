@@ -1,0 +1,58 @@
+﻿<!--Generate View-->
+@model CopyViewModel
+
+@{
+    ViewData["Title"] = "Copy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Uygulamaya tanımlı tüm yetkileri seçeceğiniz uygulama için kopyalar.
+        </h3>
+        <div class="d-flex my-2">
+            <a class='btn btn-primary btn-sm fw-bolder' asp-action="Index">Geri</a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="Copy" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="form-group">
+                        <label asp-for="SourceSystemClientId" class="control-label"></label>
+                        <select asp-for="SourceSystemClientId" class="form-control" asp-items="ViewBag.SystemClients">
+                            <option value="">Seçiniz</option>
+                        </select>
+                        <small class="form-text text-muted">Yetkilerini kopyalayacağınız bir sistem uygulaması seçiniz.</small>
+                        <span asp-validation-for="SourceSystemClientId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="TargetSystemClientId" class="control-label"></label>
+                        <select asp-for="TargetSystemClientId" class="form-control" asp-items="ViewBag.SystemClients">
+                            <option value="">Seçiniz</option>
+                        </select>
+                        <small class="form-text text-muted">Hangi sistem uygulamasına kopyalacağınızı seçiniz.</small>
+                        <span asp-validation-for="TargetSystemClientId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Kopyala" class="btn btn-primary" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
