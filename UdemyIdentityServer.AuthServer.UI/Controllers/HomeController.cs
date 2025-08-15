@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    
     public class HomeController : Controller
     {
 
@@ -13,13 +14,25 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        
-        
+
+        //[Authorize(Roles = "Admin")]
+
+        [Authorize] // Sadece login kontrolü
         public IActionResult Index()
         {
-            return Redirect("Users/Index");
-        }
+            // Kullanıcının role ve project claimlerini al
+            var roles = User.Claims.Where(x => x.Type == "role").Select(x => x.Value).ToList();
+            var projects = User.Claims.Where(x => x.Type == "project").Select(x => x.Value).ToList();
 
+            // Eğer role veya project yetkisi yoksa AccessDenied'a yönlendir
+            if (!roles.Contains("Admin") || !projects.Any(p => p.Contains("IdentityUI-Project")))
+            {
+                return RedirectToAction("AccessDenied", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
+            }
+
+            // Yetkiliyse Users/Index sayfasına yönlendir
+            return RedirectToAction("Index", "Users");
+        }
 
         public IActionResult Login()
         {
@@ -28,10 +41,34 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult AccessDenied()
+        public async Task<IActionResult> AccessDenied(string message = null)
         {
+            // Token ve project claimlerini al
+            var token = await HttpContext.GetTokenAsync("access_token");
+            var projectList = User.Claims.Where(x => x.Type == "project").Select(x => x.Value).ToList();
+
+            // Eğer token yok veya proje claimi yoksa → login sayfasına yönlendir
+            if (string.IsNullOrEmpty(token) || !projectList.Any(p => p.Contains("IdentityUI-Project")))
+            {
+                await HttpContext.SignOutAsync("Cookies");
+                await HttpContext.SignOutAsync("oidc");
+
+                TempData["ErrorMessage"] = message ?? "Giriş yapmanız gerekiyor veya yetkiniz yok.";
+
+                return Challenge(new Microsoft.AspNetCore.Authentication.AuthenticationProperties
+                {
+                    RedirectUri = Url.Action("Index", "Home") // Login sonrası gidilecek sayfa
+                }, "oidc");
+            }
+
+            // Token var ama yetki yoksa → mesaj göster
+            ViewData["ErrorMessage"] = message ?? "Bu sayfaya erişim yetkiniz yok.";
             return View();
         }
+
+
+
+
         //[HttpPost]
 
         //public IActionResult Login([FromForm] string username, string password)
