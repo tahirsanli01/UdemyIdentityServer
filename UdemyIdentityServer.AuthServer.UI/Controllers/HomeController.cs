@@ -27,15 +27,18 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             // Eğer role veya project yetkisi yoksa AccessDenied'a yönlendir
             if (!roles.Contains("Admin") || !projects.Any(p => p.Contains("IdentityUI-Project")))
             {
-                return RedirectToAction("AccessDenied", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
+                return RedirectToAction("Login", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
             }
 
             // Yetkiliyse Users/Index sayfasına yönlendir
             return RedirectToAction("Index", "Users");
         }
 
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string message = null)
         {
+            await HttpContext.SignOutAsync("Cookies");
+            await HttpContext.SignOutAsync("oidc");
+            ViewData["ErrorMessage"] = message ?? "Bu sayfaya erişim yetkiniz yok.";
 
             return View();
         }
@@ -57,7 +60,7 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
                 return Challenge(new Microsoft.AspNetCore.Authentication.AuthenticationProperties
                 {
-                    RedirectUri = Url.Action("Index", "Home") // Login sonrası gidilecek sayfa
+                    RedirectUri = Url.Action("Login", "Home") // Login sonrası gidilecek sayfa
                 }, "oidc");
             }
 
