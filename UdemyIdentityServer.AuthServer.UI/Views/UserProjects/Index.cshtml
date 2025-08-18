@@ -30,6 +30,9 @@
         <table id="table" class="table table-striped">
             <thead>
                 <tr>
+                    <th class="d-none">
+                        
+                    </th>
                     <th width="15%">
                         @Html.DisplayNameFor(model => model.Project)
                     </th>
@@ -45,6 +48,7 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td class="d-none">@Html.Raw(item.User.Name.ToLower() + " " +item.User.Surname.ToLower())</td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Project.Name)
                         </td>
