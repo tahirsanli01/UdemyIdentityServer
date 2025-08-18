@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
@@ -17,15 +18,16 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
 
         //[Authorize(Roles = "Admin")]
 
-        [Authorize] // Sadece login kontrolü
+        [Authorize]
         public IActionResult Index()
         {
             // Kullanıcının role ve project claimlerini al
             var roles = User.Claims.Where(x => x.Type == "role").Select(x => x.Value).ToList();
-            var projects = User.Claims.Where(x => x.Type == "project").Select(x => x.Value).ToList();
+            var projects = User.Claims.Where(x => x.Type == "project").ToList();
+            var projectList = JsonSerializer.Deserialize<List<string>>(projects.FirstOrDefault()?.Value ?? "[]");
 
-            // Eğer role veya project yetkisi yoksa AccessDenied'a yönlendir
-            if (!roles.Contains("Admin") || !projects.Any(p => p.Contains("IdentityUI-Project")))
+            //Eğer role veya project yetkisi yoksa AccessDenied'a yönlendir
+            if (!roles.Contains("Admin") || !projectList.Any(p => p.Contains("IdentityUI-Project")))
             {
                 return RedirectToAction("Login", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
             }
@@ -68,8 +70,6 @@ namespace UdemyIdentityServer.AuthServer.UI.Controllers
             ViewData["ErrorMessage"] = message ?? "Bu sayfaya erişim yetkiniz yok.";
             return View();
         }
-
-
 
 
         //[HttpPost]

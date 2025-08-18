@@ -1,6 +1,7 @@
 ﻿using AdasoAdvisor.Helper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using System.Text.Json;
 using UdemyIdentityServer.AuthServer.UI.Services;
 using UdemyIdentityServer.Database.Contexts;
 
@@ -46,7 +47,7 @@ builder.Services.AddAuthentication(opts =>
     opts.ClaimActions.MapUniqueJsonKey("city", "city");
     opts.ClaimActions.MapUniqueJsonKey("project", "project");
     opts.ClaimActions.MapUniqueJsonKey("role", "role");
-    
+
     opts.ClaimActions.MapUniqueJsonKey("oid", "oid");
 
     opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -68,6 +69,20 @@ builder.Services.AddAuthentication(opts =>
             return Task.CompletedTask;
         }
     };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ProjectAndRolePolicy", policy =>
+        policy.RequireAssertion(context =>
+        {
+            var hasRole = context.User.IsInRole("Admin");
+            var projectClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",",context.User.FindAll("project").Select(x=>x.Value).ToList()));
+
+            var hasProject = projectClaims.Contains("IdentityUI-Project");
+
+            return hasRole && hasProject;
+        }));
 });
 
 builder.Services.AddScoped<AuthDbContext>();

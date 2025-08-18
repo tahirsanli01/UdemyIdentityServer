@@ -36,9 +36,15 @@ namespace UdemyIdentityServer.AuthServer.Services
                new Claim("name", user.UserName),
                new Claim("city", user.City),
                new Claim("email", user.Email),
-               new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
+               //new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
                new Claim("role", user.Role)
+
             };
+
+            foreach (var item in user.Projects)
+            {
+                claims.Add(new Claim("project", item.Name));
+            }
 
             context.AddRequestedClaims(claims);
             // jwt içinde görmek istiyorsanız aşağıdaki property'i set et
@@ -122,14 +128,14 @@ namespace UdemyIdentityServer.AuthServer.Services
         {
             var identityRosources = await _customUserRepository.GetListSystemIdentityRosourcesAsync();
             var paramIdentityRosources = identityRosources.Select(x =>
-                
+
             new IdentityResource()
             {
                 Name = x.Name,
                 DisplayName = x.DisplayName,
                 Description = x.Explanation,
                 UserClaims = x.UserClaims.Split(',')
-                }).ToList();
+            }).ToList();
 
             if (paramIdentityRosources == null)
             {

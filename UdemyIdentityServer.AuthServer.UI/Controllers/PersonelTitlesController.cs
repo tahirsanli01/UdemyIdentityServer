@@ -6,7 +6,7 @@ using UdemyIdentityServer.Database.Models;
 
 namespace UdemyIdentityServer.AuthServer.UI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "ProjectAndRolePolicy")]
     public class PersonelTitlesController : Controller
     {
         private readonly AuthDbContext _context;
