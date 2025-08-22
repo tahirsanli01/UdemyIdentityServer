@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ADASOIdentityServer.Database.Models.SystemClientAllowedScopes>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section styles {
+    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
+    <style>
+    </style>
+}
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Client Allowed Scope Listesi
+            <span class="fs-6 text-gray-400 fw-semibold ms-1">@Model.Count()</span>
+        </h3>
+        <div class="d-flex my-2">
+            <div class="d-flex align-items-center position-relative me-4">
+                <i class="ki-outline ki-magnifier fs-3 position-absolute translate-middle-y top-50 ms-4"></i>
+                <input type="text" id="kt_filter_search" class="form-control form-control-sm form-control-solid bg-body fw-semibold fs-7 w-150px ps-11" placeholder="Kayıt Ara" />
+            </div>
+            <a href="/SystemClientAllowedScopes/Create" class='btn btn-primary btn-sm fw-bolder'>Client Allowed Scope Oluştur</a>
+            <a href="/SystemClientAllowedScopes/Copy" class='btn btn-danger btn-sm fw-bolder'><i class="fa fa-copy  fs-2"></i> Kopyala</a>
+        </div>
+    </div>
+    <div class="card">
+        <table id="table" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Explanation)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SystemClient)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SystemClientId)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Explanation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SystemClient.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SystemClient.ClientName)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit fs-2"></i></a> |
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-arrow-right fs-2"></i></a> |                            
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-remove fs-2"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
+    <script src="~/assets/plugins/select2/select2.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+}

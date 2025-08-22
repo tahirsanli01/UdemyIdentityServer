@@ -1,0 +1,64 @@
+﻿@using ADASOIdentityServer.AuthServer.UI.Models.ComponentViewDtos
+
+@model LatestFilesDto
+
+<div class="card card-flush h-lg-100">
+
+	<div class="card-header mt-6">
+		<!--begin::Card title-->
+		<div class="card-title flex-column">
+			<h3 class="fw-bold mb-1">@Model.Title</h3>
+			<div class="fs-6 text-gray-400">Toplam: @Model.TotalCount</div>
+		</div>
+		<!--end::Card title-->
+		<!--begin::Card toolbar-->
+		<div class="card-toolbar">
+			<a href="/TumDosyalar" class="btn btn-bg-light btn-active-color-primary btn-sm">Hepsini Göster</a>
+		</div>
+		<!--end::Card toolbar-->
+	</div>
+
+	<div class="card-body p-9 pt-3">
+		<div class="d-flex flex-column mb-9">
+			@foreach (var item in Model.LatestFiles)
+			{
+				<div class="d-flex align-items-center mb-5">
+					<!--begin::Icon-->
+					<div class="symbol symbol-30px me-5">
+						<img alt="Icon" src="@item.Icon" />
+					</div>
+					<!--end::Icon-->
+					<!--begin::Details-->
+					<div class="fw-semibold">
+						<a class="fs-6 fw-bold text-dark text-hover-primary" href="#">@item.Title</a>
+						<div class="text-gray-400">
+							@item.InsertDateString
+							<a href="#">@item.PersonFullName</a>
+						</div>
+					</div>
+					<!--end::Details-->
+			 
+				</div>
+			}
+		</div>
+		<!--end::Files-->
+		<!--begin::Notice-->
+		<div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-6">
+			<!--begin::Icon-->
+			<i class="ki-outline ki-svg/files/upload.svg fs-2tx text-primary me-4"></i>
+			<!--end::Icon-->
+			<!--begin::Wrapper-->
+			<div class="d-flex flex-stack flex-grow-1">
+				<!--begin::Content-->
+				<div class="fw-semibold">
+					<h4 class="text-gray-900 fw-bold">Hızlı dosya yükleme</h4>
+					<div class="fs-6 text-gray-700">Dosyanızı sürükleyip bırakarak yükleyebilirsiniz.</div>
+				</div>
+				<!--end::Content-->
+			</div>
+			<!--end::Wrapper-->
+		</div>
+		<!--end::Notice-->
+	</div>
+
+</div>

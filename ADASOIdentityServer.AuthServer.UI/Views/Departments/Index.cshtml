@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ADASOIdentityServer.Database.Models.Department>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
+    <style>
+    </style>
+}
+<div id="ModalCreateGoal" class="app-content">
+    @await Component.InvokeAsync("DashBoardNavbar")
+    <div class="d-flex flex-wrap flex-stack my-1">
+        <h3 class="fw-bold my-2">
+            Departmanlar
+
+        </h3>
+        <div class="d-flex my-2">
+            <div class="d-flex align-items-center position-relative me-4">
+                <i class="ki-outline ki-magnifier fs-3 position-absolute translate-middle-y top-50 ms-4"></i>
+                <input type="text" id="kt_filter_search" class="form-control form-control-sm form-control-solid bg-body fw-semibold fs-7 w-150px ps-11" placeholder="Kayıt Ara" />
+            </div>
+            <a class="btn btn-primary btn-sm fw-bolder" asp-action="Create">Yeni Departman Oluştur</a>
+        </div>
+    </div>
+    <div class="card">
+        <table id="table" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <label>Departman İsmi</label>
+                    </th>
+                    <th class="text-end">
+                        İşlemler
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department1)
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Edit" asp-route-id="@item.Id" title="Düzenle">
+                                <i class="fa fa-edit fs-1"></i>
+                            </a>
+                            &nbsp;|&nbsp;
+                            <a asp-action="Details" asp-route-id="@item.Id" title="Detaylar">
+                                <i class="fa fa-arrow-right fs-1"></i>
+                            </a>
+                            &nbsp;|&nbsp;
+                            <a asp-action="Delete" asp-route-id="@item.Id" title="Sil">
+                                <i class="fa fa-remove fs-1"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+@section scripts {
+    <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
+    <script src="~/assets/plugins/select2/select2.min.js"></script>
+    <script src="~/js/site.js"></script>
+    
+}
