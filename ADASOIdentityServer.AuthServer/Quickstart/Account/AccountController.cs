@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using ADASOIdentityServer.AuthServer.Models;
-using ADASOIdentityServer.AuthServer.Quickstart.Account;
+//using ADASOIdentityServer.AuthServer.Quickstart.Account;
 using ADASOIdentityServer.AuthServer.Repository;
 using Duende.IdentityModel;
 using Duende.IdentityServer;
@@ -61,6 +61,7 @@ namespace IdentityServerHost.Quickstart.UI
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
+
             // build a model so we know what to show on the login page
             var vm = await BuildLoginViewModelAsync(returnUrl);
 
@@ -128,7 +129,8 @@ namespace IdentityServerHost.Quickstart.UI
                             IsPersistent = true,
                             ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
                         };
-                    };
+                    }
+                    ;
 
                     // issue authentication cookie with subject ID and username
                     var isuser = new IdentityServerUser(user.Id.ToString())
@@ -178,18 +180,31 @@ namespace IdentityServerHost.Quickstart.UI
 
         //sign-up
         [HttpGet("sign-up")]
-        public IActionResult Register(string returnUrl)
+        public async Task<IActionResult> Register(string returnUrl)
         {
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+
+            if (context == null && !Url.IsLocalUrl(returnUrl))
+            {
+                returnUrl = Url.Content("~/"); // fallback
+            }
+
             var vm = new RegisterViewModel
             {
-                ReturnUrl = returnUrl
+                ReturnUrl = returnUrl,
+                EnableLocalLogin = context?.IdP == null || context.IdP == IdentityServerConstants.LocalIdentityProvider
             };
+
+            if (context?.IdP != null && context.IdP != IdentityServerConstants.LocalIdentityProvider)
+            {
+                vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP, DisplayName = context.IdP } };
+            }
             return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterInputModel model)
         {
             if (ModelState.IsValid)
             {
@@ -198,10 +213,11 @@ namespace IdentityServerHost.Quickstart.UI
                 {
                     CustomUser customuser = new CustomUser
                     {
-                        UserName = model.UserName,
+                        UserName = model.Name + " " + model.Surname,
                         Email = model.Email,
                         Password = model.Password
                     };
+
                     var newUser = await _customUserRepository.AddUser(customuser);
 
                     if (newUser != null)
@@ -232,6 +248,7 @@ namespace IdentityServerHost.Quickstart.UI
                         }
                     }
                 }
+
                 ModelState.AddModelError(string.Empty, "User with this email already exists.");
             }
             return View(model);
