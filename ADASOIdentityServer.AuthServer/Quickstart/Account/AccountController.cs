@@ -202,8 +202,8 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost("sign-up")]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterInputModel model)
         {
             if (ModelState.IsValid)
@@ -233,6 +233,7 @@ namespace IdentityServerHost.Quickstart.UI
                             DisplayName = newUser.UserName
                         };
                         await HttpContext.SignInAsync(isuser);
+
                         if (Url.IsLocalUrl(model.ReturnUrl))
                         {
                             return Redirect(model.ReturnUrl);
@@ -251,6 +252,7 @@ namespace IdentityServerHost.Quickstart.UI
 
                 ModelState.AddModelError(string.Empty, "User with this email already exists.");
             }
+
             return View(model);
         }
 

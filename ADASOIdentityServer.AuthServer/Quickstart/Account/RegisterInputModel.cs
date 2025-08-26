@@ -1,15 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ADASOIdentityServer.AuthServer.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace IdentityServerHost.Quickstart.UI;
 public class RegisterInputModel
 {
     // Kullanıcının dolduracağı alanlar
     [Required(ErrorMessage = "Ad alanı zorunludur.")]
-    [StringLength(80, ErrorMessage = "Ad en fazla 150 karakter olabilir.")]
+    [StringLength(150, ErrorMessage = "Ad en fazla 150 karakter olabilir.")]
     public string Name { get; set; }
 
     [Required(ErrorMessage = "Soyad alanı zorunludur.")]
-    [StringLength(80, ErrorMessage = "Soyad en fazla 50 karakter olabilir.")]
+    [StringLength(150, ErrorMessage = "Soyad en fazla 50 karakter olabilir.")]
     public string Surname { get; set; }
 
     [Required(ErrorMessage = "E-posta alanı zorunludur.")]
@@ -36,6 +37,6 @@ public class RegisterInputModel
     // Sistem tarafında gerekli alanlar
     public string ReturnUrl { get; set; }
 
-    [Required(ErrorMessage = "Kullanıcı sözleşmesini kabul etmelisiniz.")]
+    [MustBeTrue]
     public bool AcceptTerms { get; set; }
 }
