@@ -16,6 +16,8 @@ namespace ADASOIdentityServer.AuthServer.Repository
 
         Task<CustomUser> FindByEmail(string email);
 
+        Task<bool> ExistUser(string email);
+
         Task<List<SystemApis>> GetListSystemApisAsync();
 
         Task<List<SystemApiResources>> GetListSystemApiResourceAsync();

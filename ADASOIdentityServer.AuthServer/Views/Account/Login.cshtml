@@ -45,7 +45,7 @@
                     <div class="w-lg-500px p-10">
 
                         @if (Model.EnableLocalLogin)
-                        { 
+                        {
                             <form class="form w-100" asp-route="Login">
 
                                 <div class="text-center mb-10">
@@ -55,17 +55,23 @@
                                         <a href="/sign-up?returnUrl=@System.Net.WebUtility.UrlEncode(Model.ReturnUrl)" class="link-primary fw-bold">kayıt olabilirsiniz.</a>
                                     </div>
                                 </div>
-                                
+
                                 <input type="hidden" asp-for="ReturnUrl" />
 
                                 <div class="fv-row mb-8">
                                     <partial name="_ValidationSummary" />
                                 </div>
                                 <div class="fv-row mb-8">
+                                    <label class="form-label fs-6 fw-bold text-gray-900">Email</label>
                                     <input type="text" placeholder="Email" asp-for="Email" autocomplete="off" class="form-control bg-transparent" />
                                 </div>
                                 <div class="fv-row mb-3">
-                                    <input type="password" placeholder="Þifre" asp-for="Password" autocomplete="off" class="form-control bg-transparent" />
+                                    <div class="d-flex flex-stack mb-2">
+                                        <label class="form-label fw-bold text-gray-900 fs-6 mb-0">Password</label>
+                                        <a href="/password-reset" class="link-primary fs-6 fw-bold"> Parolanızı mı unuttunuz ? </a>
+                                    </div>
+                                    <input type="password" placeholder="Şifre" asp-for="Password" autocomplete="off" class="form-control bg-transparent" />
+
                                 </div>
                                 <div class="d-grid mb-10">
                                     <button class="btn btn-primary" name="button" value="login">Giriş Yap</button>

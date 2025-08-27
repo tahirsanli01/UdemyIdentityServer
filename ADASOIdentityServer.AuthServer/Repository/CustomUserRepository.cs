@@ -29,7 +29,6 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 return new CustomUser()
                 {
                     Id = user.Id,
-                    City = user.City,
                     Email = email,
                     Password = user.Password,
                     UserName = user.Name + " " + user.Surname
@@ -43,13 +42,14 @@ namespace ADASOIdentityServer.AuthServer.Repository
 
         public async Task<CustomUser> FindById(int id)
         {
-            var user = await _context.Users.Include(x => x.Role).Include(x=>x.UserProjects).ThenInclude(x=>x.Project).Where(x => x.Id == id).SingleOrDefaultAsync();
+            var user = await _context.Users
+                .Include(x => x.Role)
+                .Include(x=>x.UserProjects).ThenInclude(x=>x.Project).Where(x => x.Id == id).SingleOrDefaultAsync();
             
             return new CustomUser()
             {
                 Id = user.Id,
-                OId = user.TobbUyelikOid,
-                City = user.City,
+                OId = user.TobbUyelikOid,                
                 Email = user.Email,
                 Password = user.Password,
                 UserName = user.Name + " " + user.Surname,
@@ -92,6 +92,11 @@ namespace ADASOIdentityServer.AuthServer.Repository
         {
             return await _context.SystemApis.Include(x => x.SystemApiResources).ToListAsync();
         }
+                
+        public async Task<bool> ExistUser(string email)
+        {
+            return await _context.Users.AnyAsync(x => x.Email == email);
+        }
 
         //AddUser
         public async Task<CustomUser> AddUser(CustomUser user)
@@ -102,10 +107,16 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 Surname = user.UserName.Split(" ").Length > 1 ? user.UserName.Split(" ")[1] : "",
                 Email = user.Email,
                 Password = user.Password,
-                City = user.City,
-                TobbUyelikOid = user.OId,
-                //RoleId = user.RoleId
+                RoleId= 8, //Default Role User
+                PersonelTitleId=1, //Default Personel Title
+                DepartmentId=1, //Default Department
+                ConsultantId=1, //Default Consultant
+                Country="Türkiye", //Default Country
+                City="Adana", //Default City
+                Avatar= "default.png" //Default Avatar
+
             };
+
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
             user.Id = newUser.Id;

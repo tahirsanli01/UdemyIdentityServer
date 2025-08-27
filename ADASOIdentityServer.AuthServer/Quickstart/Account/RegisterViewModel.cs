@@ -6,7 +6,7 @@ namespace IdentityServerHost.Quickstart.UI;
 
 public class RegisterViewModel: RegisterInputModel
 {
-    public string ReturnUrl { get; set; }
+    
     public bool AllowRememberLogin { get; set; } = true;
     public bool EnableLocalLogin { get; set; } = true;
     public IEnumerable<ExternalProvider> ExternalProviders { get; set; }

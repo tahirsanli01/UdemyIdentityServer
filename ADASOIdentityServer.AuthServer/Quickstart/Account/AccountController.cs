@@ -203,14 +203,17 @@ namespace IdentityServerHost.Quickstart.UI
         }
 
         [HttpPost("sign-up")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterInputModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _customUserRepository.FindByEmail(model.Email);
-                if (user == null)
+                var existingUsers = await _customUserRepository.ExistUser(model.Email);
+
+                if (user == null || !existingUsers)
                 {
+
                     CustomUser customuser = new CustomUser
                     {
                         UserName = model.Name + " " + model.Surname,
@@ -222,16 +225,20 @@ namespace IdentityServerHost.Quickstart.UI
 
                     if (newUser != null)
                     {
-                        // send email to user to confirm their account
+                        //send email to user to confirm their account
                         //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+
                         //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                         //   $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+
                         //await _signInManager.SignInAsync(newUser, isPersistent: false);
+
                         var isuser = new IdentityServerUser(newUser.Id.ToString())
                         {
                             DisplayName = newUser.UserName
                         };
+
                         await HttpContext.SignInAsync(isuser);
 
                         if (Url.IsLocalUrl(model.ReturnUrl))
@@ -245,12 +252,12 @@ namespace IdentityServerHost.Quickstart.UI
                         else
                         {
                             // user might have clicked on a malicious link - should be logged
-                            throw new Exception("invalid return URL");
+                            throw new Exception("Geçersiz dönüş urlsi.");
                         }
                     }
                 }
 
-                ModelState.AddModelError(string.Empty, "User with this email already exists.");
+                ModelState.AddModelError(string.Empty, "Bu e-postaya sahip kullanıcı zaten var.");
             }
 
             return View(model);

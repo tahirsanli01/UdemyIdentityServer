@@ -27,13 +27,6 @@ public class RegisterInputModel
     [DataType(DataType.Password)]
     public string ConfirmPassword { get; set; }
 
-    // Opsiyonel alanlar
-    [StringLength(50, ErrorMessage = "Ülke en fazla 50 karakter olabilir.")]
-    public string Country { get; set; }
-
-    [StringLength(50, ErrorMessage = "Şehir en fazla 50 karakter olabilir.")]
-    public string City { get; set; }
-
     // Sistem tarafında gerekli alanlar
     public string ReturnUrl { get; set; }
 
