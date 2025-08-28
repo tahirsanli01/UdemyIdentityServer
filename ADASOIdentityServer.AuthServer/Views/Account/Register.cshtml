@@ -45,9 +45,11 @@
                         <div class="w-lg-500px p-10">
                             <form asp-action="Register" method="post" enctype="multipart/form-data">
 
-                                <div asp-validation-summary="All" class="text-danger mb-3"></div>
-
                                 <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+
+                                <div class="fv-row mb-8">
+                                    <partial name="_ValidationSummary" />
+                                 </div>
 
                                 <div class="text-center mb-11">
                                     <h1 class="text-dark fw-bolder mb-3">Kayıt Ol</h1>

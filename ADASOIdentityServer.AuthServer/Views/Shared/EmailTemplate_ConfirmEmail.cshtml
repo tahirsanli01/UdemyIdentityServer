@@ -1,0 +1,39 @@
+﻿@using ADASOIdentityServer.AuthServer.Models
+@model ConfirmEmailModel
+<html>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+
+    <div style="max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+
+        <!-- Header -->
+        <div style="background-color: #fff; padding: 20px; text-align: center;">
+            <img src="data:image/png;base64,{{LOGO_BASE64}}"
+                 alt="Logo" style="max-height: 70px;" />
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 20px; background-color: #f9f9f9;">
+            <h2 style="margin-top: 0; color: #333;">Hesap Doğrulama</h2>
+            <p>Sayın <strong>@Model.UserName</strong>,</p>
+            <p>Hesabınız başarıyla oluşturulmuştur. Güvenli kullanım için e-posta adresinizi doğrulamanız gerekmektedir.</p>
+
+            <p style="text-align: center; margin: 30px 0;">
+                <a href="@Model.CallbackUrl"
+                   style="background-color:#007bff; color:#fff; text-decoration:none;
+                          padding:12px 20px; border-radius:5px; font-weight:bold;">
+                    E-Postamı Doğrula
+                </a>
+            </p>
+
+            <p>Eğer bu işlemi siz başlatmadıysanız, lütfen bu e-postayı dikkate almayınız.</p>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding: 12px 20px; background-color: #333; color: #fff; text-align: center;">
+            <p>© @(DateTime.Now.Year) Şirket Adı – Tüm Hakları Saklıdır.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

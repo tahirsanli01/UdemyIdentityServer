@@ -1,15 +1,19 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using ADASOIdentityServer.AuthServer.Models;
 using ADASOIdentityServer.AuthServer.Repository;
 using ADASOIdentityServer.AuthServer.Services;
 using ADASOIdentityServer.Database.Contexts;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // === Services ===
 builder.Services.AddScoped<ICustomUserRepository, CustomUserRepository>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<AuthDbContext>();
+builder.Services.AddScoped<RazorViewToStringRenderer>();
+
 
 builder.Services.AddIdentityServer()
     .AddClientStore<CustomProfileService>()

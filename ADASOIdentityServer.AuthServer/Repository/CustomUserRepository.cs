@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using ADASOIdentityServer.AuthServer.Models;
+﻿using ADASOIdentityServer.AuthServer.Models;
 using ADASOIdentityServer.Database.Contexts;
 using ADASOIdentityServer.Database.Models;
-using static Duende.IdentityServer.Models.IdentityResources;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ADASOIdentityServer.AuthServer.Repository
 {
@@ -41,20 +37,24 @@ namespace ADASOIdentityServer.AuthServer.Repository
         }
 
         public async Task<CustomUser> FindById(int id)
-        {
-            var user = await _context.Users
-                .Include(x => x.Role)
-                .Include(x=>x.UserProjects).ThenInclude(x=>x.Project).Where(x => x.Id == id).SingleOrDefaultAsync();
-            
+        { 
+            var user = await _context.Users.Include(x => x.Role).Include(x => x.UserProjects).ThenInclude(x => x.Project).Where(x => x.Id == id).SingleOrDefaultAsync();
+
+            if (user == null)
+            {
+                return null;
+            }
+
             return new CustomUser()
             {
                 Id = user.Id,
-                OId = user.TobbUyelikOid,                
+                OId = user.TobbUyelikOid,
+                City = user.City,
                 Email = user.Email,
                 Password = user.Password,
                 UserName = user.Name + " " + user.Surname,
                 Role = user.Role.Name,
-                Projects=user.UserProjects.Select(x=>x.Project).ToList()
+                Projects = user.UserProjects.Select(x => x.Project).ToList()
 
             };
         }
@@ -92,7 +92,7 @@ namespace ADASOIdentityServer.AuthServer.Repository
         {
             return await _context.SystemApis.Include(x => x.SystemApiResources).ToListAsync();
         }
-                
+
         public async Task<bool> ExistUser(string email)
         {
             return await _context.Users.AnyAsync(x => x.Email == email);
@@ -107,21 +107,22 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 Surname = user.UserName.Split(" ").Length > 1 ? user.UserName.Split(" ")[1] : "",
                 Email = user.Email,
                 Password = user.Password,
-                RoleId= 8, //Default Role User
-                PersonelTitleId=1, //Default Personel Title
-                DepartmentId=1, //Default Department
-                ConsultantId=1, //Default Consultant
-                Country="Türkiye", //Default Country
-                City="Adana", //Default City
-                Avatar= "default.png" //Default Avatar
-
+                RoleId = 8, //Default Role User
+                PersonelTitleId = 1, //Default Personel Title
+                DepartmentId = 1, //Default Department
+                ConsultantId = 1, //Default Consultant
+                Country = "Türkiye", //Default Country
+                City = "Adana", //Default City
+                Avatar = "default.png" //Default Avatar
             };
 
             _context.Users.Add(newUser);
+
             await _context.SaveChangesAsync();
+
             user.Id = newUser.Id;
+
             return user;
         }
-
     }
 }

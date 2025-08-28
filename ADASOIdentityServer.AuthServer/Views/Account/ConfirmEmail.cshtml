@@ -19,9 +19,7 @@
     <meta property="og:site_name" content="ADASO Merkezi Portal" />
 
     <link rel="canonical" href="https://www.authserverui.adasoportal.com" />
-
     <link rel="shortcut icon" href="/assets/media/logos/favicon.ico" />
-
     <link rel="icon" type="image/png" sizes="16x16" href="~/assets/media/logos/favicon.png" />
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
@@ -43,90 +41,31 @@
                 <div class="d-flex flex-center flex-column flex-lg-row-fluid">
 
                     <div class="w-lg-500px p-10">
-
-                        @if (Model.EnableLocalLogin)
-                        {
-                            <form class="form w-100" asp-route="Login">
-
-                                <div class="text-center mb-10">
-                                    <h1 class="text-gray-900 mb-3">Giriş Yap</h1>
-                                    <div class="text-gray-500 fw-semibold fs-4">
-                                        Henüz kullanıcı bilgileriniz bulunmuyorsa,
-                                        <a href="/sign-up?returnUrl=@System.Net.WebUtility.UrlEncode(Model.ReturnUrl)" class="link-primary fw-bold">kayıt olabilirsiniz.</a>
-                                    </div>
-                                </div>
-
-                                <input type="hidden" asp-for="ReturnUrl" />
-
-                                <div class="fv-row mb-8">
-                                    <partial name="_ValidationSummary" />
-                                </div>
-                                <div class="fv-row mb-8">
-                                    <label class="form-label fs-6 fw-bold text-gray-900">Email</label>
-                                    <input type="text" placeholder="Email" asp-for="Email" autocomplete="off" class="form-control bg-transparent" />
-                                </div>
-                                <div class="fv-row mb-3">
-                                    <div class="d-flex flex-stack mb-2">
-                                        <label class="form-label fw-bold text-gray-900 fs-6 mb-0">Password</label>
-                                        <a href="/password-reset" class="link-primary fs-6 fw-bold"> Parolanızı mı unuttunuz ? </a>
-                                    </div>
-                                    <input type="password" placeholder="Şifre" asp-for="Password" autocomplete="off" class="form-control bg-transparent" />
-
-                                </div>
-                                <div class="d-grid mb-10">
-                                    <button class="btn btn-primary" name="button" value="login">Giriş Yap</button>
-                                </div>
-                                @*<div class="text-center">
-									<div class="text-center text-muted text-uppercase fw-bold mb-5">or</div>
-									<a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-										<img alt="Logo" src="/assets/media/svg/brand-logos/google-icon.svg" class="h-20px me-3"> Continue with Google
-									</a>
-									<a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-										<img alt="Logo" src="/assets/media/svg/brand-logos/facebook-4.svg" class="h-20px me-3"> Continue with Facebook
-									</a>
-									<a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100">
-										<img alt="Logo" src="/assets/media/svg/brand-logos/apple-black.svg" class="h-20px me-3"> Continue with Apple
-									</a>
-								</div>*@
-                            </form>
-                        }
-
-                        @if (Model.VisibleExternalProviders.Any())
-                        {
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h2>External Account</h2>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="list-inline">
-                                            @foreach (var provider in Model.VisibleExternalProviders)
-                                            {
-                                                <li class="list-inline-item">
-                                                    <a class="btn btn-secondary"
-                                                       asp-controller="External"
-                                                       asp-action="Challenge"
-                                                       asp-route-scheme="@provider.AuthenticationScheme"
-                                                       asp-route-returnUrl="@Model.ReturnUrl">
-                                                        @provider.DisplayName
-                                                    </a>
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
-                                </div>
+                     
+                            <div style="margin-bottom:20px;">
+                                <img src="data:image/png;base64,{{LOGO_BASE64}}" alt="Logo" style="max-height:80px;" />
                             </div>
-                        }
 
-                        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-                        {
-                            <div class="alert alert-warning">
-                                <strong>Invalid login request</strong>
-                                There are no login schemes configured for this request.
+                            <h2 style="color:#28a745; margin-bottom:15px;">E-Postanız Başarıyla Doğrulandı ✔</h2>
+
+                            <p style="font-size:16px; color:#333; line-height:1.6;">
+                                Sayın kullanıcımız, e-posta adresiniz başarıyla doğrulandı.
+                                Artık hesabınızı güvenle kullanabilirsiniz.
+                            </p>
+
+                            <div style="margin-top:25px;">
+                                <a href="@Url.Action("Login", "Account")"
+                                   style="background-color:#007bff; color:#fff; text-decoration:none;
+                  padding:12px 20px; border-radius:5px; font-weight:bold; display:inline-block;">
+                                    Giriş Yap
+                                </a>
                             </div>
-                        }
 
-                    </div>
+                            <p style="margin-top:20px; font-size:13px; color:#666;">
+                                Herhangi bir sorun yaşarsanız <a href="@Url.Action("Contact", "Home")" style="color:#007bff;">iletişim</a> sayfamızdan bize ulaşabilirsiniz.
+                            </p>
+                        </div>
+                 
 
                 </div>
 
@@ -226,23 +165,14 @@
                         Amacımız, sanayimizin dijital dönüşümünü destekleyerek
                         verimliliği ve rekabet gücünü artırmaktır.
                     </div>
-
                 </div>
-
-
-
             </div>
-
         </div>
-
     </div>
-
     <script>var hostUrl = "assets/";</script>
     <script src="assets/plugins/global/plugins.bundle.js"></script>
     <script src="assets/js/scripts.bundle.js"></script>
-
     <script src="assets/js/custom/authentication/sign-in/general.js"></script>
 
 </body>
-
 </html>

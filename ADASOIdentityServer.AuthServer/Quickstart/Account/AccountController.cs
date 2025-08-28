@@ -4,6 +4,7 @@
 using ADASOIdentityServer.AuthServer.Models;
 //using ADASOIdentityServer.AuthServer.Quickstart.Account;
 using ADASOIdentityServer.AuthServer.Repository;
+using ADASOIdentityServer.AuthServer.Services;
 using Duende.IdentityModel;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
@@ -35,13 +36,16 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly ICustomUserRepository _customUserRepository;
-
+        private readonly IEmailService _emailService;
+        private readonly RazorViewToStringRenderer _razorViewToStringRenderer;
         public AccountController(
             ICustomUserRepository customUserRepository,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
-            IEventService events
+            IEventService events,
+            IEmailService emailService,
+            RazorViewToStringRenderer razorViewToStringRenderer
           )
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
@@ -51,8 +55,9 @@ namespace IdentityServerHost.Quickstart.UI
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
-
             _customUserRepository = customUserRepository;
+            _emailService = emailService;
+            _razorViewToStringRenderer = razorViewToStringRenderer;
         }
 
         /// <summary>
@@ -195,10 +200,12 @@ namespace IdentityServerHost.Quickstart.UI
                 EnableLocalLogin = context?.IdP == null || context.IdP == IdentityServerConstants.LocalIdentityProvider
             };
 
+
             if (context?.IdP != null && context.IdP != IdentityServerConstants.LocalIdentityProvider)
             {
                 vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP, DisplayName = context.IdP } };
             }
+
             return View(vm);
         }
 
@@ -223,37 +230,58 @@ namespace IdentityServerHost.Quickstart.UI
 
                     var newUser = await _customUserRepository.AddUser(customuser);
 
-                    if (newUser != null)
+                    //send email to user to confirm their account
+                    // Replace the email sending line in Register POST action with validation link logic
+                    var confirmationCode = Guid.NewGuid().ToString(); // You should store this code with the user for later verification
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = newUser.Id, code = confirmationCode }, protocol: HttpContext.Request.Scheme);
+
+                    var contact = new ConfirmEmailModel
                     {
-                        //send email to user to confirm their account
-                        //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                        UserName = newUser.UserName,
+                        CallbackUrl = callbackUrl
+                    };
 
-                        //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                        //   $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                    var emailBody = await _razorViewToStringRenderer.RenderViewToStringAsync(ControllerContext, "~/Views/Shared/EmailTemplate_ConfirmEmail.cshtml", contact);
 
-                        //await _signInManager.SignInAsync(newUser, isPersistent: false);
 
-                        var isuser = new IdentityServerUser(newUser.Id.ToString())
-                        {
-                            DisplayName = newUser.UserName
-                        };
+                    var emailDto = new EmailDto
+                    {
+                        Subject = "Hesap Doğrulama",
+                        Email = newUser.Email,
+                        FullName = newUser.UserName,
+                        Body = emailBody
+                    };
 
-                        await HttpContext.SignInAsync(isuser);
+                    await _emailService.SendEmailAsync(emailDto);
 
-                        if (Url.IsLocalUrl(model.ReturnUrl))
-                        {
-                            return Redirect(model.ReturnUrl);
-                        }
-                        else if (string.IsNullOrEmpty(model.ReturnUrl))
-                        {
-                            return Redirect("~/");
-                        }
-                        else
-                        {
-                            // user might have clicked on a malicious link - should be logged
-                            throw new Exception("Geçersiz dönüş urlsi.");
-                        }
+
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+
+                    //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                    //   $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+
+                    //await _signInManager.SignInAsync(newUser, isPersistent: false);
+
+                    var isuser = new IdentityServerUser(newUser.Id.ToString())
+                    {
+                        DisplayName = newUser.UserName
+                    };
+
+                    await HttpContext.SignInAsync(isuser);
+
+                    if (Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else if (string.IsNullOrEmpty(model.ReturnUrl))
+                    {
+                        return Redirect("~/");
+                    }
+                    else
+                    {
+                        // user might have clicked on a malicious link - should be logged
+                        throw new Exception("Geçersiz dönüş urlsi.");
                     }
                 }
 
@@ -315,6 +343,40 @@ namespace IdentityServerHost.Quickstart.UI
 
             return View("LoggedOut", vm);
         }
+
+        // <ConfirmEmail>
+        //Httpget ConfirmEmail
+ 
+
+
+        
+        public async Task<IActionResult> ConfirmEmail(int userId, string code)
+        {
+            if (userId == 0 || string.IsNullOrEmpty(code))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var user = await _customUserRepository.FindById(userId);
+            if (user == null)
+            {
+                return NotFound($"Kullanıcı ID'si '{userId}' olan kullanıcı bulunamadı.");
+            }
+            // Here you should verify the code with the one stored for the user
+            // For simplicity, we assume the code is valid if it matches a placeholder value
+            // In a real application, you would check against a stored value in your database
+            if (code == "valid-code-placeholder") // Replace with actual code verification logic
+            {
+                // Mark the user's email as confirmed in your data store
+                // For example: user.EmailConfirmed = true; await _customUserRepository.UpdateUser(user);
+                return View("ConfirmEmail"); // Show a confirmation view
+            }
+            else
+            {
+                return BadRequest("Geçersiz onay kodu.");
+            }
+        }
+
+
 
 
         [HttpGet]
