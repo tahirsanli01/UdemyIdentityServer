@@ -32,5 +32,7 @@ namespace ADASOIdentityServer.AuthServer.Repository
         
         Task<CustomUser> AddUser(CustomUser user);
 
+        Task<CustomUser> UpdateUser(CustomUser user);
+
     }
 }

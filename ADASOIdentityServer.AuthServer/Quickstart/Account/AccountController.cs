@@ -217,23 +217,25 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 var user = await _customUserRepository.FindByEmail(model.Email);
                 var existingUsers = await _customUserRepository.ExistUser(model.Email);
-
+                
                 if (user == null || !existingUsers)
                 {
+                    var token = Guid.NewGuid().ToString();
 
                     CustomUser customuser = new CustomUser
                     {
                         UserName = model.Name + " " + model.Surname,
                         Email = model.Email,
-                        Password = model.Password
+                        Password = model.Password,
+                        EmailConfirmationCode = token,
+                        EmailConfirmationExpiry = DateTime.UtcNow.AddHours(24)
                     };
 
                     var newUser = await _customUserRepository.AddUser(customuser);
 
-                    //send email to user to confirm their account
-                    // Replace the email sending line in Register POST action with validation link logic
-                    var confirmationCode = Guid.NewGuid().ToString(); // You should store this code with the user for later verification
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = newUser.Id, code = confirmationCode }, protocol: HttpContext.Request.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account",
+                                      new { userId = newUser.Id, code = token }, 
+                                      protocol: HttpContext.Request.Scheme);
 
                     var contact = new ConfirmEmailModel
                     {
@@ -346,48 +348,37 @@ namespace IdentityServerHost.Quickstart.UI
 
         // <ConfirmEmail>
         //Httpget ConfirmEmail
- 
-
-
-        
         public async Task<IActionResult> ConfirmEmail(int userId, string code)
         {
             if (userId == 0 || string.IsNullOrEmpty(code))
             {
                 return RedirectToAction("Index", "Home");
             }
+
             var user = await _customUserRepository.FindById(userId);
             if (user == null)
             {
                 return NotFound($"Kullanıcı ID'si '{userId}' olan kullanıcı bulunamadı.");
             }
-            // Here you should verify the code with the one stored for the user
-            // For simplicity, we assume the code is valid if it matches a placeholder value
-            // In a real application, you would check against a stored value in your database
-            if (code == "valid-code-placeholder") // Replace with actual code verification logic
+
+            // Kod geçerliliğini kontrol et
+            if (user.EmailConfirmationCode == code && user.EmailConfirmationExpiry > DateTime.UtcNow)
             {
-                // Mark the user's email as confirmed in your data store
-                // For example: user.EmailConfirmed = true; await _customUserRepository.UpdateUser(user);
-                return View("ConfirmEmail"); // Show a confirmation view
+                user.EmailConfirmed = true;
+                user.EmailConfirmationCode = null; // token bir kere kullanılmalı
+                await _customUserRepository.UpdateUser(user);
+
+                return View("ConfirmEmail"); // Başarılı onay
             }
-            else
-            {
-                return BadRequest("Geçersiz onay kodu.");
-            }
+
+            return BadRequest("Geçersiz veya süresi dolmuş onay kodu.");
         }
-
-
-
 
         [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();
         }
-
-        /*****************************************/
-        /* helper APIs for the AccountController */
-        /*****************************************/
 
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
@@ -517,7 +508,6 @@ namespace IdentityServerHost.Quickstart.UI
 
             return vm;
         }
-
 
     }
 }

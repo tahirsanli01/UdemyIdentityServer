@@ -2,21 +2,14 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using ADASOIdentityServer.Database.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ADASOIdentityServer.Database.Contexts;
 
 public partial class AuthDbContext : DbContext
-{
-    public AuthDbContext(DbContextOptions<AuthDbContext> options)
-        : base(options)
-    {
-    }
-    
-    public AuthDbContext()
-    {
-    }
+{ 
+
     public virtual DbSet<Consultant> Consultant { get; set; }
 
     public virtual DbSet<Department> Department { get; set; }

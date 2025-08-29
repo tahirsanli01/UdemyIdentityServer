@@ -107,6 +107,9 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 Surname = user.UserName.Split(" ").Length > 1 ? user.UserName.Split(" ")[1] : "",
                 Email = user.Email,
                 Password = user.Password,
+                EmailConfirmed = user.EmailConfirmed ?? false,
+                EmailConfirmationCode = user.EmailConfirmationCode,
+                EmailConfirmationExpiry = user.EmailConfirmationExpiry,
                 RoleId = 8, //Default Role User
                 PersonelTitleId = 1, //Default Personel Title
                 DepartmentId = 1, //Default Department
@@ -122,6 +125,27 @@ namespace ADASOIdentityServer.AuthServer.Repository
 
             user.Id = newUser.Id;
 
+            return user;
+        }
+
+        //UpdateUser
+        public async Task<CustomUser> UpdateUser(CustomUser user)
+        {
+            var existingUser = await _context.Users.FindAsync(user.Id);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.Name = user.UserName.Split(" ")[0];
+            existingUser.Surname = user.UserName.Split(" ").Length > 1 ? user.UserName.Split(" ")[1] : "";
+            existingUser.Email = user.Email;
+            if (!string.IsNullOrEmpty(user.Password))
+            {
+                existingUser.Password = user.Password;
+            }
+            existingUser.City = user.City;
+            _context.Users.Update(existingUser);
+            await _context.SaveChangesAsync();
             return user;
         }
     }

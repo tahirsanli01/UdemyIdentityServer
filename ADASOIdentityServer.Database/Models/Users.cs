@@ -25,6 +25,12 @@ public partial class Users
 
     public string Password { get; set; }
 
+    public bool? EmailConfirmed { get; set; }
+
+    public string EmailConfirmationCode { get; set; }
+
+    public DateTime? EmailConfirmationExpiry { get; set; }
+
     public string Country { get; set; }
 
     public string City { get; set; }
