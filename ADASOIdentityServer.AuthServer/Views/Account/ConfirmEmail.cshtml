@@ -54,7 +54,7 @@
                         </p>
 
                         <div style="margin-top:25px;">
-                            <a href="@Url.Action("Login", "Account")"
+                            <a href="/account/login?ReturnUrl=@System.Net.WebUtility.UrlEncode(Model?.ReturnUrl)"
                                style="background-color:#007bff; color:#fff; text-decoration:none;
                   padding:12px 20px; border-radius:5px; font-weight:bold; display:inline-block;">
                                 Giriş Yap

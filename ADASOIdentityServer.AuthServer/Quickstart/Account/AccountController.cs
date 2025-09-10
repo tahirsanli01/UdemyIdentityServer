@@ -217,7 +217,7 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 var user = await _customUserRepository.FindByEmail(model.Email);
                 var existingUsers = await _customUserRepository.ExistUser(model.Email);
-                
+
                 if (user == null || !existingUsers)
                 {
                     var token = Guid.NewGuid().ToString();
@@ -234,13 +234,14 @@ namespace IdentityServerHost.Quickstart.UI
                     var newUser = await _customUserRepository.AddUser(customuser);
 
                     var callbackUrl = Url.Action("ConfirmEmail", "Account",
-                                      new { userId = newUser.Id, code = token }, 
+                                      new { userId = newUser.Id, code = token, return_url = model.ReturnUrl },
                                       protocol: HttpContext.Request.Scheme);
 
                     var contact = new ConfirmEmailModel
                     {
                         UserName = newUser.UserName,
-                        CallbackUrl = callbackUrl
+                        CallbackUrl = callbackUrl,
+                        ReturnUrl = model.ReturnUrl
                     };
 
                     var emailBody = await _razorViewToStringRenderer.RenderViewToStringAsync(ControllerContext, "~/Views/Shared/EmailTemplate_ConfirmEmail.cshtml", contact);
@@ -256,11 +257,11 @@ namespace IdentityServerHost.Quickstart.UI
 
                     await _emailService.SendEmailAsync(emailDto);
 
-                    if ((newUser.EmailConfirmed==null || newUser.EmailConfirmed==false) && newUser.EmailConfirmationExpiry > DateTime.UtcNow )
+                    if ((newUser.EmailConfirmed == null || newUser.EmailConfirmed == false) && newUser.EmailConfirmationExpiry > DateTime.UtcNow)
                     {
                         ModelState.AddModelError(string.Empty, "E-posta adresinize, e-posta doğrulamasıyla ilgili bir mesaj gönderdik. Lütfen e-postanızı doğrulayarak giriş işlemini tamamlayınız.");
 
-                        model.ReturnUrl="/sign-up";
+                        model.ReturnUrl = "/sign-up";
                         return View(model);
                     }
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -354,10 +355,10 @@ namespace IdentityServerHost.Quickstart.UI
 
         // <ConfirmEmail>
         //Httpget ConfirmEmail
-        public async Task<IActionResult> ConfirmEmail(int userId, string code)
+        public async Task<IActionResult> ConfirmEmail(int userId, string code,string return_url)
         {
 
-            if (userId == 0 || string.IsNullOrEmpty(code))            
+            if (userId == 0 || string.IsNullOrEmpty(code))
                 return RedirectToAction("Index", "Home");
 
             var user = await _customUserRepository.FindById(userId);
@@ -373,7 +374,15 @@ namespace IdentityServerHost.Quickstart.UI
                 user.EmailConfirmationCode = null; // token bir kere kullanılmalı
                 await _customUserRepository.UpdateUser(user);
 
-                return View("ConfirmEmail"); // Başarılı onay
+                var loginViewModel = new LoginViewModel
+                {
+                    ReturnUrl = return_url,
+                    Email = user.Email,
+                    EnableLocalLogin = true,
+                    AllowRememberLogin = AccountOptions.AllowRememberLogin
+                };
+
+                return View("ConfirmEmail", loginViewModel); // Başarılı onay
             }
 
             return BadRequest("Geçersiz veya süresi dolmuş onay kodu.");
