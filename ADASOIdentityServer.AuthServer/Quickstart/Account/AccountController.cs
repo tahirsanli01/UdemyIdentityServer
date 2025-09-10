@@ -256,7 +256,13 @@ namespace IdentityServerHost.Quickstart.UI
 
                     await _emailService.SendEmailAsync(emailDto);
 
+                    if ((newUser.EmailConfirmed==null || newUser.EmailConfirmed==false) && newUser.EmailConfirmationExpiry > DateTime.UtcNow )
+                    {
+                        ModelState.AddModelError(string.Empty, "E-posta adresinize, e-posta doğrulamasıyla ilgili bir mesaj gönderdik. Lütfen e-postanızı doğrulayarak giriş işlemini tamamlayınız.");
 
+                        model.ReturnUrl="/sign-up";
+                        return View(model);
+                    }
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
 
@@ -350,10 +356,9 @@ namespace IdentityServerHost.Quickstart.UI
         //Httpget ConfirmEmail
         public async Task<IActionResult> ConfirmEmail(int userId, string code)
         {
-            if (userId == 0 || string.IsNullOrEmpty(code))
-            {
+
+            if (userId == 0 || string.IsNullOrEmpty(code))            
                 return RedirectToAction("Index", "Home");
-            }
 
             var user = await _customUserRepository.FindById(userId);
             if (user == null)

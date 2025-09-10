@@ -36,7 +36,7 @@ namespace ADASOIdentityServer.AuthServer.Services
                new Claim("name", user.UserName),
                new Claim("city", user.City),
                new Claim("email", user.Email),
-               //new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
+               new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
                new Claim("role", user.Role)
 
             };

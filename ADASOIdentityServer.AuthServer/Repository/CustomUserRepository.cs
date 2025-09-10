@@ -52,6 +52,9 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 City = user.City,
                 Email = user.Email,
                 Password = user.Password,
+                EmailConfirmed = user.EmailConfirmed,
+                EmailConfirmationCode = user.EmailConfirmationCode,
+                EmailConfirmationExpiry = user.EmailConfirmationExpiry,
                 UserName = user.Name + " " + user.Surname,
                 Role = user.Role.Name,
                 Projects = user.UserProjects.Select(x => x.Project).ToList()
@@ -124,6 +127,9 @@ namespace ADASOIdentityServer.AuthServer.Repository
             await _context.SaveChangesAsync();
 
             user.Id = newUser.Id;
+            user.EmailConfirmationExpiry= newUser.EmailConfirmationExpiry;
+            user.EmailConfirmationCode= newUser.EmailConfirmationCode;
+            user.EmailConfirmed= newUser.EmailConfirmed;
 
             return user;
         }
@@ -139,6 +145,10 @@ namespace ADASOIdentityServer.AuthServer.Repository
             existingUser.Name = user.UserName.Split(" ")[0];
             existingUser.Surname = user.UserName.Split(" ").Length > 1 ? user.UserName.Split(" ")[1] : "";
             existingUser.Email = user.Email;
+            existingUser.EmailConfirmed= user.EmailConfirmed ?? existingUser.EmailConfirmed;
+            existingUser.EmailConfirmationCode= user.EmailConfirmationCode ?? existingUser.EmailConfirmationCode;
+            existingUser.EmailConfirmationExpiry= user.EmailConfirmationExpiry ?? existingUser.EmailConfirmationExpiry;
+
             if (!string.IsNullOrEmpty(user.Password))
             {
                 existingUser.Password = user.Password;
