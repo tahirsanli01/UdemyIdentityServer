@@ -2,6 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using ADASOIdentityServer.AuthServer.Models;
+using ADASOIdentityServer.AuthServer.Quickstart.Account;
+
 //using ADASOIdentityServer.AuthServer.Quickstart.Account;
 using ADASOIdentityServer.AuthServer.Repository;
 using ADASOIdentityServer.AuthServer.Services;
@@ -264,6 +266,7 @@ namespace IdentityServerHost.Quickstart.UI
                         model.ReturnUrl = "/sign-up";
                         return View(model);
                     }
+
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
 
@@ -386,6 +389,64 @@ namespace IdentityServerHost.Quickstart.UI
             }
 
             return BadRequest("Geçersiz veya süresi dolmuş onay kodu.");
+        }
+
+
+        // <PasswordReset>
+        //Httpget PasswordReset
+        [HttpGet("password-reset")]
+        public IActionResult PasswordReset()
+        {
+            var model = new PasswordResetViewModel();
+            return View(model);
+        }
+
+
+        [HttpPost("password-reset")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PasswordReset(PasswordResetViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _customUserRepository.FindByEmail(model.Email);
+                if (user != null && user.EmailConfirmed == true)
+                {
+                    var token = Guid.NewGuid().ToString();
+                    user.EmailConfirmationCode = token;
+                    user.EmailConfirmationExpiry = DateTime.UtcNow.AddHours(2);
+                    await _customUserRepository.UpdateUser(user);
+
+                    var callbackUrl = Url.Action("ResetPassword", "Account",
+                                      new { userId = user.Id, code = token },
+                                      protocol: HttpContext.Request.Scheme);
+
+                    var contact = new ResetPasswordModel
+                    {
+                        UserName = user.UserName,
+                        CallbackUrl = callbackUrl
+                    };
+
+                    var emailBody = await _razorViewToStringRenderer.RenderViewToStringAsync(ControllerContext, "~/Views/Shared/EmailTemplate_ResetPassword.cshtml", contact);
+
+                    var emailDto = new EmailDto
+                    {
+                        Subject = "Şifre Sıfırlama",
+                        Email = user.Email,
+                        FullName = user.UserName,
+                        Body = emailBody
+                    };
+
+                    await _emailService.SendEmailAsync(emailDto);
+
+                    ModelState.AddModelError(string.Empty, "E-posta adresinize, şifre sıfırlama ile ilgili bir mesaj gönderdik. Lütfen e-postanızı kontrol ediniz.");
+
+                    model.Email = string.Empty;
+
+                    return View(model);
+                }
+            }
+
+            return View(model);
         }
 
         [HttpGet]
