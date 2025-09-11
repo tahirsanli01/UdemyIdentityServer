@@ -27,7 +27,11 @@ namespace ADASOIdentityServer.AuthServer.Repository
                     Id = user.Id,
                     Email = email,
                     Password = user.Password,
-                    UserName = user.Name + " " + user.Surname
+                    UserName = user.Name + " " + user.Surname,
+                    EmailConfirmationCode = user.EmailConfirmationCode,
+                    EmailConfirmationExpiry = user.EmailConfirmationExpiry,
+                    EmailConfirmed = user.EmailConfirmed
+
                 };
             }
             else
@@ -37,7 +41,7 @@ namespace ADASOIdentityServer.AuthServer.Repository
         }
 
         public async Task<CustomUser> FindById(int id)
-        { 
+        {
             var user = await _context.Users.Include(x => x.Role).Include(x => x.UserProjects).ThenInclude(x => x.Project).Where(x => x.Id == id).SingleOrDefaultAsync();
 
             if (user == null)
@@ -127,9 +131,9 @@ namespace ADASOIdentityServer.AuthServer.Repository
             await _context.SaveChangesAsync();
 
             user.Id = newUser.Id;
-            user.EmailConfirmationExpiry= newUser.EmailConfirmationExpiry;
-            user.EmailConfirmationCode= newUser.EmailConfirmationCode;
-            user.EmailConfirmed= newUser.EmailConfirmed;
+            user.EmailConfirmationExpiry = newUser.EmailConfirmationExpiry;
+            user.EmailConfirmationCode = newUser.EmailConfirmationCode;
+            user.EmailConfirmed = newUser.EmailConfirmed;
 
             return user;
         }
@@ -145,9 +149,9 @@ namespace ADASOIdentityServer.AuthServer.Repository
             existingUser.Name = user.UserName.Split(" ")[0];
             existingUser.Surname = user.UserName.Split(" ").Length > 1 ? user.UserName.Split(" ")[1] : "";
             existingUser.Email = user.Email;
-            existingUser.EmailConfirmed= user.EmailConfirmed ?? existingUser.EmailConfirmed;
-            existingUser.EmailConfirmationCode= user.EmailConfirmationCode ?? existingUser.EmailConfirmationCode;
-            existingUser.EmailConfirmationExpiry= user.EmailConfirmationExpiry ?? existingUser.EmailConfirmationExpiry;
+            existingUser.EmailConfirmed = user.EmailConfirmed ?? existingUser.EmailConfirmed;
+            existingUser.EmailConfirmationCode = user.EmailConfirmationCode ?? existingUser.EmailConfirmationCode;
+            existingUser.EmailConfirmationExpiry = user.EmailConfirmationExpiry ?? existingUser.EmailConfirmationExpiry;
 
             if (!string.IsNullOrEmpty(user.Password))
             {

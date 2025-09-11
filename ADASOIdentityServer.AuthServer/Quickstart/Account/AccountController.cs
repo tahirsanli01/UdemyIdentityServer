@@ -409,6 +409,7 @@ namespace IdentityServerHost.Quickstart.UI
             if (ModelState.IsValid)
             {
                 var user = await _customUserRepository.FindByEmail(model.Email);
+
                 if (user != null && user.EmailConfirmed == true)
                 {
                     var token = Guid.NewGuid().ToString();
@@ -446,6 +447,72 @@ namespace IdentityServerHost.Quickstart.UI
                 }
             }
 
+            return View(model);
+        }
+
+
+        [HttpGet("reset-password")]
+        public async Task<IActionResult> ResetPassword(int userId, string code)
+        {
+
+            var user = await _customUserRepository.FindById(userId);
+
+            if (user !=null && user.EmailConfirmed==true)
+            {
+                if (userId == 0 || string.IsNullOrEmpty(code))
+                    return RedirectToAction("Index", "Home");
+                if (user == null)
+                {
+                    return NotFound($"Kullanıcı ID'si '{userId}' olan kullanıcı bulunamadı.");
+                }
+                // Kod geçerliliğini kontrol et
+                if (user.EmailConfirmationCode == code && user.EmailConfirmationExpiry > DateTime.UtcNow)
+                {
+                    var model = new ResetPasswordViewModel
+                    {
+                        Code = code,
+                        UserId = userId
+                    };
+
+                    return View(model); // Başarılı onay
+                }
+
+            }
+            return BadRequest("Geçersiz veya süresi dolmuş şifre sıfırlama kodu.");
+
+
+        }
+
+        [HttpPost("reset-password")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _customUserRepository.FindById(model.UserId);
+                if (user != null && user.EmailConfirmed == true)
+                {
+                    // Kod geçerliliğini kontrol et
+                    if (user.EmailConfirmationCode == model.Code && user.EmailConfirmationExpiry > DateTime.UtcNow)
+                    {
+                        user.Password = model.Password;
+                        user.EmailConfirmationCode = null; // token bir kere kullanılmalı
+                        await _customUserRepository.UpdateUser(user);
+                        var loginViewModel = new LoginViewModel
+                        {
+                            ReturnUrl = "/login",
+                            Email = user.Email,
+                            EnableLocalLogin = true,
+                            AllowRememberLogin = AccountOptions.AllowRememberLogin
+                        };
+                        return View("ResetPasswordConfirm", loginViewModel); // Başarılı onay
+                    }
+                    ModelState.AddModelError(string.Empty, "Geçersiz veya süresi dolmuş şifre sıfırlama kodu.");
+                    return View(model);
+                }
+                ModelState.AddModelError(string.Empty, "Kullanıcı bulunamadı veya e-posta doğrulanmamış.");
+                return View(model);
+            }
             return View(model);
         }
 
