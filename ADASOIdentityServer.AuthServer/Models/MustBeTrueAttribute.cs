@@ -1,5 +1,4 @@
-﻿using Duende.IdentityServer.Models;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace ADASOIdentityServer.AuthServer.Models

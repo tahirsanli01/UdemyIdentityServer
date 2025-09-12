@@ -1,7 +1,8 @@
-﻿using Duende.IdentityModel;
-using Duende.IdentityServer.Validation;
+﻿
 using System.Threading.Tasks;
 using ADASOIdentityServer.AuthServer.Repository;
+using IdentityModel;
+using IdentityServer4.Validation;
 
 namespace ADASOIdentityServer.AuthServer.Services
 {

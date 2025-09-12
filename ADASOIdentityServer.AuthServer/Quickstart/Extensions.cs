@@ -1,5 +1,5 @@
 using System;
-using Duende.IdentityServer.Models;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServerHost.Quickstart.UI

@@ -1,7 +1,7 @@
-﻿using Duende.IdentityServer.Extensions;
-using Duende.IdentityServer.Models;
-using Duende.IdentityServer.Services;
-using Duende.IdentityServer.Stores;
+﻿using IdentityServer4.Extensions;
+using IdentityServer4.Models;
+using IdentityServer4.Services;
+using IdentityServer4.Stores;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
