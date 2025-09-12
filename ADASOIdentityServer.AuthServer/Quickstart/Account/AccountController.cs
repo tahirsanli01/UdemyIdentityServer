@@ -516,6 +516,13 @@ namespace IdentityServerHost.Quickstart.UI
             return View(model);
         }
 
+        //ResetPasswordConfirm
+        [HttpGet("reset-password-confirm")]        
+        public IActionResult ResetPasswordConfirm()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult AccessDenied()
         {
