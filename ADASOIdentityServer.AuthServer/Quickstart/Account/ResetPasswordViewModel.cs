@@ -10,5 +10,11 @@ namespace ADASOIdentityServer.AuthServer.Quickstart.Account
         [Required(ErrorMessage ="Şifre alanı boş olamaz")]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Şifre tekrar alanı boş olamaz")]
+        [Compare("Password", ErrorMessage = "Şifreler uyuşmuyor")]
+        public string ConfirmPassword { get; set; }
+
+        public string ReturnUrl { get; set; }
+
     }
 }

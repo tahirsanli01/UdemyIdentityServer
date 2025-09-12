@@ -502,7 +502,7 @@ namespace IdentityServerHost.Quickstart.UI
                         await _customUserRepository.UpdateUser(user);
                         var loginViewModel = new LoginViewModel
                         {
-                            ReturnUrl = "/login",
+                            ReturnUrl = model.ReturnUrl,
                             Email = user.Email,
                             EnableLocalLogin = true,
                             AllowRememberLogin = AccountOptions.AllowRememberLogin
@@ -513,6 +513,7 @@ namespace IdentityServerHost.Quickstart.UI
                     return View(model);
                 }
                 ModelState.AddModelError(string.Empty, "Kullanıcı bulunamadı veya e-posta doğrulanmamış.");
+
                 return View(model);
             }
             return View(model);

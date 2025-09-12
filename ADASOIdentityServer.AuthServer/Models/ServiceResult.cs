@@ -61,7 +61,6 @@ namespace ADASOIdentityServer.AuthServer.Models
     }
     public class ServiceResult
     {
-
         public List<String>? ErrorMessage { get; set; }
 
         [JsonIgnore]
