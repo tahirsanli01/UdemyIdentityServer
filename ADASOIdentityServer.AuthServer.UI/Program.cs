@@ -48,23 +48,21 @@ builder.Services.AddAuthentication(opts =>
     opts.ClaimActions.MapUniqueJsonKey("city", "city");
     opts.ClaimActions.MapUniqueJsonKey("project", "project");
     opts.ClaimActions.MapUniqueJsonKey("role", "role");
-
     opts.ClaimActions.MapUniqueJsonKey("oid", "oid");
 
     opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
         RoleClaimType = "role"
     };
+
     opts.Events = new OpenIdConnectEvents
     {
         OnRemoteFailure = context =>
         {
             var error = context.Failure?.Message;
-            var fullError = context.Failure?.ToString(); // detaylı hata
+            var fullError = context.Failure?.ToString();
 
-            // Gelişmiş hata loglama
             Console.WriteLine("OpenID Connect Hatası: " + fullError);
-
             context.Response.Redirect("/Home/Error?error=" + Uri.EscapeDataString(error ?? "Bilinmeyen hata"));
             context.HandleResponse(); // varsayılan hata akışını durdur
             return Task.CompletedTask;
