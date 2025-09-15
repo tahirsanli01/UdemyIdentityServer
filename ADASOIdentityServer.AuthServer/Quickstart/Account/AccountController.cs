@@ -396,9 +396,10 @@ namespace IdentityServerHost.Quickstart.UI
         // <PasswordReset>
         //Httpget PasswordReset
         [HttpGet("password-reset")]
-        public IActionResult PasswordReset()
+        public IActionResult PasswordReset(string returnUrl)
         {
             var model = new PasswordResetViewModel();
+            model.ReturnUrl = returnUrl;
             return View(model);
         }
 
@@ -419,7 +420,7 @@ namespace IdentityServerHost.Quickstart.UI
                     await _customUserRepository.UpdateUser(user);
 
                     var callbackUrl = Url.Action("ResetPassword", "Account",
-                                      new { userId = user.Id, code = token },
+                                      new { userId = user.Id, code = token, return_url = model.ReturnUrl },
                                       protocol: HttpContext.Request.Scheme);
 
                     var contact = new ResetPasswordModel
@@ -453,7 +454,7 @@ namespace IdentityServerHost.Quickstart.UI
 
 
         [HttpGet("reset-password")]
-        public async Task<IActionResult> ResetPassword(int userId, string code)
+        public async Task<IActionResult> ResetPassword(int userId, string code, string return_url)
         {
 
             var user = await _customUserRepository.FindById(userId);
@@ -472,7 +473,8 @@ namespace IdentityServerHost.Quickstart.UI
                     var model = new ResetPasswordViewModel
                     {
                         Code = code,
-                        UserId = userId
+                        UserId = userId,
+                        ReturnUrl = return_url
                     };
 
                     return View(model); // Başarılı onay
@@ -480,8 +482,6 @@ namespace IdentityServerHost.Quickstart.UI
 
             }
             return BadRequest("Geçersiz veya süresi dolmuş şifre sıfırlama kodu.");
-
-
         }
 
         [HttpPost("reset-password")]
@@ -506,6 +506,7 @@ namespace IdentityServerHost.Quickstart.UI
                             EnableLocalLogin = true,
                             AllowRememberLogin = AccountOptions.AllowRememberLogin
                         };
+                        
                         return View("ResetPasswordConfirm", loginViewModel); // Başarılı onay
                     }
                     ModelState.AddModelError(string.Empty, "Geçersiz veya süresi dolmuş şifre sıfırlama kodu.");

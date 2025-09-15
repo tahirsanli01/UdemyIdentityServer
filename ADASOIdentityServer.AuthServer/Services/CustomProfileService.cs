@@ -33,11 +33,11 @@ namespace ADASOIdentityServer.AuthServer.Services
             {
                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                new Claim("oid", user.OId),
-               new Claim("name", user.UserName),
-               new Claim("city", user.City),
-               new Claim("email", user.Email),
-               new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
+               new Claim("name", user.UserName),               
+               new Claim("email", user.Email),               
                new Claim("role", user.Role)
+               //new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
+               //new Claim("city", user.City)
 
             };
 
