@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADASOIdentityServer.Database.Contexts;
 using ADASOIdentityServer.Database.Models;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace ADASOIdentityServer.AuthServer.UI.Controllers
 {
@@ -20,8 +21,12 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         // GET: UserProjects
         public async Task<IActionResult> Index()
         {
-            
-            var authDbContext = _context.UserProjects.Include(u => u.Project).Include(u => u.User);
+
+            var authDbContext = _context.UserProjects
+                                        .Include(u => u.Project)
+                                        .Include(u => u.User)
+                                        .Include(u => u.UserProjectRole);
+
             TempData["UserProjects"] = "active";
             return View(await authDbContext.ToListAsync());
         }
@@ -51,16 +56,24 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         // GET: UserProjects/Create
         public IActionResult Create()
         {
-        
             var userList = _context.Users.Select(u => new
             {
                 Id = u.Id,
                 DisplayText = $"{u.Name} - {u.Email}"
+
             }).ToList();
+
+            var roles = Enum.GetValues(typeof(ProjectRole))
+            .Cast<ProjectRole>()
+            .Select(r => new { Id = (int)r, Name = r.ToString() });
+
+
+            ViewData["UserProjectRole"] = new SelectList(roles, "Id", "Name");
 
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name");
             ViewData["UserId"] = new SelectList(userList, "Id", "DisplayText");
             TempData["UserProjects"] = "active";
+
             return View();
         }
 
@@ -69,14 +82,30 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,ProjectId")] UserProjects userProjects)
+        public async Task<IActionResult> Create([Bind("Id,UserId,ProjectId,SelectedRoleIds")] UserProjects userProjects)
         {
             if (ModelState.IsValid)
             {
+                if (userProjects.SelectedRoleIds != null && userProjects.SelectedRoleIds.Count > 0)
+                {
+                    foreach (var roleId in userProjects.SelectedRoleIds)
+                    {
+                        var userProjectRole = new UserProjectRole
+                        {
+                            UserProjects = userProjects,
+                            Id = roleId,
+                            Explanation = ((ProjectRole)roleId).ToString(),
+                            Name = roleId == 1 ? "ReadOnly" : roleId == 2 ? "ReadWrite" : "Admin",
+                            ShortName = roleId == 1 ? "RO" : roleId == 2 ? "RW" : "AD"
+                        };
+                        _context.UserProjectRole.Add(userProjectRole);
+                    }
+                }
                 _context.Add(userProjects);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", userProjects.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userProjects.UserId);
             TempData["UserProjects"] = "active";
@@ -91,13 +120,22 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                 return NotFound();
             }
 
-            var userProjects = await _context.UserProjects.FindAsync(id);
+            var userProjects = await _context.UserProjects
+                                    .FindAsync(id);
+
 
             if (userProjects == null)
             {
                 return NotFound();
             }
-            
+            var projectRoles = userProjects.UserProjectRole.Select(r => r.Id).ToList();
+            userProjects.SelectedRoleIds = projectRoles;
+            var roles = Enum.GetValues(typeof(ProjectRole))
+                .Cast<ProjectRole>()
+                .Select(r => new { Id = (int)r, Name = r.ToString() });
+
+            ViewData["SelectedRoleIds"] = new SelectList(roles, "Id", "Name", projectRoles);
+
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", userProjects.ProjectId);
 
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userProjects.UserId);
@@ -111,7 +149,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ProjectId")] UserProjects userProjects)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ProjectId,SelectedRoleIds")] UserProjects userProjects)
         {
             if (id != userProjects.Id)
             {
@@ -122,6 +160,27 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
             {
                 try
                 {
+                    if (userProjects.SelectedRoleIds != null && userProjects.SelectedRoleIds.Count > 0)
+                    {
+
+                        var existingRoles = _context.UserProjectRole.Where(r => r.UserProjects.Id == userProjects.Id);
+                            _context.UserProjectRole.RemoveRange(existingRoles);
+
+                        foreach (var roleId in userProjects.SelectedRoleIds)
+                        {
+                            var userProjectRole = new UserProjectRole
+                            {
+                                UserProjectsId = userProjects.Id,
+                                ProjectRoleId = roleId,
+                                Explanation = ((ProjectRole)roleId).ToString(),
+                                Name = roleId == 1 ? "ReadOnly" : roleId == 2 ? "ReadWrite" : "Admin",
+                                ShortName = roleId == 1 ? "RO" : roleId == 2 ? "RW" : "AD"
+                            };
+                            _context.UserProjectRole.Add(userProjectRole);
+                             
+                        }
+                    }
+
                     _context.Update(userProjects);
                     await _context.SaveChangesAsync();
                 }
@@ -138,6 +197,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", userProjects.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userProjects.UserId);
             return View(userProjects);
@@ -150,16 +210,17 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
-
             var userProjects = await _context.UserProjects
                 .Include(u => u.Project)
                 .Include(u => u.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (userProjects == null)
-            {
                 return NotFound();
-            }
+
+
             TempData["UserProjects"] = "active";
+
             return View(userProjects);
         }
 
@@ -177,14 +238,14 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
             {
                 _context.UserProjects.Remove(userProjects);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserProjectsExists(int id)
         {
-          return (_context.UserProjects?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.UserProjects?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

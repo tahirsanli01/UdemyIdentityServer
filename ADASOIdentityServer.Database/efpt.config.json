@@ -59,6 +59,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[UserProjectRole]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[UserProjects]",
          "ObjectType": 0
       },

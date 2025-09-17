@@ -8,12 +8,19 @@ namespace ADASOIdentityServer.Database.Models;
 public partial class Users
 {
     public int Id { get; set; }
+
     public int RoleId { get; set; }
+
     public int PersonelTitleId { get; set; }
+
     public int DepartmentId { get; set; }
+
     public int ConsultantId { get; set; }
+
     public string Name { get; set; }
+
     public string Surname { get; set; }
+
     public string Email { get; set; }
 
     public string Password { get; set; }

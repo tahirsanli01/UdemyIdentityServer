@@ -42,7 +42,12 @@ namespace ADASOIdentityServer.AuthServer.Repository
 
         public async Task<CustomUser> FindById(int id)
         {
-            var user = await _context.Users.Include(x => x.Role).Include(x => x.UserProjects).ThenInclude(x => x.Project).Where(x => x.Id == id).SingleOrDefaultAsync();
+            var user = await _context.Users
+                .Include(x => x.Role)
+                .Include(x => x.UserProjects)
+                .ThenInclude(x => x.Project)
+                .Where(x => x.Id == id).SingleOrDefaultAsync();
+
 
             if (user == null)
             {

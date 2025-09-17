@@ -32,6 +32,8 @@ public partial class AuthDbContext : DbContext
 
     public virtual DbSet<SystemIdentityRosources> SystemIdentityRosources { get; set; }
 
+    public virtual DbSet<UserProjectRole> UserProjectRole { get; set; }
+
     public virtual DbSet<UserProjects> UserProjects { get; set; }
 
     public virtual DbSet<Users> Users { get; set; }
@@ -193,6 +195,21 @@ public partial class AuthDbContext : DbContext
             entity.Property(e => e.UserClaims)
                 .HasMaxLength(500)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        });
+
+        modelBuilder.Entity<UserProjectRole>(entity =>
+        {
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.ShortName)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
+            entity.HasOne(d => d.UserProjects).WithMany(p => p.UserProjectRole)
+                .HasForeignKey(d => d.UserProjectsId)
+                .HasConstraintName("FK_UserProjectRole_UserProjects");
         });
 
         modelBuilder.Entity<UserProjects>(entity =>
