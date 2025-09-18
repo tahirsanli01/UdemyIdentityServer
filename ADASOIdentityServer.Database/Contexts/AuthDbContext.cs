@@ -9,7 +9,6 @@ namespace ADASOIdentityServer.Database.Contexts;
 
 public partial class AuthDbContext : DbContext
 { 
-
     public virtual DbSet<Consultant> Consultant { get; set; }
 
     public virtual DbSet<Department> Department { get; set; }

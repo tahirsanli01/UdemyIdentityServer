@@ -5,6 +5,6 @@ namespace ADASOIdentityServer.Database.Partial
     public class UserProjectDto
     {
         [NotMapped]
-        public List<int> SelectedRoleIds { get; set; }
+        public List<int> SelectedRoleIds { get; set; } = new List<int>();
     }
 }

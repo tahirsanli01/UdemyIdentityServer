@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Extensions;
+﻿using ADASOIdentityServer.AuthServer.Repository;
+using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
@@ -9,7 +10,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ADASOIdentityServer.AuthServer.Repository;
 
 namespace ADASOIdentityServer.AuthServer.Services
 {
@@ -28,13 +28,13 @@ namespace ADASOIdentityServer.AuthServer.Services
             var subId = context.Subject.GetSubjectId();
 
             var user = await _customUserRepository.FindById(int.Parse(subId));
-
+            
             var claims = new List<Claim>()
             {
                new Claim(JwtRegisteredClaimNames.Email, user.Email),
                new Claim("oid", user.OId),
-               new Claim("name", user.UserName),               
-               new Claim("email", user.Email),               
+               new Claim("name", user.UserName),
+               new Claim("email", user.Email),
                new Claim("role", user.Role)
                //new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
                //new Claim("city", user.City)
@@ -46,6 +46,7 @@ namespace ADASOIdentityServer.AuthServer.Services
                 claims.Add(new Claim("project", item.Name));
             }
 
+            
             context.AddRequestedClaims(claims);
             // jwt içinde görmek istiyorsanız aşağıdaki property'i set et
             //   context.IssuedClaims = claims;

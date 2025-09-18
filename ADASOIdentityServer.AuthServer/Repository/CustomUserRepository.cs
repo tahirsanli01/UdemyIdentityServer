@@ -1,6 +1,7 @@
 ﻿using ADASOIdentityServer.AuthServer.Models;
 using ADASOIdentityServer.Database.Contexts;
 using ADASOIdentityServer.Database.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +45,23 @@ namespace ADASOIdentityServer.AuthServer.Repository
         {
             var user = await _context.Users
                 .Include(x => x.Role)
-                .Include(x => x.UserProjects)
-                .ThenInclude(x => x.Project)
+                .Include(x => x.UserProjects)                
+                .ThenInclude(x => x.Project)                
                 .Where(x => x.Id == id).SingleOrDefaultAsync();
+
+
+
+            //###################### Planlama ##############
+            //UserProject ve  UserprojectRole tablosundan join yaparak role bilgilerini de alıyoruz
+            //Daha sonra user içerisinde UserProjectRoles propertysini dolduruyoruz
+
+            //var userProjectRoles = await _context.UserProjectRole
+            //    .Include(x => x.ProjectRole)
+            //    .Where(x => x.UserProjects.UserId == id).ToListAsync();
+
+            //var userProjectRoles = await _context.UserProjectRole
+            //        .Where(x => x.UserProjectsId == id && x.ProjectRoleId).ToListAsync();
+
 
 
             if (user == null)
@@ -66,7 +81,8 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 EmailConfirmationExpiry = user.EmailConfirmationExpiry,
                 UserName = user.Name + " " + user.Surname,
                 Role = user.Role.Name,
-                Projects = user.UserProjects.Select(x => x.Project).ToList()
+                Projects = user.UserProjects.Select(x => x.Project).ToList(),
+                UserProjectRoles = userProjectRoles
 
             };
         }

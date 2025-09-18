@@ -48,12 +48,23 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="d-none">@Html.Raw(item.User.Name.ToLower() + " " +item.User.Surname.ToLower())</td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Project.Name)
+                        <td class="d-none">
+                            @if (item.User != null)
+                            {
+                                @Html.Raw(item.User.Name.ToLower() + " " + item.User.Surname.ToLower())
+                            }
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.User.Name) @Html.DisplayFor(modelItem => item.User.Surname)
+                            @if (item.Project != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Project.Name)
+                            }
+                        </td>
+                        <td>
+                            @if (item.User != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.User.Name) @Html.DisplayFor(modelItem => item.User.Surname)
+                            }
                         </td>
                         <td class="text-end">
                             <a asp-action="Edit" asp-route-id="@item.Id" title="Düzenle">

@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ADASOIdentityServer.AuthServer.UI.Models.UserProject;
+using ADASOIdentityServer.Database.Contexts;
+using ADASOIdentityServer.Database.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ADASOIdentityServer.Database.Contexts;
-using ADASOIdentityServer.Database.Models;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace ADASOIdentityServer.AuthServer.UI.Controllers
 {
@@ -120,36 +120,50 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                 return NotFound();
             }
 
-            var userProjects = await _context.UserProjects
-                                    .FindAsync(id);
-
+            var userProjects = await _context.UserProjects.FindAsync(id);
 
             if (userProjects == null)
             {
                 return NotFound();
             }
-            var projectRoles = userProjects.UserProjectRole.Select(r => r.Id).ToList();
-            userProjects.SelectedRoleIds = projectRoles;
+
+            // Projeye atanmış roller
+            var projectRoles = _context.UserProjectRole
+                .Where(r => r.UserProjectsId == userProjects.Id)
+                .Select(r => r.ProjectRoleId)
+                .ToList();
+
+            // Enum'dan roller
             var roles = Enum.GetValues(typeof(ProjectRole))
                 .Cast<ProjectRole>()
                 .Select(r => new { Id = (int)r, Name = r.ToString() });
 
-            ViewData["SelectedRoleIds"] = new SelectList(roles, "Id", "Name", projectRoles);
+            // MultiSelectList (seçilmiş roller ile)
+            ViewData["SelectedRoleIds"] = new MultiSelectList(roles, "Id", "Name", projectRoles);
 
+            // Diğer dropdownlar
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", userProjects.ProjectId);
-
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userProjects.UserId);
 
             TempData["UserProjects"] = "active";
-            return View(userProjects);
+
+            // ViewModel doldur
+            var vm = new UserProjectEditViewModel
+            {
+                UserProject = userProjects,
+                SelectedRoleIds = projectRoles
+            };
+
+            return View(vm);
         }
+
 
         // POST: UserProjects/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ProjectId,SelectedRoleIds")] UserProjects userProjects)
+        public async Task<IActionResult> Edit(int id, UserProjectEditPostModel userProjects)
         {
             if (id != userProjects.Id)
             {
@@ -158,14 +172,31 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
 
             if (ModelState.IsValid)
             {
+                var existingUserProject = await _context.UserProjects
+                    .Include(up => up.UserProjectRole)
+                    .FirstOrDefaultAsync(up => up.Id == userProjects.Id);
+
+                if (existingUserProject == null)
+                {
+                    return NotFound();
+                }
+
                 try
                 {
+                    // 1) UserProject tablosunu güncelle
+                    existingUserProject.UserId = userProjects.UserId;
+                    existingUserProject.ProjectId = userProjects.ProjectId;
+
+                    
+                    await _context.SaveChangesAsync();
+
+
+
+                    // 2) Roller güncelle
+                    _context.UserProjectRole.RemoveRange(existingUserProject.UserProjectRole);
+
                     if (userProjects.SelectedRoleIds != null && userProjects.SelectedRoleIds.Count > 0)
                     {
-
-                        var existingRoles = _context.UserProjectRole.Where(r => r.UserProjects.Id == userProjects.Id);
-                            _context.UserProjectRole.RemoveRange(existingRoles);
-
                         foreach (var roleId in userProjects.SelectedRoleIds)
                         {
                             var userProjectRole = new UserProjectRole
@@ -177,16 +208,15 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                                 ShortName = roleId == 1 ? "RO" : roleId == 2 ? "RW" : "AD"
                             };
                             _context.UserProjectRole.Add(userProjectRole);
-                             
                         }
                     }
 
-                    _context.Update(userProjects);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserProjectsExists(userProjects.Id))
+                    if (!_context.UserProjects.Any(e => e.Id == userProjects.Id))
                     {
                         return NotFound();
                     }
@@ -195,13 +225,13 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
 
             ViewData["ProjectId"] = new SelectList(_context.Projects, "Id", "Name", userProjects.ProjectId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Name", userProjects.UserId);
             return View(userProjects);
         }
+
 
         // GET: UserProjects/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -223,6 +253,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
 
             return View(userProjects);
         }
+
 
         // POST: UserProjects/Delete/5
         [HttpPost, ActionName("Delete")]
