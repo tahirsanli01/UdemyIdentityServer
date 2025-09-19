@@ -20,6 +20,7 @@ namespace ADASOIdentityServer.AuthServer.Models
         public string City { get; set; }
         public string Role { get; set; }
         public List<Projects> Projects { get; set; }
-        public List<UserProjectRole>? UserProjectRoles { get; set; } = new List<UserProjectRole>();
+        public List<UserProjects>? UserProjects { get; set; }
+        public List<UserProjectRole>? UserProjectRoles { get; set; }
     }
 }

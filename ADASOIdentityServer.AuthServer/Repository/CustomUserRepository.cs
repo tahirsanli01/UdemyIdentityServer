@@ -44,13 +44,19 @@ namespace ADASOIdentityServer.AuthServer.Repository
         public async Task<CustomUser> FindById(int id)
         {
             var user = await _context.Users
-                .Include(x => x.Role)
-                .Include(x => x.UserProjects)                
-                .ThenInclude(x => x.Project)                
-                .Where(x => x.Id == id).SingleOrDefaultAsync();
+            .Include(u => u.Role)
+            .Include(u => u.Consultant)
+            .Include(u => u.Department)
+            .Include(u => u.PersonelTitle)
+            .Include(u => u.UserProjects)
+                .ThenInclude(up => up.Project)
+            .Include(u => u.UserProjects)
+                .ThenInclude(up => up.UserProjectRole)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
 
 
+             
             //###################### Planlama ##############
             //UserProject ve  UserprojectRole tablosundan join yaparak role bilgilerini de alıyoruz
             //Daha sonra user içerisinde UserProjectRoles propertysini dolduruyoruz
@@ -81,8 +87,7 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 EmailConfirmationExpiry = user.EmailConfirmationExpiry,
                 UserName = user.Name + " " + user.Surname,
                 Role = user.Role.Name,
-                Projects = user.UserProjects.Select(x => x.Project).ToList(),
-                UserProjectRoles = userProjectRoles
+                Projects = user.UserProjects.Select(x => x.Project).ToList()
 
             };
         }

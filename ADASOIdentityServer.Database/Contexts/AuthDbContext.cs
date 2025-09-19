@@ -208,6 +208,7 @@ public partial class AuthDbContext : DbContext
 
             entity.HasOne(d => d.UserProjects).WithMany(p => p.UserProjectRole)
                 .HasForeignKey(d => d.UserProjectsId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserProjectRole_UserProjects");
         });
 
