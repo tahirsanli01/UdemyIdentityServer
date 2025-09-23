@@ -35,18 +35,22 @@ builder.Services.AddAuthentication(opts =>
 
     opts.ClientSecret = "K9f!2vG#8xTqP$1bLr7mNzW4dHs6YjQp";
     opts.ResponseType = "code id_token";
+
     opts.GetClaimsFromUserInfoEndpoint = true;
     opts.SaveTokens = true;
+
     opts.Scope.Add("api1.read");
     opts.Scope.Add("offline_access");
     opts.Scope.Add("CountryAndCity");
     opts.Scope.Add("email");
     opts.Scope.Add("Roles");
-    opts.Scope.Add("Projects");
+    opts.Scope.Add("userprojects");
+    opts.Scope.Add("userprojectsrole");
     opts.Scope.Add("OId");
     opts.ClaimActions.MapUniqueJsonKey("country", "country");
     opts.ClaimActions.MapUniqueJsonKey("city", "city");
-    opts.ClaimActions.MapUniqueJsonKey("project", "project");
+    opts.ClaimActions.MapUniqueJsonKey("userprojects", "userprojects");
+    opts.ClaimActions.MapUniqueJsonKey("userprojectsrole", "userprojectsrole");
     opts.ClaimActions.MapUniqueJsonKey("role", "role");
     opts.ClaimActions.MapUniqueJsonKey("oid", "oid");
 
@@ -57,6 +61,20 @@ builder.Services.AddAuthentication(opts =>
 
     opts.Events = new OpenIdConnectEvents
     {
+        OnRedirectToIdentityProviderForSignOut = context =>
+        {
+            var idToken = context.Properties.GetTokenValue("id_token");
+            
+            var projectClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",", context.HttpContext.User.FindAll("userprojects").Select(x => x.Value).ToList()));
+
+            if (!string.IsNullOrEmpty(idToken))
+            {
+                Console.WriteLine("Logout sırasında id_token_hint: " + idToken);
+            }
+
+            return Task.CompletedTask;
+        },
+
         OnRemoteFailure = context =>
         {
             var error = context.Failure?.Message;
@@ -76,7 +94,10 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAssertion(context =>
         {
             var hasRole = context.User.IsInRole("Admin");
-            var projectClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",",context.User.FindAll("project").Select(x=>x.Value).ToList()));
+            var projectClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",",context.User.FindAll("userprojects").Select(x=>x.Value).ToList()));
+            
+            //var projectroleClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",", context.User.FindAll("userprojectsrole").Select(x => x.Value).ToList()));
+
 
             var hasProject = projectClaims.Contains("IdentityUI-Project");
 

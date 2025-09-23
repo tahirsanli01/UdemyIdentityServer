@@ -17,65 +17,51 @@ namespace ADASOIdentityServer.AuthServer.Repository
         {
             _context = context;
         }
-
         public async Task<CustomUser> FindByEmail(string email)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
-            if (user != null)
-            {
-                return new CustomUser()
-                {
-                    Id = user.Id,
-                    Email = email,
-                    Password = user.Password,
-                    UserName = user.Name + " " + user.Surname,
-                    EmailConfirmationCode = user.EmailConfirmationCode,
-                    EmailConfirmationExpiry = user.EmailConfirmationExpiry,
-                    EmailConfirmed = user.EmailConfirmed
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.UserProjects)
+                    .ThenInclude(up => up.Project)
+                    .ThenInclude(up => up.UserProjects)
+                    .ThenInclude(upr => upr.UserProjectRole)
+                .FirstOrDefaultAsync(x => x.Email == email);
 
-                };
-            }
-            else
+            if (user == null) return null;
+
+            return new CustomUser()
             {
-                return null;
-            }
+                Id = user.Id,
+                OId = user.TobbUyelikOid,
+                City = user.City,
+                Email = user.Email,
+                Password = user.Password,
+                EmailConfirmed = user.EmailConfirmed,
+                EmailConfirmationCode = user.EmailConfirmationCode,
+                UserName = user.Name + " " + user.Surname,
+                Role = user.Role?.Name,
+                UserProjects = user.UserProjects.ToList()
+            };
         }
 
         public async Task<CustomUser> FindById(int id)
         {
             var user = await _context.Users
-            .Include(u => u.Role)
-            .Include(u => u.Consultant)
-            .Include(u => u.Department)
-            .Include(u => u.PersonelTitle)
-            .Include(u => u.UserProjects)
-                .ThenInclude(up => up.Project)
-            .Include(u => u.UserProjects)
-                .ThenInclude(up => up.UserProjectRole)
-            .FirstOrDefaultAsync(u => u.Id == id);
+                .Include(u => u.Role)
+                .Include(u => u.Consultant)
+                .Include(u => u.Department)
+                .Include(u => u.PersonelTitle)
+                .Include(u => u.UserProjects)
+                    .ThenInclude(up => up.Project)
+                .Include(u => u.UserProjects)
+                    .ThenInclude(up => up.UserProjectRole)
+                        .ThenInclude(upr => upr.ProjectRole)
+                .FirstOrDefaultAsync(u => u.Id == id);
 
+            if (user == null) return null;
 
-
-             
-            //###################### Planlama ##############
-            //UserProject ve  UserprojectRole tablosundan join yaparak role bilgilerini de alıyoruz
-            //Daha sonra user içerisinde UserProjectRoles propertysini dolduruyoruz
-
-            //var userProjectRoles = await _context.UserProjectRole
-            //    .Include(x => x.ProjectRole)
-            //    .Where(x => x.UserProjects.UserId == id).ToListAsync();
-
-            //var userProjectRoles = await _context.UserProjectRole
-            //        .Where(x => x.UserProjectsId == id && x.ProjectRoleId).ToListAsync();
-
-
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            return new CustomUser()
+            // UserProjects ve UserProjectRole verilerini DTO’ya map ediyoruz
+            var customUser = new CustomUser
             {
                 Id = user.Id,
                 OId = user.TobbUyelikOid,
@@ -87,10 +73,32 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 EmailConfirmationExpiry = user.EmailConfirmationExpiry,
                 UserName = user.Name + " " + user.Surname,
                 Role = user.Role.Name,
-                Projects = user.UserProjects.Select(x => x.Project).ToList()
-
+                UserProjects = user.UserProjects.Select(up => new UserProjects
+                {
+                    Id = up.Id,
+                    ProjectId = up.ProjectId,
+                    Project = new Projects
+                    {
+                        Id = up.Project.Id,
+                        Name = up.Project.Name
+                    },
+                    UserProjectRole = up.UserProjectRole.Select(upr => new UserProjectRole
+                    {
+                        Id = upr.Id,
+                        ProjectRoleId = upr.ProjectRoleId,
+                        ProjectRole = new ProjectRole
+                        {
+                            Id = upr.ProjectRole.Id,
+                            Name = upr.ProjectRole.Name,
+                            ShortName = upr.ProjectRole.ShortName
+                        }
+                    }).ToList()
+                }).ToList()
             };
+
+            return customUser;
         }
+
 
         public async Task<bool> Validate(string email, string password)
         {

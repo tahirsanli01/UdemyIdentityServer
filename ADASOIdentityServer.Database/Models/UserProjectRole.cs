@@ -13,11 +13,7 @@ public partial class UserProjectRole
 
     public int UserProjectsId { get; set; }
 
-    public string Name { get; set; }
-
-    public string ShortName { get; set; }
-
-    public string Explanation { get; set; }
+    public virtual ProjectRole ProjectRole { get; set; }
 
     public virtual UserProjects UserProjects { get; set; }
 }

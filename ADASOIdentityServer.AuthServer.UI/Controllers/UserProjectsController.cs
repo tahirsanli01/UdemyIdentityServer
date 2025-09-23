@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Immutable;
 
 namespace ADASOIdentityServer.AuthServer.UI.Controllers
 {
@@ -63,10 +64,11 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
 
             }).ToList();
 
-            var roles = Enum.GetValues(typeof(ProjectRole))
-            .Cast<ProjectRole>()
-            .Select(r => new { Id = (int)r, Name = r.ToString() });
+            //var roles = Enum.GetValues(typeof(ProjectRole))
+            //.Cast<ProjectRole>()
+            //.Select(r => new { Id = (int)r, Name = r.ToString() });
 
+            var roles = _context.ProjectRole;
 
             ViewData["UserProjectRole"] = new SelectList(roles, "Id", "Name");
 
@@ -93,10 +95,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                         var userProjectRole = new UserProjectRole
                         {
                             UserProjects = userProjects,
-                            Id = roleId,
-                            Explanation = ((ProjectRole)roleId).ToString(),
-                            Name = roleId == 1 ? "ReadOnly" : roleId == 2 ? "ReadWrite" : "Admin",
-                            ShortName = roleId == 1 ? "RO" : roleId == 2 ? "RW" : "AD"
+                            Id = roleId                 
                         };
                         _context.UserProjectRole.Add(userProjectRole);
                     }
@@ -134,9 +133,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                 .ToList();
 
             // Enum'dan roller
-            var roles = Enum.GetValues(typeof(ProjectRole))
-                .Cast<ProjectRole>()
-                .Select(r => new { Id = (int)r, Name = r.ToString() });
+            var roles = _context.ProjectRole;
 
             // MultiSelectList (seçilmiş roller ile)
             ViewData["SelectedRoleIds"] = new MultiSelectList(roles, "Id", "Name", projectRoles);
@@ -202,10 +199,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                             var userProjectRole = new UserProjectRole
                             {
                                 UserProjectsId = userProjects.Id,
-                                ProjectRoleId = roleId,
-                                Explanation = ((ProjectRole)roleId).ToString(),
-                                Name = roleId == 1 ? "ReadOnly" : roleId == 2 ? "ReadWrite" : "Admin",
-                                ShortName = roleId == 1 ? "RO" : roleId == 2 ? "RW" : "AD"
+                                ProjectRoleId = roleId
                             };
                             _context.UserProjectRole.Add(userProjectRole);
                         }

@@ -15,6 +15,8 @@ public partial class AuthDbContext : DbContext
 
     public virtual DbSet<PersonelTitle> PersonelTitle { get; set; }
 
+    public virtual DbSet<ProjectRole> ProjectRole { get; set; }
+
     public virtual DbSet<Projects> Projects { get; set; }
 
     public virtual DbSet<Roles> Roles { get; set; }
@@ -61,6 +63,17 @@ public partial class AuthDbContext : DbContext
         {
             entity.Property(e => e.Title)
                 .IsRequired()
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        });
+
+        modelBuilder.Entity<ProjectRole>(entity =>
+        {
+            entity.Property(e => e.Explanation)
+                .HasMaxLength(500)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.ShortName)
+                .HasMaxLength(50)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
@@ -198,18 +211,15 @@ public partial class AuthDbContext : DbContext
 
         modelBuilder.Entity<UserProjectRole>(entity =>
         {
-            entity.Property(e => e.Explanation)
-                .HasMaxLength(500)
-                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.ShortName)
-                .HasMaxLength(50)
-                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.HasOne(d => d.ProjectRole).WithMany(p => p.UserProjectRole)
+                .HasForeignKey(d => d.ProjectRoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserProjectRole_ProjectRole");
 
             entity.HasOne(d => d.UserProjects).WithMany(p => p.UserProjectRole)
                 .HasForeignKey(d => d.UserProjectsId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserProjectRole_UserProjects");
+                .HasConstraintName("FK_UserProjectRole_UserProjects1");
         });
 
         modelBuilder.Entity<UserProjects>(entity =>

@@ -26,31 +26,34 @@ namespace ADASOIdentityServer.AuthServer.Services
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var subId = context.Subject.GetSubjectId();
-
             var user = await _customUserRepository.FindById(int.Parse(subId));
-            
-            var claims = new List<Claim>()
-            {
-               new Claim(JwtRegisteredClaimNames.Email, user.Email),
-               new Claim("oid", user.OId),
-               new Claim("name", user.UserName),
-               new Claim("email", user.Email),
-               new Claim("role", user.Role)
-               //new Claim("project", string.Join(',', user.Projects.Select(x=>x.ShortName).ToList())),
-               //new Claim("city", user.City)
 
-            };
+            if (user == null) return;
 
-            foreach (var item in user.Projects)
+            var claims = new List<Claim>
+                {
+                    //new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim("oid", user.OId ?? string.Empty),
+                    new Claim("name", user.UserName),
+                    new Claim("email", user.Email),
+                    new Claim("role", user.Role)
+                };
+
+            foreach (var up in user.UserProjects)
             {
-                claims.Add(new Claim("project", item.Name));
+                claims.Add(new Claim("userprojects", up.Project.Name));
+
+                foreach (var upr in up.UserProjectRole)
+                {
+                    claims.Add(new Claim("userprojectsrole", upr.ProjectRole.Name));
+                }
             }
 
-            
+
             context.AddRequestedClaims(claims);
-            // jwt içinde görmek istiyorsanız aşağıdaki property'i set et
-            //   context.IssuedClaims = claims;
         }
+
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
@@ -67,7 +70,7 @@ namespace ADASOIdentityServer.AuthServer.Services
         {
             var data = await _customUserRepository.GetListSystemClientsAsync();
 
-            return data.Where(x => x.ClientId == clientId).Select(x => new Client()
+            var result = data.Where(x => x.ClientId == clientId).Select(x => new Client()
             {
                 ClientId = x.ClientId,
                 RequirePkce = x.RequirePkce ?? false,
@@ -83,7 +86,11 @@ namespace ADASOIdentityServer.AuthServer.Services
                 RefreshTokenExpiration = (TokenExpiration)(x.RefreshTokenExpiration ?? 0),
                 AbsoluteRefreshTokenLifetime = x.AbsoluteRefreshTokenLifetime ?? 0,
                 RequireConsent = x.RequireConsent ?? false
+
             }).SingleOrDefault();
+
+
+            return result;
         }
         #endregion
 

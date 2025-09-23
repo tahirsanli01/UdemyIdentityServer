@@ -21,9 +21,12 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            // Kullanıcının role ve project claimlerini al
+            // Kullanıcının role ve project claimleréini al
             var roles = User.Claims.Where(x => x.Type == "role").Select(x => x.Value).ToList();
-            var projects = User.Claims.Where(x => x.Type == "project").ToList();
+            var projects = User.Claims.Where(x => x.Type == "userprojects").ToList();
+            
+            var projectsRole = User.Claims.Where(x => x.Type == "userprojectsrole").ToList();
+
             var projectList = JsonSerializer.Deserialize<List<string>>(projects.FirstOrDefault()?.Value ?? "[]");
 
             //Eğer role veya project yetkisi yoksa AccessDenied'a yönlendir

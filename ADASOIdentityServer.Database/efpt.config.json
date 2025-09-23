@@ -27,6 +27,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ProjectRole]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Projects]",
          "ObjectType": 0
       },
