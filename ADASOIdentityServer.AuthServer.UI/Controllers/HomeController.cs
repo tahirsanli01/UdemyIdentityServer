@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using ADASOIdentityServer.AuthServer.UI.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
@@ -20,20 +21,19 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
 
         [Authorize]
         public IActionResult Index()
-        {
+        {            
             // Kullanıcının role ve project claimleréini al
             var roles = User.Claims.Where(x => x.Type == "role").Select(x => x.Value).ToList();
+            
             var projects = User.Claims.Where(x => x.Type == "userprojects").ToList();
             
-            var projectsRole = User.Claims.Where(x => x.Type == "userprojectsrole").ToList();
-
-            var projectList = JsonSerializer.Deserialize<List<string>>(projects.FirstOrDefault()?.Value ?? "[]");
+            var projectList = JsonSerializer.Deserialize<List<ProjectClaim>>(projects.FirstOrDefault()?.Value ?? "[]");
 
             //Eğer role veya project yetkisi yoksa AccessDenied'a yönlendir
-            if (!roles.Contains("Admin") || !projectList.Any(p => p.Contains("IdentityUI-Project")))
-            {
-                return RedirectToAction("Login", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
-            }
+            //if (!roles.Contains("Admin") || !projectList.Any(p => p.Contains("IdentityUI-Project")))
+            //{
+            //    return RedirectToAction("Login", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
+            //}
 
             // Yetkiliyse Users/Index sayfasına yönlendir
             return RedirectToAction("Index", "Users");

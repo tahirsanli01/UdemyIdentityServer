@@ -95,13 +95,16 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                         var userProjectRole = new UserProjectRole
                         {
                             UserProjects = userProjects,
-                            Id = roleId                 
+                            ProjectRoleId = roleId
                         };
+
                         _context.UserProjectRole.Add(userProjectRole);
                     }
                 }
                 _context.Add(userProjects);
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -171,20 +174,20 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
             {
                 var existingUserProject = await _context.UserProjects
                     .Include(up => up.UserProjectRole)
+                        .ThenInclude(up => up.ProjectRole)
+                    .Include(up => up.Project)
+
                     .FirstOrDefaultAsync(up => up.Id == userProjects.Id);
 
-                if (existingUserProject == null)
-                {
-                    return NotFound();
-                }
+                if (existingUserProject == null) return NotFound();
 
                 try
                 {
                     // 1) UserProject tablosunu güncelle
                     existingUserProject.UserId = userProjects.UserId;
                     existingUserProject.ProjectId = userProjects.ProjectId;
+                    _context.Update(existingUserProject);
 
-                    
                     await _context.SaveChangesAsync();
 
 

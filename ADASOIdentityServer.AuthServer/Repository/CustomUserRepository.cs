@@ -1,7 +1,6 @@
 ﻿using ADASOIdentityServer.AuthServer.Models;
 using ADASOIdentityServer.Database.Contexts;
 using ADASOIdentityServer.Database.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

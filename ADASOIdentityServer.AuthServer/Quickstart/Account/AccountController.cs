@@ -392,7 +392,6 @@ namespace IdentityServerHost.Quickstart.UI
             return BadRequest("Geçersiz veya süresi dolmuş onay kodu.");
         }
 
-
         // <PasswordReset>
         //Httpget PasswordReset
         [HttpGet("password-reset")]
@@ -402,7 +401,6 @@ namespace IdentityServerHost.Quickstart.UI
             model.ReturnUrl = returnUrl;
             return View(model);
         }
-
 
         [HttpPost("password-reset")]
         [ValidateAntiForgeryToken]
@@ -451,7 +449,6 @@ namespace IdentityServerHost.Quickstart.UI
 
             return View(model);
         }
-
 
         [HttpGet("reset-password")]
         public async Task<IActionResult> ResetPassword(int userId, string code, string return_url)

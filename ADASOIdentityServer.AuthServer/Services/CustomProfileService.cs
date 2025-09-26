@@ -1,4 +1,5 @@
 ﻿using ADASOIdentityServer.AuthServer.Repository;
+using ADASOIdentityServer.Database.Models;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -9,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ADASOIdentityServer.AuthServer.Services
@@ -40,16 +42,17 @@ namespace ADASOIdentityServer.AuthServer.Services
                     new Claim("role", user.Role)
                 };
 
-            foreach (var up in user.UserProjects)
-            {
-                claims.Add(new Claim("userprojects", up.Project.Name));
+            var projects = user.UserProjects?
+                        .Select(up => new
+                        {
+                            UserProjects = up.Project?.Name ?? string.Empty,
+                            UserProjectRole = up.UserProjectRole?.Select(upr => upr.ProjectRole?.Name)
+                            .Where(r => !string.IsNullOrEmpty(r)).Distinct().ToList()
+                        })
+                        .Where(p => !string.IsNullOrEmpty(p.UserProjects))
+                        .ToList();
 
-                foreach (var upr in up.UserProjectRole)
-                {
-                    claims.Add(new Claim("userprojectsrole", upr.ProjectRole.Name));
-                }
-            }
-
+            claims.Add(new Claim("userprojects", JsonSerializer.Serialize(projects)));
 
             context.AddRequestedClaims(claims);
         }

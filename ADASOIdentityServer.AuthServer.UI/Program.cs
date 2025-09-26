@@ -1,4 +1,5 @@
 ﻿using ADASOIdentityServer.AuthServer.UI.Helper;
+using ADASOIdentityServer.AuthServer.UI.Models;
 using ADASOIdentityServer.AuthServer.UI.Services;
 using ADASOIdentityServer.Database.Contexts;
 using Microsoft.AspNetCore.Authentication;
@@ -64,7 +65,8 @@ builder.Services.AddAuthentication(opts =>
         OnRedirectToIdentityProviderForSignOut = context =>
         {
             var idToken = context.Properties.GetTokenValue("id_token");
-            
+            var users_ = context.HttpContext.User;
+
             var projectClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",", context.HttpContext.User.FindAll("userprojects").Select(x => x.Value).ToList()));
 
             if (!string.IsNullOrEmpty(idToken))
@@ -93,15 +95,28 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ProjectAndRolePolicy", policy =>
         policy.RequireAssertion(context =>
         {
-            var hasRole = context.User.IsInRole("Admin");
-            var projectClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",",context.User.FindAll("userprojects").Select(x=>x.Value).ToList()));
-            
-            //var projectroleClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",", context.User.FindAll("userprojectsrole").Select(x => x.Value).ToList()));
+            var user = context.User;
+            var hasGlobalRole = user.IsInRole("Admin");
 
+            var projectsClaim = user.FindFirst("userprojects")?.Value;
+            if (string.IsNullOrEmpty(projectsClaim))
+                return false;
 
-            var hasProject = projectClaims.Contains("IdentityUI-Project");
+            List<ProjectClaim> projectList;
+            try
+            {
+                projectList = JsonSerializer.Deserialize<List<ProjectClaim>>(projectsClaim) ?? new();
+            }
+            catch
+            {
+                return false; // JSON parse hatası varsa reddet
+            }
 
-            return hasRole && hasProject;
+            // örnek kontrol: IdentityUI-Project projesine ait mi?
+            var hasProject = projectList.Any(p =>
+                p.UserProjects.Equals("IdentityUI-Project", StringComparison.OrdinalIgnoreCase));
+
+            return hasGlobalRole && hasProject;
         }));
 });
 
