@@ -55,7 +55,7 @@ namespace ADASOIdentityServer.AuthServer.Services
             claims.Add(new Claim("userprojects", JsonSerializer.Serialize(projects)));
 
             context.AddRequestedClaims(claims);
-        }
+         }
 
 
         public async Task IsActiveAsync(IsActiveContext context)

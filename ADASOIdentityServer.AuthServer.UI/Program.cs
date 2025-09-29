@@ -2,6 +2,7 @@
 using ADASOIdentityServer.AuthServer.UI.Models;
 using ADASOIdentityServer.AuthServer.UI.Services;
 using ADASOIdentityServer.Database.Contexts;
+using ADASOIdentityServer.Database.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using System.Text.Json;
@@ -65,9 +66,8 @@ builder.Services.AddAuthentication(opts =>
         OnRedirectToIdentityProviderForSignOut = context =>
         {
             var idToken = context.Properties.GetTokenValue("id_token");
-            var users_ = context.HttpContext.User;
 
-            var projectClaims = JsonSerializer.Deserialize<List<string>>(string.Join(",", context.HttpContext.User.FindAll("userprojects").Select(x => x.Value).ToList()));
+            var projectsClaim = context.HttpContext.User.FindFirst("userprojects")?.Value;
 
             if (!string.IsNullOrEmpty(idToken))
             {
@@ -111,6 +111,8 @@ builder.Services.AddAuthorization(options =>
             {
                 return false; // JSON parse hatası varsa reddet
             }
+
+
 
             // örnek kontrol: IdentityUI-Project projesine ait mi?
             var hasProject = projectList.Any(p =>

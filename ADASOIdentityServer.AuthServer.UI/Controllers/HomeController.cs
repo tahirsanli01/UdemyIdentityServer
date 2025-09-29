@@ -6,11 +6,11 @@ using System.Text.Json;
 
 namespace ADASOIdentityServer.AuthServer.UI.Controllers
 {
-    
+
     public class HomeController : Controller
     {
 
-       IHttpContextAccessor _httpContextAccessor;
+        IHttpContextAccessor _httpContextAccessor;
 
         public HomeController(IHttpContextAccessor httpContextAccessor)
         {
@@ -21,19 +21,20 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
 
         [Authorize]
         public IActionResult Index()
-        {            
+        {
             // Kullanıcının role ve project claimleréini al
             var roles = User.Claims.Where(x => x.Type == "role").Select(x => x.Value).ToList();
-            
+
             var projects = User.Claims.Where(x => x.Type == "userprojects").ToList();
-            
+
             var projectList = JsonSerializer.Deserialize<List<ProjectClaim>>(projects.FirstOrDefault()?.Value ?? "[]");
 
             //Eğer role veya project yetkisi yoksa AccessDenied'a yönlendir
-            //if (!roles.Contains("Admin") || !projectList.Any(p => p.Contains("IdentityUI-Project")))
-            //{
-            //    return RedirectToAction("Login", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
-            //}
+
+            if (!roles.Contains("Admin") || !projectList.Any(p => p.UserProjects.Contains("IdentityUI-Project")))
+            {
+                return RedirectToAction("Login", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
+            }
 
             // Yetkiliyse Users/Index sayfasına yönlendir
             return RedirectToAction("Index", "Users");
@@ -46,6 +47,12 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
             ViewData["ErrorMessage"] = message ?? "Bu sayfaya erişim yetkiniz yok.";
 
             return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            return SignOut("Cookies", "oidc");
+          
         }
 
         [AllowAnonymous]
