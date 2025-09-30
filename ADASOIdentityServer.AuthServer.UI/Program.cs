@@ -82,7 +82,7 @@ builder.Services.AddAuthentication(opts =>
             var error = context.Failure?.Message;
             var fullError = context.Failure?.ToString();
 
-            Console.WriteLine("OpenID Connect Hatası: " + fullError);
+            Console.WriteLine("OpenID Connect Hatası : " + fullError);
             context.Response.Redirect("/Home/Error?error=" + Uri.EscapeDataString(error ?? "Bilinmeyen hata"));
             context.HandleResponse(); // varsayılan hata akışını durdur
             return Task.CompletedTask;
