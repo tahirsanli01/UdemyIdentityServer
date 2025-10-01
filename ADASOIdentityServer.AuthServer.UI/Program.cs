@@ -32,6 +32,7 @@ builder.Services.AddAuthentication(opts =>
     opts.SignInScheme = "Cookies";
     opts.Authority = "https://authserver.adasoportal.com/";
     opts.ClientId = "IdentityUI-Project";
+
     //opts.Authority = "https://localhost:5000/";
     //opts.ClientId = "IdentityUI-Test-Project";
 
@@ -96,7 +97,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAssertion(context =>
         {
             var user = context.User;
-            var hasGlobalRole = user.IsInRole("Admin");
+            var hasGlobalRole = user.IsInRole("SuperAdmin");
 
             var projectsClaim = user.FindFirst("userprojects")?.Value;
             if (string.IsNullOrEmpty(projectsClaim))

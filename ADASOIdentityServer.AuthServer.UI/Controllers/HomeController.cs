@@ -31,7 +31,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
 
             //Eğer role veya project yetkisi yoksa AccessDenied'a yönlendir
 
-            if (!roles.Contains("Admin") || !projectList.Any(p => p.UserProjects.Contains("IdentityUI-Project")))
+            if (!roles.Contains("SuperAdmin") || !projectList.Any(p => p.UserProjects.Contains("IdentityUI-Project")))
             {
                 return RedirectToAction("Login", "Home", new { message = "Bu sayfaya erişim yetkiniz yok." });
             }
