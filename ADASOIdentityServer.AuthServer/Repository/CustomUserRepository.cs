@@ -150,7 +150,7 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 EmailConfirmed = user.EmailConfirmed ?? false,
                 EmailConfirmationCode = user.EmailConfirmationCode,
                 EmailConfirmationExpiry = user.EmailConfirmationExpiry,
-                RoleId = 8, //Default Role User
+                RoleId = 3, //Default Role User
                 PersonelTitleId = 1, //Default Personel Title
                 DepartmentId = 1, //Default Department
                 ConsultantId = 1, //Default Consultant
