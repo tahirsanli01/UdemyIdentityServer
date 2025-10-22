@@ -1,11 +1,11 @@
-﻿using ADASOIdentityServer.AuthServer.UI.Models.UserProject;
+﻿using ADASOIdentityServer.AuthServer.UI.Models.ComponentViewDtos;
+using ADASOIdentityServer.AuthServer.UI.Models.UserProject;
 using ADASOIdentityServer.Database.Contexts;
 using ADASOIdentityServer.Database.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Immutable;
 
 namespace ADASOIdentityServer.AuthServer.UI.Controllers
 {
@@ -28,9 +28,45 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                                         .Include(u => u.User)
                                         .Include(u => u.UserProjectRole);
 
+            var result = await authDbContext.Take(10).ToListAsync();
             TempData["UserProjects"] = "active";
-            return View(await authDbContext.ToListAsync());
+            return View(result);
         }
+
+        [HttpPost]
+        public async Task<JsonResult> GetUserProjectsListAsync([FromBody] PagingDto pagingDto)
+        {
+            string searchkey = pagingDto.search.value;
+
+            var query = _context.UserProjects
+                            .Include(u => u.Project)
+                            .Include(u => u.User)
+                            .Include(u => u.UserProjectRole)
+                            .Where(x => x.Project.Name.Contains(searchkey) || x.User.Email.Contains(searchkey));
+ 
+            var totalCount = await query.CountAsync();
+
+            var pagedData = await query
+                .Skip(pagingDto.start)
+                .Take(pagingDto.length)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Project.Name,
+                    u.User.Email,
+                    roles = string.Join("-", u.UserProjectRole.Select(r => r.ProjectRole.Name))
+
+                }).ToListAsync();
+
+            return Json(new
+            {
+                draw = pagingDto.draw,
+                recordsTotal = totalCount,
+                recordsFiltered = totalCount,
+                data = pagedData
+            });
+        }
+
 
         // GET: UserProjects/Details/5
         public async Task<IActionResult> Details(int? id)

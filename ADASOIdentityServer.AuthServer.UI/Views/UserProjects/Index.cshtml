@@ -11,6 +11,7 @@
     <style>
     </style>
 }
+
 <div id="ModalCreateGoal" class="app-content">
     @await Component.InvokeAsync("DashBoardNavbar")
     <div class="d-flex flex-wrap flex-stack my-1">
@@ -27,78 +28,72 @@
         </div>
     </div>
     <div class="card">
-        <table id="table" class="table table-striped w-100">
+        <table id="table" class="table table-striped">
             <thead>
                 <tr>
-                    <th class="d-none"></th>
-                    <th style="width:15%">
-                        @Html.DisplayNameFor(model => model.Project)
-                    </th>
-                    <th style="width:50%">
-                        @Html.DisplayNameFor(model => model.User)
-                    </th>
-                    <th style="width:15%">
-                        @Html.DisplayNameFor(model => model.User.Email)
-                    </th>
-                    <th style="width:10%">
-                        İşlemler
-                    </th>
+                    <th>ID</th>
+                    <th>Ad Soyad</th>
+                    <th>Email</th>
+                    <th>Proje Rolü</th>
+
+                    <th style="width: 10%;">İşlemler</th>
+
                 </tr>
             </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td class="d-none">
-                            @if (item.User != null)
-                            {
-                                @Html.Raw(item.User.Name.ToLower() + " " + item.User.Surname.ToLower())
-                            }
-                        </td>
-                        <td>
-                            @if (item.Project != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Project.Name)
-                            }
-                        </td>
-                        <td>
-                            @if (item.User != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.User.Name)
-                                @Html.DisplayFor(modelItem => item.User.Surname)
-                            }
-                        </td>
-                        <td>
-                            @if (item.User != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.User.Email)
-                            }
-                        </td>
-                        <td class="text-end p-lg-5">
-                            <a asp-action="Edit" asp-route-id="@item.Id" title="Düzenle">
-                                <i class="fa fa-edit fs-2"></i>
-                            </a>
-                            &nbsp;|&nbsp;
-                            <a asp-action="Details" asp-route-id="@item.Id" title="Detaylar">
-                                <i class="fa fa-arrow-right fs-2"></i>
-                            </a>
-                            &nbsp;|&nbsp;
-                            <a asp-action="Delete" asp-route-id="@item.Id" title="Sil">
-                                <i class="fa fa-remove fs-2"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
         </table>
-
 
     </div>
 </div>
-
 @section scripts {
     <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
     <script src="~/assets/plugins/select2/select2.min.js"></script>
-    <script src="~/js/site.js"></script>
-  
+
+    <script>
+        $("#table").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/UserProjects/GetUserProjectsList',
+                type: 'POST',
+                contentType: "application/json",
+                data: function (d) {
+                    return JSON.stringify(d);
+                }
+            },
+            columns: [
+                { data: 'id', title: 'ID' },
+                { data: 'name', title: 'Ad Soyad' },
+                { data: 'email', title: 'Email' },
+                { data: 'roles', title: 'roles' },
+                {
+                    data: 'id',
+                    title: 'İşlemler',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        return `
+                            <a href="/UserProjects/Edit/${data}"><i class="fa fa-edit fs-2"></i></a> |
+                            <a href="/UserProjects/Details/${data}"><i class="fa fa-arrow-right fs-2"></i></a> |
+                            <a href="/UserProjects/Delete/${data}"><i class="fa fa-trash fs-2"></i></a>
+                        `;
+                    }
+                }
+            ],
+            language: {
+                lengthMenu: "Show _MENU_"
+            },
+            dom:
+                "<'row'" +
+                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                ">" +
+                "<'table-responsive'tr>" +
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">"
+        });
+    </script>
+
+    @*<script src="~/custom/advisor.js"></script>*@
 }
