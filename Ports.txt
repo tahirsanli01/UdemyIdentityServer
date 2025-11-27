@@ -6,7 +6,7 @@
 
 
 
-     <!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
 <style>
@@ -75,12 +75,14 @@ values.forEach(v => {
     `;
 
     // Açıyı hesapla (dilim ortası)
-    const angle = (cumulative + v.value / 2) * 3.6; // her % için 3.6°
+    const angle = (cumulative + v.value / 2) * 3.6;
     const rad = (angle - 90) * (Math.PI / 180);
 
-    // Etiketi donut dışına konumla
-    const cx = 180 + Math.cos(rad) * 130;
-    const cy = 180 + Math.sin(rad) * 130;
+    // Etiketi donut'ın TAM dışına koy (130 → 160 px yapıldı)
+    const distance = 160; // <<< HEMEN DIŞARIDA OLMASI İÇİN ARTTIRILDI
+
+    const cx = 180 + Math.cos(rad) * distance;
+    const cy = 180 + Math.sin(rad) * distance;
 
     const div = document.createElement("div");
     div.className = "label";
