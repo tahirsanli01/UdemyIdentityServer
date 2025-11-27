@@ -5,134 +5,76 @@
   API2 => https://localhost:5021;
 
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="utf-8" />
-<title>Fixed Donut Chart</title>
+<meta charset="UTF-8">
+<title>Donut Chart</title>
 <style>
-  body{
-    font-family: Arial;
-    display:flex;
-    justify-content:center;
-    padding:40px;
-  }
-  #chart{
-    position:relative;
-  }
-  svg{
-    width:420px;
-    height:420px;
-  }
-  .legend{
-    position:absolute;
-    left:460px;
-    top:60px;
-    display:flex;
-    flex-direction:column;
-    gap:26px;
-  }
-  .item{ display:flex; align-items:center; gap:12px; }
-  .sw{
-    width:48px; height:28px;
-    border-radius:6px;
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-weight:bold;
-  }
-  .left-badge{
-    position:absolute;
-    left:-70px; top:170px;
-    background:#0b2b4a;
-    color:white;
-    padding:8px 14px;
-    border-radius:6px;
-    font-weight:bold;
-  }
-  .conn{
-    stroke:#aaa;
-    stroke-width:1.4;
-    fill:none;
-  }
+    body { background:#f6f6f6; font-family: Arial; }
+    .wrapper { width: 500px; margin: 40px auto; position: relative; }
+
+    .label-box {
+        position: absolute;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
 </style>
 </head>
+
 <body>
 
-<div id="chart">
-  <svg viewBox="-200 -200 400 400">
-      <g id="segments" transform="rotate(-90)"></g>
-      <g id="lines"></g>
-  </svg>
+<div class="wrapper">
 
-  <div class="left-badge" id="leftBadge">350</div>
+    <!-- DONUT CHART -->
+    <svg width="500" height="500" viewBox="0 0 500 500">
+        <circle cx="250" cy="250" r="120" stroke="#ff7675" stroke-width="70" fill="none"
+                stroke-dasharray="100 628" transform="rotate(-90 250 250)"/>
+        <circle cx="250" cy="250" r="120" stroke="#74b9ff" stroke-width="70" fill="none"
+                stroke-dasharray="180 628" transform="rotate(-90 250 250)"/>
+        <circle cx="250" cy="250" r="120" stroke="#55efc4" stroke-width="70" fill="none"
+                stroke-dasharray="120 628" transform="rotate(-90 250 250)"/>
+        <circle cx="250" cy="250" r="120" stroke="#ffeaa7" stroke-width="70" fill="none"
+                stroke-dasharray="228 628" transform="rotate(-90 250 250)"/>
+    </svg>
 
-  <div class="legend" id="legend"></div>
+    <!-- LABEL BOXES (her biri ilgili dilimin açısına göre konumlanıyor) -->
+    <div class="label-box" id="l1">Puan: 4.5</div>
+    <div class="label-box" id="l2">Puan: 3.2</div>
+    <div class="label-box" id="l3">Puan: 5.0</div>
+    <div class="label-box" id="l4">Puan: 2.8</div>
+
 </div>
 
 <script>
-const data = [
-  {label:"Koyu", value:350, color:"#0b2b4a"},
-  {label:"Mavi", value:110, color:"#3b9cff"},
-  {label:"Yeşil", value:50,  color:"#2ca24b"},
-  {label:"Sarı", value:60,  color:"#f0b229"},
-  {label:"Kahverengi", value:90, color:"#c35b43"},
-];
+    // Donut merkez koordinatları
+    const cx = 250, cy = 250, R = 180;  
 
-const total = data.reduce((a,b)=>a+b.value,0);
-const radius = 120;
-const stroke = 46;
+    // Her dilimin orta açısı (örnek olarak)
+    const angles = [
+        45,   // Dilim 1
+        135,  // Dilim 2
+        225,  // Dilim 3
+        315   // Dilim 4
+    ];
 
-const segG = document.getElementById("segments");
-const lineG = document.getElementById("lines");
-const legend = document.getElementById("legend");
+    // Kutuları yerleştir
+    angles.forEach((angle, i) => {
+        const rad = (angle - 90) * Math.PI / 180;
+        const x = cx + R * Math.cos(rad);
+        const y = cy + R * Math.sin(rad);
 
-let offset = 0;
-
-// Sağdaki etiketlere ZORLAMALI dikey offset (çakışmayı engeller)
-const labelOffsets = [0, 26, 52, 78]; 
-
-data.slice(1).forEach((d,i)=>{
-  const div=document.createElement("div");
-  div.className="item";
-  div.innerHTML=`<div class="sw" style="background:${d.color}">${d.value}</div> <span>${d.label}</span>`;
-  legend.appendChild(div);
-});
-
-// Segmentler
-data.forEach((d,i)=>{
-  const frac = d.value / total;
-  const dash = frac * 2*Math.PI*radius;
-
-  const c = document.createElementNS("http://www.w3.org/2000/svg","circle");
-  c.setAttribute("r", radius);
-  c.setAttribute("fill","none");
-  c.setAttribute("stroke", d.color);
-  c.setAttribute("stroke-width", stroke);
-  c.setAttribute("stroke-dasharray", `${dash} ${9999}`);
-  c.setAttribute("stroke-dashoffset", -(offset * 2*Math.PI*radius));
-  segG.appendChild(c);
-
-  // connector çizgisi (ilk büyük olan hariç)
-  if(i > 0){
-    const midAngle = (offset + frac/2) * 2*Math.PI; 
-    const sx = Math.cos(midAngle) * (radius + stroke/2);
-    const sy = Math.sin(midAngle) * (radius + stroke/2);
-
-    // sağdaki etiketin SVG koordinatı
-    const lx = 170;  
-    const ly = -80 + labelOffsets[i-1];
-
-    const line = document.createElementNS("http://www.w3.org/2000/svg","polyline");
-    line.setAttribute("class","conn");
-    line.setAttribute("points", `${sx},${sy}  ${(sx+lx)/2},${sy}  ${lx},${ly}`);
-    line.setAttribute("stroke", data[i].color);
-    lineG.appendChild(line);
-  }
-
-  offset += frac;
-});
+        const box = document.getElementById("l" + (i+1));
+        box.style.left = x + "px";
+        box.style.top = y + "px";
+    });
 </script>
 
 </body>
