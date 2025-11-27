@@ -3,3 +3,349 @@
  Client2 => https://localhost:5011;
   API1 => https://localhost:5016;
   API2 => https://localhost:5021;
+
+
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Donut Chart - HTML/CSS/JS</title>
+<style>
+  :root{
+    --size: 420px; /* overall SVG box */
+    --donut-radius: 120; /* used in JS, must match SVG circle r */
+    --stroke: 48; /* donut thickness */
+    --gap-right: 220px; /* space for right legend */
+  }
+
+  body{
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    padding: 24px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    background:#fff;
+    color:#222;
+  }
+
+  .chart-wrap{
+    position:relative;
+    width: calc(var(--size) + var(--gap-right));
+    max-width:100%;
+  }
+
+  /* SVG area */
+  svg.donut{
+    width: var(--size);
+    height: var(--size);
+    display:block;
+    margin:0;
+    overflow:visible;
+  }
+
+  /* labels on right */
+  .legend {
+    position:absolute;
+    top:50%;
+    right:0;
+    transform: translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    min-width:180px;
+  }
+
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:15px;
+  }
+
+  .swatch{
+    width:54px;
+    height:30px;
+    border-radius:8px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:600;
+    box-shadow:0 2px 0 rgba(0,0,0,0.06);
+  }
+
+  .legend-text{
+    margin-left:auto;
+    font-weight:700;
+    font-size:15px;
+    color:#0b2b4a;
+  }
+
+  /* left floating small label */
+  .left-label{
+    position:absolute;
+    left:-24px;
+    top: 50%;
+    transform: translateY(-55%);
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .left-pill{
+    background:#0b2b4a;
+    color:#fff;
+    padding:8px 14px;
+    border-radius:8px;
+    font-weight:700;
+    box-shadow:0 2px 0 rgba(0,0,0,0.06);
+  }
+
+  /* small connecting line style (SVG lines will have class .conn) */
+  svg .conn {
+    stroke: #98a6b3;
+    stroke-width:1.6;
+    fill:none;
+  }
+
+  /* numeric inside swatches use smaller font for longer numbers */
+  .swatch.small { font-size:13px; }
+</style>
+</head>
+<body>
+
+<div class="chart-wrap">
+  <!-- SVG donut + connectors -->
+  <svg class="donut" viewBox="-220 -220 440 440" xmlns="http://www.w3.org/2000/svg" aria-hidden="false" role="img">
+    <!-- background circle (thin) -->
+    <circle cx="0" cy="0" r="140" fill="none" stroke="#fff" stroke-width="0"></circle>
+
+    <!-- segments container (we'll inject circles here via JS) -->
+    <g id="segments" transform="rotate(-90)"></g>
+
+    <!-- connector lines (will be added by JS) -->
+    <g id="connectors"></g>
+  </svg>
+
+  <!-- left label (for big dark segment) -->
+  <div class="left-label" id="leftLabel">
+    <div class="left-pill" id="leftValue">350</div>
+  </div>
+
+  <!-- right legend -->
+  <div class="legend" id="legend">
+    <!-- JS will populate legend items -->
+  </div>
+</div>
+
+<script>
+/*
+ Values/colors arranged so they match the image's look & order.
+ We'll draw donut segments using SVG circles with stroke-dasharray.
+ Also draw connector lines from segment centroid to legend boxes.
+*/
+
+const data = [
+  { label: 'Koyu (Ana)', value: 350, color: '#0b2b4a' }, // dark navy (left big)
+  { label: 'Mavi', value: 110, color: '#3b9cff' },       // blue (bottom-right)
+  { label: 'Yeşil', value: 50, color: '#2ca24b' },       // green
+  { label: 'Sarı', value: 60, color: '#f0b229' },        // yellow
+  { label: 'Kahverengi', value: 90, color: '#c35b43' }   // brown (top-right)
+];
+
+const svg = document.querySelector('svg.donut');
+const segmentsG = document.getElementById('segments');
+const connectorsG = document.getElementById('connectors');
+const legendWrap = document.getElementById('legend');
+const leftLabel = document.getElementById('leftLabel');
+const leftValue = document.getElementById('leftValue');
+
+const radius = 120;      // must match CSS variable for visuals
+const stroke = 48;       // donut thickness
+const circumference = 2 * Math.PI * radius;
+
+// compute total
+const total = data.reduce((s,d) => s + d.value, 0);
+
+// helper to create one donut segment (circle)
+function makeSegment(color, fraction, offset) {
+  const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  circle.setAttribute('cx', 0);
+  circle.setAttribute('cy', 0);
+  circle.setAttribute('r', radius);
+  circle.setAttribute('fill', 'none');
+  circle.setAttribute('stroke-linecap', 'butt');
+  circle.setAttribute('stroke-width', stroke);
+  circle.setAttribute('stroke', color);
+
+  // dasharray: visible part then gap (remaining)
+  const dash = fraction * circumference;
+  const gap = circumference - dash;
+  circle.setAttribute('stroke-dasharray', `${dash} ${gap}`);
+  // dashoffset = how far along the circumference to start the visible segment
+  // offset is fraction of circumference where this segment should start
+  const dashOffset = (1 - offset) * circumference;
+  circle.setAttribute('stroke-dashoffset', dashOffset);
+  return circle;
+}
+
+// create segments and connectors, compute centroid angle for each to place connectors
+let cumulative = 0;
+const connectorPositions = []; // store for later drawing lines to legends
+
+data.forEach((d, idx) => {
+  const fraction = d.value / total; // fraction of circle
+  const seg = makeSegment(d.color, fraction, cumulative);
+  segmentsG.appendChild(seg);
+
+  // compute central angle (in degrees) of this segment for connector:
+  const startFrac = cumulative;
+  const midFrac = startFrac + fraction / 2;
+  const angleDeg = midFrac * 360; // since we rotated -90 on g, 0deg is top
+  connectorPositions.push({ angleDeg, idx });
+  cumulative += fraction;
+});
+
+// create right-side legend items (skip the first dark one which we'll place left)
+const rightItems = data.slice(1); // items for right column
+rightItems.forEach((d, i) => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  // swatch
+  const sw = document.createElement('div');
+  sw.className = 'swatch';
+  // apply color
+  sw.style.background = d.color;
+  sw.textContent = d.label;
+  // numeric badge
+  const num = document.createElement('div');
+  num.className = 'legend-text';
+  num.textContent = d.value;
+  item.appendChild(sw);
+  item.appendChild(num);
+  legendWrap.appendChild(item);
+});
+
+// left label value (big dark segment) already present; ensure number maybe large font
+leftValue.textContent = data[0].value;
+
+// Now draw connector lines from the donut to each legend item.
+// For right legends we compute target Y positions and draw line from circle outskirts to the center-left of swatch.
+// For left legend (the dark large one) draw a line to left pill.
+
+// helper: convert polar angle to x,y on circle edge (center at 0,0)
+function polarToCartesian(angleDeg, r) {
+  const rad = (angleDeg-90) * Math.PI/180; // svg polar conversion (0 at 12 o'clock)
+  const x = r * Math.cos(rad);
+  const y = r * Math.sin(rad);
+  return { x, y };
+}
+
+// compute legend item center positions (in SVG coords)
+// The svg viewBox is centered at (0,0). Legend HTML is positioned absolutely relative to chart-wrap.
+// We'll compute the page position of each legend swatch and then map to SVG coordinates.
+
+function drawConnectors() {
+  // clear previous connectors
+  connectorsG.innerHTML = '';
+
+  // get the bounding rect of svg in the page
+  const svgRect = svg.getBoundingClientRect();
+  const svgLeft = svgRect.left;
+  const svgTop = svgRect.top;
+  const svgWidth = svgRect.width;
+  const svgHeight = svgRect.height;
+
+  // helper: convert page coords to svg coords (centered viewBox -220..220)
+  function pageToSvgCoords(pageX, pageY) {
+    // viewBox is -220,-220 -> 220,220 (size 440)
+    const vbSize = 440;
+    const x = ((pageX - svgLeft) / svgWidth) * vbSize - vbSize/2;
+    const y = ((pageY - svgTop) / svgHeight) * vbSize - vbSize/2;
+    return { x, y };
+  }
+
+  // connectors to right items:
+  const rightElements = Array.from(document.querySelectorAll('.legend .legend-item'));
+  rightElements.forEach((el, i) => {
+    const dataIdx = i + 1; // because first data is left label
+    const cp = connectorPositions[dataIdx];
+    // start point on donut edge (a bit outside)
+    const start = polarToCartesian(cp.angleDeg, radius + stroke/2 - 6);
+    // mid point (slightly further out)
+    const mid = polarToCartesian(cp.angleDeg, radius + stroke/2 + 18);
+
+    // target coords: center-left of the swatch in page coords
+    const swatch = el.querySelector('.swatch');
+    const swRect = swatch.getBoundingClientRect();
+    const targetPageX = swRect.left; // left edge -> we'll aim for left edge center
+    const targetPageY = swRect.top + swRect.height/2;
+
+    const targetSvg = pageToSvgCoords(targetPageX, targetPageY);
+
+    // draw a polyline from start -> mid -> target
+    const poly = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    poly.setAttribute('class','conn');
+    poly.setAttribute('points', `${start.x},${start.y} ${mid.x},${mid.y} ${targetSvg.x},${targetSvg.y}`);
+    connectorsG.appendChild(poly);
+
+    // also place a subtle colored dot near the start to show connection point
+    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('cx', start.x);
+    dot.setAttribute('cy', start.y);
+    dot.setAttribute('r', 4);
+    dot.setAttribute('fill', data[dataIdx].color);
+    connectorsG.appendChild(dot);
+  });
+
+  // connector for left big dark segment
+  const leftCp = connectorPositions[0];
+  const leftStart = polarToCartesian(leftCp.angleDeg, radius + stroke/2 - 6);
+  // target is leftLabel element center
+  const leftRect = leftLabel.getBoundingClientRect();
+  const targetLeftPageX = leftRect.right; // right edge of left label
+  const targetLeftPageY = leftRect.top + leftRect.height/2;
+  const targetLeftSvg = pageToSvgCoords(targetLeftPageX, targetLeftPageY);
+
+  const polyL = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+  polyL.setAttribute('class','conn');
+  // make a bit of a curved path by using a small mid point to the left
+  const midLeft = polarToCartesian(leftCp.angleDeg, radius + stroke/2 + 20);
+  polyL.setAttribute('points', `${leftStart.x},${leftStart.y} ${midLeft.x - 10},${midLeft.y} ${targetLeftSvg.x},${targetLeftSvg.y}`);
+  connectorsG.appendChild(polyL);
+
+  const dotL = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  dotL.setAttribute('cx', leftStart.x);
+  dotL.setAttribute('cy', leftStart.y);
+  dotL.setAttribute('r', 4);
+  dotL.setAttribute('fill', data[0].color);
+  connectorsG.appendChild(dotL);
+}
+
+// draw numeric values inside swatches as well (already done), but we can make swatches show numbers too:
+(function addNumbersToSwatches() {
+  const rightSwatches = Array.from(document.querySelectorAll('.legend .swatch'));
+  rightSwatches.forEach((sw, i) => {
+    // show number on swatch instead of label text to match image style
+    const d = data[i+1];
+    sw.textContent = d.value;
+    sw.classList.add('small');
+  });
+})();
+
+// initial draw (and on resize reposition connectors)
+function refresh() {
+  drawConnectors();
+}
+
+// wait for layout to settle (fonts etc) then draw
+window.addEventListener('load', () => {
+  // small timeout to let fonts/layout settle
+  setTimeout(refresh, 80);
+});
+
+// redraw on resize or when fonts change
+window.addEventListener('resize', refresh);
+</script>
+</body>
+</html>
