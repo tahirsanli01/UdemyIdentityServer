@@ -9,34 +9,38 @@
     <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
+<title>Donut Chart</title>
 <style>
     body {
         font-family: Arial, sans-serif;
+        background: #fafafa;
     }
 
     .chart-container {
         position: relative;
-        width: 360px;
-        height: 360px;
-        margin: 50px auto;
+        width: 320px;
+        height: 320px;
+        margin: 40px auto;
     }
 
     .label {
         position: absolute;
         background: white;
-        padding: 6px 10px;
+        padding: 6px 12px;
         border-radius: 6px;
         border: 1px solid #ccc;
         font-size: 14px;
         transform: translate(-50%, -50%);
         white-space: nowrap;
+        pointer-events: none;
     }
 </style>
 </head>
 <body>
 
 <div class="chart-container">
-    <svg width="360" height="360" viewBox="0 0 42 42" id="chart" style="transform: rotate(-90deg);">
+    <svg width="320" height="320" viewBox="0 0 42 42" id="chart" style="transform: rotate(-90deg);">
     </svg>
 </div>
 
@@ -52,7 +56,7 @@ const svg = document.getElementById("chart");
 
 let cumulative = 0;
 
-// Donut arka planı
+// Donut arka plan
 svg.innerHTML += `
     <circle r="15.915" cx="21" cy="21" fill="transparent" stroke="#eee" stroke-width="6"></circle>
 `;
@@ -74,15 +78,15 @@ values.forEach(v => {
         ></circle>
     `;
 
-    // Açıyı hesapla (dilim ortası)
+    // Etiket açısı
     const angle = (cumulative + v.value / 2) * 3.6;
     const rad = (angle - 90) * (Math.PI / 180);
 
-    // Etiketi donut'ın TAM dışına koy (130 → 160 px yapıldı)
-    const distance = 160; // <<< HEMEN DIŞARIDA OLMASI İÇİN ARTTIRILDI
+    // Etiket mesafesi – donut'tan tamamen ayrı
+    const distance = 115;
 
-    const cx = 180 + Math.cos(rad) * distance;
-    const cy = 180 + Math.sin(rad) * distance;
+    const cx = 160 + Math.cos(rad) * distance;
+    const cy = 160 + Math.sin(rad) * distance;
 
     const div = document.createElement("div");
     div.className = "label";
