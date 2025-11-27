@@ -6,76 +6,88 @@
 
 
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Donut Chart</title>
 <style>
-    body { background:#f6f6f6; font-family: Arial; }
-    .wrapper { width: 500px; margin: 40px auto; position: relative; }
+    body {
+        font-family: Arial, sans-serif;
+    }
 
-    .label-box {
+    .chart-container {
+        position: relative;
+        width: 350px;
+        height: 350px;
+        margin: 40px auto;
+    }
+
+    .label {
         position: absolute;
-        background: white;
-        border: 1px solid #ccc;
+        background: #fff;
         padding: 6px 10px;
         border-radius: 6px;
+        border: 1px solid #ccc;
         font-size: 14px;
-        font-weight: bold;
         white-space: nowrap;
-        transform: translate(-50%, -50%);
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
 </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="chart-container">
 
-    <!-- DONUT CHART -->
-    <svg width="500" height="500" viewBox="0 0 500 500">
-        <circle cx="250" cy="250" r="120" stroke="#ff7675" stroke-width="70" fill="none"
-                stroke-dasharray="100 628" transform="rotate(-90 250 250)"/>
-        <circle cx="250" cy="250" r="120" stroke="#74b9ff" stroke-width="70" fill="none"
-                stroke-dasharray="180 628" transform="rotate(-90 250 250)"/>
-        <circle cx="250" cy="250" r="120" stroke="#55efc4" stroke-width="70" fill="none"
-                stroke-dasharray="120 628" transform="rotate(-90 250 250)"/>
-        <circle cx="250" cy="250" r="120" stroke="#ffeaa7" stroke-width="70" fill="none"
-                stroke-dasharray="228 628" transform="rotate(-90 250 250)"/>
+    <!-- SVG Donut Chart (tam 360° görünür) -->
+    <svg width="350" height="350" viewBox="0 0 42 42" style="transform: rotate(-90deg);">
+        
+        <!-- Donut arka plan -->
+        <circle r="15.915494" cx="21" cy="21" fill="transparent" stroke="#eee" stroke-width="6"></circle>
+
+        <!-- Dilimler -->
+        <!-- 40% -->
+        <circle r="15.915494" cx="21" cy="21"
+                fill="transparent"
+                stroke="#ff6b6b"
+                stroke-width="6"
+                stroke-dasharray="40 60"
+                stroke-dashoffset="0">
+        </circle>
+
+        <!-- 25% -->
+        <circle r="15.915494" cx="21" cy="21"
+                fill="transparent"
+                stroke="#4dabf7"
+                stroke-width="6"
+                stroke-dasharray="25 75"
+                stroke-dashoffset="-40">
+        </circle>
+
+        <!-- 20% -->
+        <circle r="15.915494" cx="21" cy="21"
+                fill="transparent"
+                stroke="#51cf66"
+                stroke-width="6"
+                stroke-dasharray="20 80"
+                stroke-dashoffset="-65">
+        </circle>
+
+        <!-- 15% -->
+        <circle r="15.915494" cx="21" cy="21"
+                fill="transparent"
+                stroke="#ffd43b"
+                stroke-width="6"
+                stroke-dasharray="15 85"
+                stroke-dashoffset="-85">
+        </circle>
+
     </svg>
 
-    <!-- LABEL BOXES (her biri ilgili dilimin açısına göre konumlanıyor) -->
-    <div class="label-box" id="l1">Puan: 4.5</div>
-    <div class="label-box" id="l2">Puan: 3.2</div>
-    <div class="label-box" id="l3">Puan: 5.0</div>
-    <div class="label-box" id="l4">Puan: 2.8</div>
+    <!-- Puan Kutuları (dilimlerin yanında) -->
+    <div class="label" style="top: 20px; left: 260px;">40 Puan</div>
+    <div class="label" style="top: 80px; left: 270px;">25 Puan</div>
+    <div class="label" style="top: 230px; left: 260px;">20 Puan</div>
+    <div class="label" style="top: 260px; left: 150px;">15 Puan</div>
 
 </div>
-
-<script>
-    // Donut merkez koordinatları
-    const cx = 250, cy = 250, R = 180;  
-
-    // Her dilimin orta açısı (örnek olarak)
-    const angles = [
-        45,   // Dilim 1
-        135,  // Dilim 2
-        225,  // Dilim 3
-        315   // Dilim 4
-    ];
-
-    // Kutuları yerleştir
-    angles.forEach((angle, i) => {
-        const rad = (angle - 90) * Math.PI / 180;
-        const x = cx + R * Math.cos(rad);
-        const y = cy + R * Math.sin(rad);
-
-        const box = document.getElementById("l" + (i+1));
-        box.style.left = x + "px";
-        box.style.top = y + "px";
-    });
-</script>
 
 </body>
 </html>
