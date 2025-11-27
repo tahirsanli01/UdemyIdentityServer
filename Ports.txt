@@ -5,7 +5,8 @@
   API2 => https://localhost:5021;
 
 
-<!DOCTYPE html>
+
+     <!DOCTYPE html>
 <html>
 <head>
 <style>
@@ -15,79 +16,83 @@
 
     .chart-container {
         position: relative;
-        width: 350px;
-        height: 350px;
-        margin: 40px auto;
+        width: 360px;
+        height: 360px;
+        margin: 50px auto;
     }
 
     .label {
         position: absolute;
-        background: #fff;
+        background: white;
         padding: 6px 10px;
         border-radius: 6px;
         border: 1px solid #ccc;
         font-size: 14px;
+        transform: translate(-50%, -50%);
         white-space: nowrap;
     }
 </style>
 </head>
-
 <body>
 
 <div class="chart-container">
-
-    <!-- SVG Donut Chart (tam 360° görünür) -->
-    <svg width="350" height="350" viewBox="0 0 42 42" style="transform: rotate(-90deg);">
-        
-        <!-- Donut arka plan -->
-        <circle r="15.915494" cx="21" cy="21" fill="transparent" stroke="#eee" stroke-width="6"></circle>
-
-        <!-- Dilimler -->
-        <!-- 40% -->
-        <circle r="15.915494" cx="21" cy="21"
-                fill="transparent"
-                stroke="#ff6b6b"
-                stroke-width="6"
-                stroke-dasharray="40 60"
-                stroke-dashoffset="0">
-        </circle>
-
-        <!-- 25% -->
-        <circle r="15.915494" cx="21" cy="21"
-                fill="transparent"
-                stroke="#4dabf7"
-                stroke-width="6"
-                stroke-dasharray="25 75"
-                stroke-dashoffset="-40">
-        </circle>
-
-        <!-- 20% -->
-        <circle r="15.915494" cx="21" cy="21"
-                fill="transparent"
-                stroke="#51cf66"
-                stroke-width="6"
-                stroke-dasharray="20 80"
-                stroke-dashoffset="-65">
-        </circle>
-
-        <!-- 15% -->
-        <circle r="15.915494" cx="21" cy="21"
-                fill="transparent"
-                stroke="#ffd43b"
-                stroke-width="6"
-                stroke-dasharray="15 85"
-                stroke-dashoffset="-85">
-        </circle>
-
+    <svg width="360" height="360" viewBox="0 0 42 42" id="chart" style="transform: rotate(-90deg);">
     </svg>
-
-    <!-- Puan Kutuları (dilimlerin yanında) -->
-    <div class="label" style="top: 20px; left: 260px;">40 Puan</div>
-    <div class="label" style="top: 80px; left: 270px;">25 Puan</div>
-    <div class="label" style="top: 230px; left: 260px;">20 Puan</div>
-    <div class="label" style="top: 260px; left: 150px;">15 Puan</div>
-
 </div>
+
+<script>
+const values = [
+    { value: 40, color: "#ff6b6b", label: "40 Puan" },
+    { value: 25, color: "#4dabf7", label: "25 Puan" },
+    { value: 20, color: "#51cf66", label: "20 Puan" },
+    { value: 15, color: "#ffd43b", label: "15 Puan" }
+];
+
+const svg = document.getElementById("chart");
+
+let cumulative = 0;
+
+// Donut arka planı
+svg.innerHTML += `
+    <circle r="15.915" cx="21" cy="21" fill="transparent" stroke="#eee" stroke-width="6"></circle>
+`;
+
+values.forEach(v => {
+    const dash = v.value;
+    const gap = 100 - dash;
+    const offset = -cumulative;
+
+    // Dilimi çiz
+    svg.innerHTML += `
+        <circle 
+            r="15.915" cx="21" cy="21"
+            fill="transparent"
+            stroke="${v.color}"
+            stroke-width="6"
+            stroke-dasharray="${dash} ${gap}"
+            stroke-dashoffset="${offset}"
+        ></circle>
+    `;
+
+    // Açıyı hesapla (dilim ortası)
+    const angle = (cumulative + v.value / 2) * 3.6; // her % için 3.6°
+    const rad = (angle - 90) * (Math.PI / 180);
+
+    // Etiketi donut dışına konumla
+    const cx = 180 + Math.cos(rad) * 130;
+    const cy = 180 + Math.sin(rad) * 130;
+
+    const div = document.createElement("div");
+    div.className = "label";
+    div.style.left = cx + "px";
+    div.style.top = cy + "px";
+    div.innerText = v.label;
+
+    document.querySelector(".chart-container").appendChild(div);
+
+    cumulative += v.value;
+});
+</script>
 
 </body>
 </html>
