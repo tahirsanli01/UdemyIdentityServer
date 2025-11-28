@@ -7,97 +7,138 @@
 
 
     <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Donut Chart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Donut Chart</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #fafafa;
-    }
-
-    .chart-container {
-        position: relative;
-        width: 320px;
-        height: 320px;
-        margin: 40px auto;
-    }
-
-    .label {
-        position: absolute;
-        background: white;
-        padding: 6px 12px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-        transform: translate(-50%, -50%);
-        white-space: nowrap;
-        pointer-events: none;
-    }
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f0f0f0;
+    font-family: Arial, sans-serif;
+  }
+  canvas {
+    background: transparent;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
 
-<div class="chart-container">
-    <svg width="320" height="320" viewBox="0 0 42 42" id="chart" style="transform: rotate(-90deg);">
-    </svg>
-</div>
+<canvas id="donut" width="400" height="400"></canvas>
 
 <script>
-const values = [
-    { value: 40, color: "#ff6b6b", label: "40 Puan" },
-    { value: 25, color: "#4dabf7", label: "25 Puan" },
-    { value: 20, color: "#51cf66", label: "20 Puan" },
-    { value: 15, color: "#ffd43b", label: "15 Puan" }
+const canvas = document.getElementById('donut');
+const ctx = canvas.getContext('2d');
+
+const data = [
+  { label: 'Elma', value: 30, color: '#FF6384' },
+  { label: 'Armut', value: 20, color: '#36A2EB' },
+  { label: 'Muz', value: 25, color: '#FFCE56' },
+  { label: 'Çilek', value: 25, color: '#4BC0C0' }
 ];
 
-const svg = document.getElementById("chart");
+const total = data.reduce((sum, item) => sum + item.value, 0);
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+const radius = 120;
+const innerRadius = 60;
+let animationProgress = 0;
+let hoverIndex = -1;
 
-let cumulative = 0;
+function drawChart() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// Donut arka plan
-svg.innerHTML += `
-    <circle r="15.915" cx="21" cy="21" fill="transparent" stroke="#eee" stroke-width="6"></circle>
-`;
+  let startAngle = -Math.PI / 2;
 
-values.forEach(v => {
-    const dash = v.value;
-    const gap = 100 - dash;
-    const offset = -cumulative;
+  data.forEach((item, index) => {
+    const sliceAngle = (item.value / total) * 2 * Math.PI * animationProgress;
+
+    // Hover efekti
+    const midAngle = startAngle + sliceAngle / 2;
+    let offsetX = 0;
+    let offsetY = 0;
+    if (index === hoverIndex) {
+      const offset = 15; // ne kadar dışarı çıkacak
+      offsetX = offset * Math.cos(midAngle);
+      offsetY = offset * Math.sin(midAngle);
+    }
 
     // Dilimi çiz
-    svg.innerHTML += `
-        <circle 
-            r="15.915" cx="21" cy="21"
-            fill="transparent"
-            stroke="${v.color}"
-            stroke-width="6"
-            stroke-dasharray="${dash} ${gap}"
-            stroke-dashoffset="${offset}"
-        ></circle>
-    `;
+    ctx.beginPath();
+    ctx.arc(centerX + offsetX, centerY + offsetY, radius, startAngle, startAngle + sliceAngle);
+    ctx.arc(centerX + offsetX, centerY + offsetY, innerRadius, startAngle + sliceAngle, startAngle, true);
+    ctx.closePath();
+    ctx.fillStyle = item.color;
+    ctx.fill();
 
-    // Etiket açısı
-    const angle = (cumulative + v.value / 2) * 3.6;
-    const rad = (angle - 90) * (Math.PI / 180);
+    // Etiket
+    if (sliceAngle > 0.1) {
+      const labelRadius = radius + 20;
+      const labelX = centerX + offsetX + labelRadius * Math.cos(midAngle);
+      const labelY = centerY + offsetY + labelRadius * Math.sin(midAngle);
 
-    // Etiket mesafesi – donut'tan tamamen ayrı
-    const distance = 115;
+      ctx.fillStyle = '#000';
+      ctx.textAlign = midAngle > Math.PI / 2 && midAngle < 3 * Math.PI / 2 ? 'right' : 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`${item.label} (${item.value})`, labelX, labelY);
+    }
 
-    const cx = 160 + Math.cos(rad) * distance;
-    const cy = 160 + Math.sin(rad) * distance;
+    startAngle += sliceAngle;
+  });
 
-    const div = document.createElement("div");
-    div.className = "label";
-    div.style.left = cx + "px";
-    div.style.top = cy + "px";
-    div.innerText = v.label;
+  // Ortadaki boşluk
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
+  ctx.fillStyle = '#f0f0f0';
+  ctx.fill();
+}
 
-    document.querySelector(".chart-container").appendChild(div);
+function animate() {
+  animationProgress += 0.02;
+  if (animationProgress > 1) animationProgress = 1;
+  drawChart();
+  if (animationProgress < 1) requestAnimationFrame(animate);
+}
 
-    cumulative += v.value;
+// Hover tespiti
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left - centerX;
+  const y = e.clientY - rect.top - centerY;
+  const angle = Math.atan2(y, x);
+  const distance = Math.sqrt(x * x + y * y);
+
+  if (distance < innerRadius || distance > radius) {
+    hoverIndex = -1;
+  } else {
+    let startAngle = -Math.PI / 2;
+    hoverIndex = -1;
+    data.forEach((item, index) => {
+      const sliceAngle = (item.value / total) * 2 * Math.PI;
+      if (angle >= startAngle && angle < startAngle + sliceAngle) {
+        hoverIndex = index;
+      } else if (angle < -Math.PI / 2) { // açı -PI/2 ile 0 arasında wrap kontrol
+        if (angle + 2 * Math.PI >= startAngle && angle + 2 * Math.PI < startAngle + sliceAngle) {
+          hoverIndex = index;
+        }
+      }
+      startAngle += sliceAngle;
+    });
+  }
+  drawChart();
 });
+
+canvas.addEventListener('mouseleave', () => {
+  hoverIndex = -1;
+  drawChart();
+});
+
+animate();
 </script>
 
 </body>
