@@ -18,7 +18,10 @@ namespace ADASOIdentityServer.AuthServer.Models
         public string EmailConfirmationCode { get; set; }
         public DateTime? EmailConfirmationExpiry { get; set; }
         public string City { get; set; }
-        public string Role { get; set; }        
+        public string Role { get; set; }
+
+        public string TobbMerkezSube { get; set; }
+        public int? TobbOdaSicilNo { get; set; }
         public List<UserProjects>? UserProjects { get; set; }
     }
 }

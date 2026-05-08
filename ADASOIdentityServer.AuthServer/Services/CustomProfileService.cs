@@ -33,29 +33,41 @@ namespace ADASOIdentityServer.AuthServer.Services
             if (user == null) return;
 
             var claims = new List<Claim>
-                {
-                    //new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim("oid", user.OId ?? string.Empty),
-                    new Claim("name", user.UserName),
-                    new Claim("email", user.Email),
-                    new Claim("role", user.Role)
-                };
+            {
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("oid", user.OId ?? string.Empty),
+                new Claim("name", user.UserName),
+                new Claim("email", user.Email),
+                new Claim("role", user.Role)
+            };
+
+            
+            var clientId = context.Client?.ClientId;
+            var tobbEnabledClients = new[] { "Crm-MVC-Project", "Crm-MVC-Test-Project", "IdentityUI-Project" };
+
+            if (tobbEnabledClients.Contains(clientId))
+            {
+                if (!string.IsNullOrEmpty(user.TobbMerkezSube))
+                    claims.Add(new Claim("tobb_merkez_sube", user.TobbMerkezSube));
+
+                if (user.TobbOdaSicilNo.HasValue)
+                    claims.Add(new Claim("tobb_oda_sicil_no", user.TobbOdaSicilNo.Value.ToString()));
+            }
 
             var projects = user.UserProjects?
-                        .Select(up => new
-                        {
-                            UserProjects = up.Project?.Name ?? string.Empty,
-                            UserProjectRole = up.UserProjectRole?.Select(upr => upr.ProjectRole?.Name)
-                            .Where(r => !string.IsNullOrEmpty(r)).Distinct().ToList()
-                        })
-                        .Where(p => !string.IsNullOrEmpty(p.UserProjects))
-                        .ToList();
+                .Select(up => new
+                {
+                    UserProjects = up.Project?.Name ?? string.Empty,
+                    UserProjectRole = up.UserProjectRole?.Select(upr => upr.ProjectRole?.Name)
+                        .Where(r => !string.IsNullOrEmpty(r)).Distinct().ToList()
+                })
+                .Where(p => !string.IsNullOrEmpty(p.UserProjects))
+                .ToList();
 
             claims.Add(new Claim("userprojects", JsonSerializer.Serialize(projects)));
 
             context.AddRequestedClaims(claims);
-         }
+        }
 
 
         public async Task IsActiveAsync(IsActiveContext context)

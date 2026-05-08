@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ADASOIdentityServer.Database.Models;
 
-public partial class UserProjects: UserProjectDto
+public partial class UserProjects:UserProjectDto
 {
     public int Id { get; set; }
 

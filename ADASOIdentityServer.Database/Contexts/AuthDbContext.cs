@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ADASOIdentityServer.Database.Contexts;
 
 public partial class AuthDbContext : DbContext
-{ 
+{
     public virtual DbSet<Consultant> Consultant { get; set; }
 
     public virtual DbSet<Department> Department { get; set; }
@@ -251,6 +251,11 @@ public partial class AuthDbContext : DbContext
             entity.Property(e => e.Surname)
                 .HasMaxLength(50)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.TobbMerkezSube)
+                .HasMaxLength(1)
+                .IsFixedLength()
+                .HasColumnName("TOBB_MERKEZ_SUBE");
+            entity.Property(e => e.TobbOdaSicilNo).HasColumnName("TOBB_ODA_SICIL_NO");
             entity.Property(e => e.TobbUyelikOid)
                 .HasMaxLength(50)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS")

@@ -45,9 +45,16 @@ namespace ADASOIdentityServer.AuthServer
             {
                 new IdentityResources.OpenId(), //subId
                 new IdentityResources.Profile(), ///
-                new IdentityResource(){ Name="Projects", DisplayName="Proje Bilgisi",Description="Proje bilgisi", UserClaims= new [] {"project"}},
+                new IdentityResource(){ Name="Projects", DisplayName="Proje Bilgisi",Description="Proje bilgisi", UserClaims= new [] {"project"},},
                 new IdentityResource(){ Name="CountryAndCity", DisplayName="Country and City",Description="Kullanıcının ülke ve şehir bilgisi", UserClaims= new [] {"country","city"}},
                 new IdentityResource(){ Name="Roles",DisplayName="Roles", Description="Kullanıcı rolleri", UserClaims=new [] { "role"} }
+         
+                //new IdentityResource(){
+                //    Name="TobbInfo",
+                //    DisplayName="TOBB Bilgileri",
+                //    Description="Kullanıcı TOBB merkez şube ve oda sicil bilgileri",
+                //    UserClaims=new [] { "tobb_merkez_sube", "tobb_oda_sicil_no"}
+                //}
             };
         }
 

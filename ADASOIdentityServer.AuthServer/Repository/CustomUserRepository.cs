@@ -18,7 +18,7 @@ namespace ADASOIdentityServer.AuthServer.Repository
         }
         public async Task<CustomUser> FindByEmail(string email)
         {
-            var user = await _context.Users
+            var user = await _context.Users                
                 .Include(u => u.Role)
                 .Include(u => u.UserProjects)
                     .ThenInclude(up => up.Project)
@@ -39,6 +39,8 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 EmailConfirmationCode = user.EmailConfirmationCode,
                 UserName = user.Name + " " + user.Surname,
                 Role = user.Role?.Name,
+                TobbMerkezSube = user.TobbMerkezSube,
+                TobbOdaSicilNo = user.TobbOdaSicilNo,
                 UserProjects = user.UserProjects.ToList()
             };
         }
@@ -72,6 +74,8 @@ namespace ADASOIdentityServer.AuthServer.Repository
                 EmailConfirmationExpiry = user.EmailConfirmationExpiry,
                 UserName = user.Name + " " + user.Surname,
                 Role = user.Role.Name,
+                TobbMerkezSube = user.TobbMerkezSube,
+                TobbOdaSicilNo = user.TobbOdaSicilNo,
                 UserProjects = user.UserProjects.Select(up => new UserProjects
                 {
                     Id = up.Id,

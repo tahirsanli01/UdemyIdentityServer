@@ -39,6 +39,10 @@ public partial class Users
 
     public string TobbUyelikOid { get; set; }
 
+    public string TobbMerkezSube { get; set; }
+
+    public int? TobbOdaSicilNo { get; set; }
+
     public virtual Consultant Consultant { get; set; }
 
     public virtual Department Department { get; set; }
