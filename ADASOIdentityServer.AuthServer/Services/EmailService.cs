@@ -11,7 +11,7 @@ namespace ADASOIdentityServer.AuthServer.Services
         private readonly string _smtpServer = "smtp.office365.com";
         private readonly int _port = 587;
         private readonly string _fromEmail = "bilgi-islem@adaso.org.tr";
-        private readonly string _password = "Luf90449";
+        private readonly string _password = "Y&074331124061at";
 
         public async Task<ServiceResult<EmailDto>> SendEmailAsync(EmailDto model)
         {
