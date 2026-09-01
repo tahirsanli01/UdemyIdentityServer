@@ -1,0 +1,23 @@
+@model ADASOIdentityServer.AuthServer.UI.Models.Users.UserProjectsModalViewModel
+
+<div class="modal-header"><div><h3 class="modal-title">Proje ve Yetkiler</h3><div class="text-muted fs-7">@Model.UserDisplayName</div></div><button type="button" class="btn btn-sm btn-icon btn-light" data-bs-dismiss="modal"><i class="ki-outline ki-cross fs-2"></i></button></div>
+<div class="modal-body">
+    @if (Model.Assignments.Count == 0)
+    { <div class="notice d-flex bg-light-primary rounded border-primary border border-dashed p-5 mb-6">Bu kullanıcıya henüz proje atanmamış.</div> }
+    else
+    {
+        <div class="table-responsive mb-7"><table class="table table-row-bordered align-middle"><thead><tr class="text-muted fw-bold"><th>Proje</th><th>Yetkiler</th><th></th></tr></thead><tbody>
+        @foreach (var assignment in Model.Assignments)
+        {
+            <tr><td class="fw-bold">@assignment.Project?.Name</td><td>@foreach (var role in assignment.UserProjectRole) { <span class="badge badge-light-primary me-1">@role.ProjectRole?.Name</span> }</td><td class="text-end"><a class="btn btn-sm btn-light-primary" href="@Url.Action("Edit", "UserProjects", new { id = assignment.Id })">Düzenle</a></td></tr>
+        }
+        </tbody></table></div>
+    }
+    <div class="separator mb-6"></div><h5 class="mb-4">Yeni proje ata</h5>
+    <form id="add-user-project-form" action="@Url.Action("AddUserProject", "Users")" method="post">
+        @Html.AntiForgeryToken()<input type="hidden" name="userId" value="@Model.UserId" /><div id="project-form-error" class="text-danger mb-3"></div>
+        <div class="row g-4"><div class="col-md-6"><label class="form-label">Proje</label><select name="projectId" class="form-select" asp-items="Model.Projects" required><option value="">Seçiniz</option></select></div><div class="col-md-6"><label class="form-label">Yetkiler</label><select name="selectedRoleIds" class="form-select" asp-items="Model.Roles" multiple></select></div></div>
+        <div class="text-end mt-5"><button type="submit" class="btn btn-primary">Projeye Ata</button></div>
+    </form>
+</div>
+<div class="modal-footer"><a asp-controller="UserProjects" asp-action="Index" class="btn btn-light-primary">Tüm kullanıcı projeleri</a><button type="button" class="btn btn-light" data-bs-dismiss="modal">Kapat</button></div>

@@ -11,5 +11,7 @@ public partial class Department
 
     public string Department1 { get; set; }
 
+    public string Organization { get; set; }
+
     public virtual ICollection<Users> Users { get; set; } = new List<Users>();
 }

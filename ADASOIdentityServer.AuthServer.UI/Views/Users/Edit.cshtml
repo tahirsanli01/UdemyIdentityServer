@@ -20,17 +20,28 @@
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
-                    <div class="form-group">
+                    <div class="form-group mb-5">
+                        <label asp-for="UserTypeId" class="control-label">Kullanıcı Türü</label>
+                        <select asp-for="UserTypeId" class="form-control" asp-items="ViewBag.UserTypeId">
+                            <option value="">Belirtilmemiş</option>
+                        </select>
+                    </div>
+                    <div class="form-check form-switch mb-5">
+                        <input id="IsActive" name="IsActive" class="form-check-input" type="checkbox" value="true" checked="@(Model.IsActive != false ? "checked" : null)" />
+                        <input name="IsActive" type="hidden" value="false" />
+                        <label for="IsActive" class="form-check-label">Aktif kullanıcı</label>
+                    </div>
+                    <div class="form-group personnel-field">
                         <label asp-for="RoleId" class="control-label">Rol</label>
                         <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
                         <span asp-validation-for="RoleId" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group personnel-field">
                         <label asp-for="PersonelTitleId" class="control-label">Personel Ünvanı</label>
                         <select asp-for="PersonelTitleId" class="form-control" asp-items="ViewBag.PersonelTitleId"></select>
                         <span asp-validation-for="PersonelTitleId" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group personnel-field">
                         <label asp-for="DepartmentId" class="control-label">Departman</label>
                         <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
                         <span asp-validation-for="DepartmentId" class="text-danger"></span>
@@ -97,6 +108,16 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        function togglePersonnelFields() {
+            const personnelUserTypeId = '@ViewBag.PersonnelUserTypeId';
+            const selectedValue = document.getElementById('UserTypeId')?.value;
+            document.querySelectorAll('.personnel-field').forEach(x => {
+                x.style.display = selectedValue === personnelUserTypeId ? '' : 'none';
+            });
+        }
+        document.getElementById('UserTypeId')?.addEventListener('change', togglePersonnelFields);
+        togglePersonnelFields();
+
         function generatePassword(length = 12) {
             const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@@#$%^&*()_+";
             let password = "";

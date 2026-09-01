@@ -17,6 +17,10 @@ public partial class Users
 
     public int ConsultantId { get; set; }
 
+    public int? UserTypeId { get; set; }
+
+    public bool? IsActive { get; set; }
+
     public string Name { get; set; }
 
     public string Surname { get; set; }
@@ -50,6 +54,8 @@ public partial class Users
     public virtual PersonelTitle PersonelTitle { get; set; }
 
     public virtual Roles Role { get; set; }
+
+    public virtual UserType UserType { get; set; }
 
     public virtual ICollection<UserProjects> UserProjects { get; set; } = new List<UserProjects>();
 }

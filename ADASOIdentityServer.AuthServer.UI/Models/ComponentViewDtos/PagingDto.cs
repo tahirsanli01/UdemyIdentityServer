@@ -8,6 +8,8 @@
         public List<ColumnDto> columns { get; set; }
         public List<OrderDto> order { get; set; }
         public SearchDto search { get; set; }
+        public int? userTypeId { get; set; }
+        public bool unassignedUserType { get; set; }
     }
 
     public class ColumnDto

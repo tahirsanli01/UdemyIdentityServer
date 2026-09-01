@@ -29,7 +29,14 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
                     <div class="form-group">
-                        <label asp-for="Department1" class="control-label"></label>
+                        <label asp-for="Organization" class="control-label">Kurum</label>
+                        <select asp-for="Organization" class="form-control" asp-items="ViewBag.Organizations">
+                            <option value="">Kurum seçiniz</option>
+                        </select>
+                        <span asp-validation-for="Organization" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Department1" class="control-label">Departman / Birim Adı</label>
                         <input asp-for="Department1" class="form-control" />
                         <span asp-validation-for="Department1" class="text-danger"></span>
                     </div>

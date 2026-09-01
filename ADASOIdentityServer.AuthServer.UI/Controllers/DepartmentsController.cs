@@ -9,6 +9,12 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
     [Authorize(Policy = "ProjectAndRolePolicy")]
     public class DepartmentsController : Controller
     {
+        private static readonly string[] Organizations =
+        {
+            "Adana Sanayi Odası",
+            "Adana Sanayi Kampüsü"
+        };
+
         private readonly AuthDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -55,6 +61,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         {
             
             TempData["Departments"] = "active";
+            SetOrganizations();
             return View();
         }
 
@@ -63,15 +70,17 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Department1")] Department department)
+        public async Task<IActionResult> Create([Bind("Id,Department1,Organization")] Department department)
         {
             TempData["Departments"] = "active";
+            ValidateOrganization(department.Organization);
             if (ModelState.IsValid)
             {
                 _context.Add(department);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            SetOrganizations(department.Organization);
             return View(department);
         }
 
@@ -89,6 +98,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
             {
                 return NotFound();
             }
+            SetOrganizations(department.Organization);
             return View(department);
         }
 
@@ -97,7 +107,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Department1")] Department department)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Department1,Organization")] Department department)
         { 
             TempData["Departments"] = "active";
             if (id != department.Id)
@@ -105,6 +115,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                 return NotFound();
             }
 
+            ValidateOrganization(department.Organization);
             if (ModelState.IsValid)
             {
                 try
@@ -125,6 +136,7 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            SetOrganizations(department.Organization);
             return View(department);
         }
 
@@ -171,6 +183,17 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
         private bool DepartmentExists(int id)
         {
           return (_context.Department?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private void SetOrganizations(string selected = null)
+        {
+            ViewData["Organizations"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(Organizations, selected);
+        }
+
+        private void ValidateOrganization(string organization)
+        {
+            if (!Organizations.Contains(organization))
+                ModelState.AddModelError(nameof(Department.Organization), "Lütfen geçerli bir kurum seçiniz.");
         }
     }
 }

@@ -1,111 +1,109 @@
-﻿@using ADASOIdentityServer.Database.Models
-
-@model IEnumerable<Users>
-
+@model ADASOIdentityServer.AuthServer.UI.Models.Users.UsersIndexViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Kullanıcılar";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int CountFor(int? typeId) => Model.TypeCounts.FirstOrDefault(x => x.UserTypeId == typeId)?.Count ?? 0;
+    string BadgeClass(string? code) => code switch
+    {
+        "PERSONEL" => "badge-light-primary",
+        "UYE" => "badge-light-success",
+        "DIS_KULLANICI" => "badge-light-warning",
+        _ => "badge-light-secondary"
+    };
+    var firstPage = Math.Max(1, Model.Page - 2);
+    var lastPage = Math.Min(Model.TotalPages, Model.Page + 2);
 }
-
 
 @section styles {
-    <link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
-    <link href="~/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <style>
+        .user-filter-card { transition: .15s ease; border: 1px solid var(--bs-gray-300); }
+        .user-filter-card:hover, .user-filter-card.active { border-color: var(--bs-primary); transform: translateY(-1px); }
+        tr.user-row-passive > td { opacity: .55; background-color: var(--bs-gray-200) !important; }
+        .user-name-passive { text-decoration: line-through; }
     </style>
 }
- 
 
-<div id="ModalCreateGoal" class="app-content">
+<div class="app-content">
     @await Component.InvokeAsync("DashBoardNavbar")
-    <div class="d-flex flex-wrap flex-stack my-1">
-        <h3 class="fw-bold my-2">
-            Kullanıcı Listesi
-            <span class="fs-6 text-gray-400 fw-semibold ms-1">@Model.Count()</span>
-        </h3>
-        <div class="d-flex my-2">
-@*             <div class="d-flex align-items-center position-relative me-4">
-                <i class="ki-outline ki-magnifier fs-3 position-absolute translate-middle-y top-50 ms-4"></i>
-                <input type="text" id="kt_filter_search" class="form-control form-control-sm form-control-solid bg-body fw-semibold fs-7 w-150px ps-11" placeholder="Firma Ara" />
-            </div> *@
-            <a href="/Users/Create" class='btn btn-primary btn-sm fw-bolder'>Kullanıcı Oluştur</a>
-        </div>
+    <div class="d-flex flex-wrap flex-stack my-4">
+        <div><h3 class="fw-bold mb-1">Kullanıcı Yönetimi</h3><span class="text-muted">Personel, üye ve dış kullanıcıları tek ekrandan yönetin</span></div>
+        <a asp-action="Create" class="btn btn-primary btn-sm fw-bolder"><i class="ki-outline ki-plus fs-3"></i>Kullanıcı Oluştur</a>
     </div>
+
+    <div class="row g-3 mb-5">
+        <div class="col-6 col-md-3 col-xl-2"><a class="card user-filter-card h-100 text-reset @(Model.UserTypeId == null && !Model.Unassigned ? "active" : "")" asp-action="Index" asp-route-search="@Model.Search" asp-route-pageSize="@Model.PageSize"><div class="card-body py-4 px-5"><div class="text-muted fs-7">Tümü</div><div class="fs-2 fw-bold">@Model.TotalCount</div></div></a></div>
+        @foreach (var type in Model.UserTypes)
+        {
+            <div class="col-6 col-md-3 col-xl-2"><a class="card user-filter-card h-100 text-reset @(Model.UserTypeId == type.Id ? "active" : "")" asp-action="Index" asp-route-userTypeId="@type.Id" asp-route-search="@Model.Search" asp-route-pageSize="@Model.PageSize"><div class="card-body py-4 px-5"><div class="text-muted fs-7">@type.Name</div><div class="fs-2 fw-bold">@CountFor(type.Id)</div></div></a></div>
+        }
+        <div class="col-6 col-md-3 col-xl-2"><a class="card user-filter-card h-100 text-reset @(Model.Unassigned ? "active" : "")" asp-action="Index" asp-route-unassigned="true" asp-route-search="@Model.Search" asp-route-pageSize="@Model.PageSize"><div class="card-body py-4 px-5"><div class="text-muted fs-7">Belirtilmemiş</div><div class="fs-2 fw-bold">@CountFor(null)</div></div></a></div>
+    </div>
+
     <div class="card">
-        <table id="table" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ad Soyad</th>
-                    <th>Email</th>
-                    <th>Departman</th>
-                    <th>Rol</th>
-                    <th style="width: 10%;">İşlemler</th>
-                    
-                </tr>
-            </thead>
-        </table>
-        
+        <div class="card-header border-0 pt-5">
+            <form method="get" class="card-title d-flex flex-wrap gap-3 w-100">
+                @if (Model.UserTypeId.HasValue) { <input type="hidden" name="userTypeId" value="@Model.UserTypeId" /> }
+                @if (Model.Unassigned) { <input type="hidden" name="unassigned" value="true" /> }
+                <div class="d-flex align-items-center position-relative flex-grow-1"><i class="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i><input name="search" value="@Model.Search" class="form-control form-control-solid ps-12" placeholder="Ad, soyad veya e-posta ara" /></div>
+                <select name="pageSize" class="form-select form-select-solid w-100px" onchange="this.form.submit()">
+                    @foreach (var size in new[] { 10, 25, 50, 100 }) { <option value="@size" selected="@(Model.PageSize == size)">@size kayıt</option> }
+                </select>
+                <button class="btn btn-primary" type="submit">Ara</button>
+                @if (!string.IsNullOrWhiteSpace(Model.Search)) { <a class="btn btn-light" asp-action="Index" asp-route-userTypeId="@Model.UserTypeId" asp-route-unassigned="@Model.Unassigned" asp-route-pageSize="@Model.PageSize">Temizle</a> }
+            </form>
+        </div>
+        <div class="card-body pt-2">
+            <div class="table-responsive">
+                <table class="table table-row-bordered table-row-dashed align-middle gy-4">
+                    <thead><tr class="fw-bold text-muted"><th>Ad Soyad</th><th>E-posta</th><th>Tür</th><th>Departman / Ünvan</th><th>Rol</th><th class="text-end">İşlemler</th></tr></thead>
+                    <tbody>
+                    @if (Model.Users.Count == 0)
+                    {
+                        <tr><td colspan="6" class="text-center text-muted py-10">Aramanızla eşleşen kullanıcı bulunamadı.</td></tr>
+                    }
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr class="@(!user.IsActive ? "user-row-passive" : "")">
+                            <td><span class="fw-bold @(!user.IsActive ? "user-name-passive" : "")">@user.Name @user.Surname</span>@if (!user.IsActive) { <span class="badge badge-light-secondary ms-2">Pasif</span> }</td>
+                            <td><span class="text-muted">@user.Email</span></td>
+                            <td>@if (user.UserTypeId.HasValue) { <span class="badge @BadgeClass(user.UserTypeCode)">@user.UserTypeName</span> } else { <span class="badge badge-light-secondary">Belirtilmemiş</span> }</td>
+                            <td>@if (!string.IsNullOrWhiteSpace(user.Department) || !string.IsNullOrWhiteSpace(user.Title)) { <div class="fw-semibold">@(user.Department ?? "-")</div><div class="text-muted fs-7">@user.Title</div> } else { <span class="text-muted">—</span> }</td>
+                            <td>@user.Role</td>
+                            <td class="text-end"><button class="btn btn-sm btn-light btn-active-light-primary" data-bs-toggle="dropdown">İşlemler <i class="ki-outline ki-down fs-5 ms-1"></i></button><div class="dropdown-menu dropdown-menu-end"><a class="dropdown-item" asp-action="Edit" asp-route-id="@user.Id">Düzenle</a><button class="dropdown-item js-user-projects" type="button" data-user-id="@user.Id">Proje ve yetkiler</button><a class="dropdown-item" asp-action="Details" asp-route-id="@user.Id">Detaylar</a><div class="dropdown-divider"></div><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@user.Id">Sil</a></div></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-5">
+                <span class="text-muted">@Model.FilteredCount kayıttan @((Model.Page - 1) * Model.PageSize + (Model.FilteredCount == 0 ? 0 : 1)) - @Math.Min(Model.Page * Model.PageSize, Model.FilteredCount) arası</span>
+                @if (Model.TotalPages > 1)
+                {
+                    <ul class="pagination mb-0">
+                        <li class="page-item @(Model.Page == 1 ? "disabled" : "")"><a class="page-link" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-userTypeId="@Model.UserTypeId" asp-route-unassigned="@Model.Unassigned">Önceki</a></li>
+                        @for (var p = firstPage; p <= lastPage; p++) { <li class="page-item @(p == Model.Page ? "active" : "")"><a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-userTypeId="@Model.UserTypeId" asp-route-unassigned="@Model.Unassigned">@p</a></li> }
+                        <li class="page-item @(Model.Page == Model.TotalPages ? "disabled" : "")"><a class="page-link" asp-action="Index" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize" asp-route-search="@Model.Search" asp-route-userTypeId="@Model.UserTypeId" asp-route-unassigned="@Model.Unassigned">Sonraki</a></li>
+                    </ul>
+                }
+            </div>
+        </div>
     </div>
 </div>
 
-
-@await Component.InvokeAsync("DrawerMainProcess")
-@await Component.InvokeAsync("DrawerSubProcess")
-@await Component.InvokeAsync("DrawerAttachmentProcess")
-@await Component.InvokeAsync("DrawerKPIProcess")
-@await Component.InvokeAsync("DrawerSurveyProcess")
+<div class="modal fade" id="userProjectsModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content" id="user-projects-modal-content"></div></div></div>
 
 @section scripts {
-    <script src="~/assets/js/custom/utilities/modals/create-account.js"></script>
-    <script src="~/assets/plugins/select2/select2.min.js"></script>
     <script>
-        $("#table").DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: '/Users/GetUserList',
-                type: 'POST',
-                contentType: "application/json",
-                data: function (d) {
-                    return JSON.stringify(d); // JSON formatında gönder
-                }
-            },
-            columns: [
-                { data: 'id', title: 'ID' },
-                { data: 'name', title: 'Ad Soyad' },
-                { data: 'email', title: 'Email' },
-                { data: 'department.department1', title: 'Departman' }, // navigation property
-                { data: 'role.name', title: 'Rol' },
-                {
-                    data: 'id',
-                    title: 'İşlemler',
-                    orderable: false,
-                    searchable: false,
-                    render: function (data, type, row) {
-                        return `
-                            <a href="/Users/Edit/${data}"><i class="fa fa-edit fs-2"></i></a> |
-                            <a href="/Users/Details/${data}"><i class="fa fa-arrow-right fs-2"></i></a> |
-                            <a href="/Users/Delete/${data}"><i class="fa fa-trash fs-2"></i></a>
-                        `;
-                    }
-                }
-            ],
-            language: {
-                lengthMenu: "Show _MENU_"
-            },
-            dom:
-                "<'row'" +
-                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
-                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
-                ">" +
-                "<'table-responsive'tr>" +
-                "<'row'" +
-                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-                ">"
+        $('.js-user-projects').on('click', async function () {
+            const modal = new bootstrap.Modal(document.getElementById('userProjectsModal'));
+            $('#user-projects-modal-content').html('<div class="modal-body text-center py-15">Yükleniyor...</div>'); modal.show();
+            try { $('#user-projects-modal-content').html(await $.get(`/Users/UserProjectsModal/${$(this).data('user-id')}`)); }
+            catch { $('#user-projects-modal-content').html('<div class="modal-body text-danger">Proje bilgileri yüklenemedi.</div>'); }
+        });
+        $('#user-projects-modal-content').on('submit', '#add-user-project-form', function (e) {
+            e.preventDefault(); const form = $(this); const userId = form.find('[name=userId]').val();
+            $.post(form.attr('action'), form.serialize()).done(() => $.get(`/Users/UserProjectsModal/${userId}`).done(html => $('#user-projects-modal-content').html(html))).fail(xhr => $('#project-form-error').text(xhr.responseJSON?.message || 'İşlem tamamlanamadı.'));
         });
     </script>
-
-    @*<script src="~/custom/advisor.js"></script>*@
 }

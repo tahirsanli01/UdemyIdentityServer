@@ -31,6 +31,9 @@
             <thead>
                 <tr>
                     <th>
+                        <label>Kurum</label>
+                    </th>
+                    <th>
                         <label>Departman İsmi</label>
                     </th>
                     <th class="text-end">
@@ -42,6 +45,9 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Organization)
+                        </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Department1)
                         </td>
