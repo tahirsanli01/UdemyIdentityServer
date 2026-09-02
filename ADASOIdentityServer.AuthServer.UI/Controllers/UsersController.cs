@@ -129,6 +129,28 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
             return Ok(new { message = "Proje ve yetkiler kullanıcıya eklendi." });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUserProject(int id)
+        {
+            var userProject = await _context.UserProjects
+                .Include(x => x.UserProjectRole)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (userProject == null)
+                return NotFound(new { message = "Kullanıcının proje ataması bulunamadı." });
+
+            _context.UserProjectRole.RemoveRange(userProject.UserProjectRole);
+            _context.UserProjects.Remove(userProject);
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                userId = userProject.UserId,
+                message = "Proje ataması ve bağlı yetkiler silindi."
+            });
+        }
+
 
         // GET: Users/Details/5
 

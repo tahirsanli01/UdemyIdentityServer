@@ -9,7 +9,18 @@
         <div class="table-responsive mb-7"><table class="table table-row-bordered align-middle"><thead><tr class="text-muted fw-bold"><th>Proje</th><th>Yetkiler</th><th></th></tr></thead><tbody>
         @foreach (var assignment in Model.Assignments)
         {
-            <tr><td class="fw-bold">@assignment.Project?.Name</td><td>@foreach (var role in assignment.UserProjectRole) { <span class="badge badge-light-primary me-1">@role.ProjectRole?.Name</span> }</td><td class="text-end"><a class="btn btn-sm btn-light-primary" href="@Url.Action("Edit", "UserProjects", new { id = assignment.Id })">Düzenle</a></td></tr>
+            <tr>
+                <td class="fw-bold">@assignment.Project?.Name</td>
+                <td>@foreach (var role in assignment.UserProjectRole) { <span class="badge badge-light-primary me-1">@role.ProjectRole?.Name</span> }</td>
+                <td class="text-end text-nowrap">
+                    <a class="btn btn-sm btn-light-primary" href="@Url.Action("Edit", "UserProjects", new { id = assignment.Id })">Düzenle</a>
+                    <form class="d-inline js-delete-user-project" action="@Url.Action("DeleteUserProject", "Users")" method="post" data-project-name="@assignment.Project?.Name">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@assignment.Id" />
+                        <button type="submit" class="btn btn-sm btn-light-danger">Sil</button>
+                    </form>
+                </td>
+            </tr>
         }
         </tbody></table></div>
     }

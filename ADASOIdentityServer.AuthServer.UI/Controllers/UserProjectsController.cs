@@ -297,9 +297,12 @@ namespace ADASOIdentityServer.AuthServer.UI.Controllers
             {
                 return Problem("Entity set 'AuthDbContext.UserProjects'  is null.");
             }
-            var userProjects = await _context.UserProjects.FindAsync(id);
+            var userProjects = await _context.UserProjects
+                .Include(x => x.UserProjectRole)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (userProjects != null)
             {
+                _context.UserProjectRole.RemoveRange(userProjects.UserProjectRole);
                 _context.UserProjects.Remove(userProjects);
             }
 

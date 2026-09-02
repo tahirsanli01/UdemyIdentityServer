@@ -105,5 +105,19 @@
             e.preventDefault(); const form = $(this); const userId = form.find('[name=userId]').val();
             $.post(form.attr('action'), form.serialize()).done(() => $.get(`/Users/UserProjectsModal/${userId}`).done(html => $('#user-projects-modal-content').html(html))).fail(xhr => $('#project-form-error').text(xhr.responseJSON?.message || 'İşlem tamamlanamadı.'));
         });
+        $('#user-projects-modal-content').on('submit', '.js-delete-user-project', function (e) {
+            e.preventDefault();
+            const form = $(this);
+            const projectName = form.data('project-name');
+            if (!confirm(`"${projectName}" proje ataması ve bağlı yetkiler silinsin mi?`)) return;
+
+            form.find('button[type=submit]').prop('disabled', true);
+            $.post(form.attr('action'), form.serialize())
+                .done(response => $.get(`/Users/UserProjectsModal/${response.userId}`).done(html => $('#user-projects-modal-content').html(html)))
+                .fail(xhr => {
+                    form.find('button[type=submit]').prop('disabled', false);
+                    $('#project-form-error').text(xhr.responseJSON?.message || 'Silme işlemi tamamlanamadı.');
+                });
+        });
     </script>
 }
